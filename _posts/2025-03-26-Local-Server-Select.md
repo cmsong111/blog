@@ -1,8 +1,8 @@
 ---
-title: test
-date: 2023-10-01 00:00:00 +0900
-categories: [TOP_CATEGORIE, SUB_CATEGORIE]
-tags: [TAG]
+title: 온 프레미스 서버 선택하기
+date: 2025-03-26 12:00:00 +0000
+categories: [Server, On-Premise]
+tags: [server, on-premise, mac-mini]
 mermaid: true
 ---
 # This is a test post.
