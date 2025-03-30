@@ -47,8 +47,7 @@ bundle install
 ```
 
 4. css 파일 추가
-
-리드미의 설명에 따라 [기본 CSS 파일](https://github.com/ysk24ok/jekyll-linkpreview/blob/master/assets/css/linkpreview.css)을 추가해야 한다.
+  - 리드미의 설명에 따라 [기본 CSS 파일](https://github.com/ysk24ok/jekyll-linkpreview/blob/master/assets/css/linkpreview.css)을 추가해야 한다.
 
 필자은 CSS를 적당히 수정하여 사용했다. [CSS 링크](https://github.com/cmsong111/blog/blob/main/assets/css/linkpreview.css)에서 확인할 수 있다.
 

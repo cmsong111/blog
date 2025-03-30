@@ -9,4 +9,29 @@ image:
   path: https://static.wanted.co.kr/images/events/4818/6f9f8e47.jpg
 ---
 
+## Storage Service Class 다이어그램
+
+```mermaid
+classDiagram
+    class StorageService {
+        <<interface>>
+        +uploadFile(file: MultipartFile): String
+    }
+
+    class AWSS3StorageService {
+        -amazonS3Client: AmazonS3Client
+    }
+
+    class MinIOStorageService {
+        -restClient: RestClient
+    }
+
+    class MockStorageService
+
+    StorageService <|.. AWSS3StorageService
+    StorageService <|.. MinIOStorageService
+    StorageService <|.. MockStorageService
+```
+
+
 {% linkpreview "https://github.com/cmsong111/Wanted-PreOnBoarding-Backend-Challenge" %}

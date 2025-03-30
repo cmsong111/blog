@@ -15,7 +15,7 @@ image:
 특히, 프론트엔드 측에서 이러한 요구를 해오는 경우가 많은데, 진짜 어쩔수 없는 부분인가 싶기도 합니다. 
 
 
-## 더미 이미지 API
+## Lorem Picsum - 더미 이미지 API
 
 제가 자주 사용하는 더미이미지 API는 [picsum.photos](https://picsum.photos/)입니다.
 
@@ -52,8 +52,23 @@ image:
 | ![image](https://picsum.photos/id/250/250) | [https://picsum.photos/id/250/250](https://picsum.photos/id/250/250)
 | ![image](https://picsum.photos/id/400/250/200) | [https://picsum.photos/id/400/250/200](https://picsum.photos/id/400/250/200) |
 
+## Pravatar - 더미 프로필 이미지 API
+> https://i.pravatar.cc/{width}
+{: .prompt-info }
 
-## 무료 기업 로고 API
+> https://i.pravatar.cc/{width}?img={id}
+{: .prompt-info }
+
+- `width`는 가로 크기를 의미합니다. (최대 1000)
+- `id`는 고정된 이미지를 가져오기 위한 값입니다.
+
+| image | URL |
+|-------|-----|
+| ![image](https://i.pravatar.cc/250) | [https://i.pravatar.cc/250](https://i.pravatar.cc/250) |
+| ![image](https://i.pravatar.cc/250?img=1) | [https://i.pravatar.cc/250?img=1](https://i.pravatar.cc/250?img=1) |
+
+
+## Clearbit logo API - 기업 로고 API
 
 > https://logo.clearbit.com/{domain}
 {: .prompt-info }
