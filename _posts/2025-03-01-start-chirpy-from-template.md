@@ -5,6 +5,8 @@ date: 2025-03-01 12:00:00 +0000
 categories: [Blog, GitHub-Pages]
 tags: [Chirpy, Jekyll, GitHub-Pages]
 mermaid: true
+image:
+  path: https://blog.dnd.ac/assets/images/jekyll_memoirs/jekyll-logo.png
 ---
 ## 블로그 선택하기 
 
