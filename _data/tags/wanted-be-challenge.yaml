@@ -1,0 +1,11 @@
+name: Wanted BE Challenge
+link: "https://www.wanted.co.kr/events/pre_challenge_be_22"
+thumbnail:
+  path: "https://static.wanted.co.kr/images/events/4818/6f9f8e47.jpg"
+  alt: "Wanted BE Challenge"
+description: |
+  ### 프리온보딩 BE 챌린지
+
+  프리온보딩 BE 챌린지 사전과제를 진행하면서 작성한 게시글입니다.
+
+  단순한 CRUD 개발이 아닌 요구사항에 맞춰 기능을 개발하고, 단위테스트부터 통합테스트까지 진행합니다.

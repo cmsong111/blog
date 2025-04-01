@@ -2,7 +2,7 @@
 title: 프리온보딩 BE 챌린지 8월 사전 과제 - CICD 파이프라인 구축
 description: GitHub Actions를 활용한 손쉬운 CICD 파이프라인 구축
 date: 2024-08-09 12:00:00 +0000
-categories: [SpringBoot, Wanted-BE-Challenge]
+categories: [spring-boot, wanted-be-challenge]
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 mermaid: true
 image:

@@ -2,7 +2,7 @@
 title: 프리온보딩 BE 챌린지 8월 사전 과제 - 게시글 프로젝트 요구사항 분석
 description: 게시글 프로젝트 요구사항 분석
 date: 2024-08-01 12:00:00 +0000
-categories: [SpringBoot, Wanted-BE-Challenge]
+categories: [spring-boot, wanted-be-challenge]
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 mermaid: true
 image:

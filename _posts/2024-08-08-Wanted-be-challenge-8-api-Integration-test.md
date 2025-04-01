@@ -2,7 +2,7 @@
 title: 프리온보딩 BE 챌린지 8월 사전 과제 - API 통합 테스트
 description: JUnit5와 WebTestClient을 활용한 API 통합 테스트
 date: 2024-08-08 12:00:00 +0000
-categories: [SpringBoot, Wanted-BE-Challenge]
+categories: [spring-boot, wanted-be-challenge]
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 mermaid: true
 image:
