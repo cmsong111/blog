@@ -68,23 +68,22 @@ image:
 | ![image](https://i.pravatar.cc/250?img=1) | [https://i.pravatar.cc/250?img=1](https://i.pravatar.cc/250?img=1) |
 
 
-## Clearbit logo API - 기업 로고 API
+## Logo Dev API - 기업 로고 API
 
-> https://logo.clearbit.com/{domain}
+> https://img.logo.dev/{domain}
 {: .prompt-info }
 
 - `domain`은 해당 기업의 도메인입니다.
 
 | image | URL |
 |-------|-----|
-| ![image](https://logo.clearbit.com/google.com) | [https://logo.clearbit.com/google.com](https://logo.clearbit.com/google.com) |
-| ![image](https://logo.clearbit.com/apple.com) | [https://logo.clearbit.com/apple.com](https://logo.clearbit.com/apple.com) |
-| ![image](https://logo.clearbit.com/microsoft.com) | [https://logo.clearbit.com/microsoft.com](https://logo.clearbit.com/microsoft.com) |
-| ![image](https://logo.clearbit.com/amazon.com) | [https://logo.clearbit.com/amazon.com](https://logo.clearbit.com/amazon.com) |
-| ![image](https://logo.clearbit.com/facebook.com) | [https://logo.clearbit.com/facebook.com](https://logo.clearbit.com/facebook.com) |
-| ![image](https://logo.clearbit.com/instagram.com) | [https://logo.clearbit.com/instagram.com](https://logo.clearbit.com/instagram.com) |
-| ![image](https://logo.clearbit.com/youtube.com) | [https://logo.clearbit.com/youtube.com](https://logo.clearbit.com/youtube.com) |
-| ![image](https://logo.clearbit.com/samsung.com) | [https://logo.clearbit.com/samsung.com](https://logo.clearbit.com/samsung.com) |
-| ![image](https://logo.clearbit.com/lg.com) | [https://logo.clearbit.com/lg.com](https://logo.clearbit.com/lg.com) |
-| ![image](https://logo.clearbit.com/daum.net) | [https://logo.clearbit.com/daum.net](https://logo.clearbit.com/daum.net) |
-| ![image](https://logo.clearbit.com/naver.com) | [https://logo.clearbit.com/naver.com](https://logo.clearbit.com/naver.com) |
+| ![image](https://img.logo.dev/google.com) | [https://img.logo.dev/google.com](https://img.logo.dev/google.com) |
+| ![image](https://img.logo.dev/apple.com) | [https://img.logo.dev/apple.com](https://img.logo.dev/apple.com) |
+| ![image](https://img.logo.dev/microsoft.com) | [https://img.logo.dev/microsoft.com](https://img.logo.dev/microsoft.com) |
+| ![image](https://img.logo.dev/amazon.com) | [https://img.logo.dev/amazon.com](https://img.logo.dev/amazon.com) |
+| ![image](https://img.logo.dev/facebook.com) | [https://img.logo.dev/facebook.com](https://img.logo.dev/facebook.com) |
+| ![image](https://img.logo.dev/instagram.com) | [https://img.logo.dev/instagram.com](https://img.logo.dev/instagram.com) |
+| ![image](https://img.logo.dev/youtube.com) | [https://img.logo.dev/youtube.com](https://img.logo.dev/youtube.com) |
+| ![image](https://img.logo.dev/samsung.com) | [https://img.logo.dev/samsung.com](https://img.logo.dev/samsung.com) |
+| ![image](https://img.logo.dev/lg.com) | [https://img.logo.dev/lg.com](https://img.logo.dev/lg.com) |
+| ![image](https://img.logo.dev/naver.com) | [https://img.logo.dev/naver.com](https://img.logo.dev/naver.com) |
