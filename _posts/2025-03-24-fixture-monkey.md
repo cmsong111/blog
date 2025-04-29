@@ -144,39 +144,42 @@ data class RegisterRequest(
 ### 🛠 랜덤 요청 예시 출력
 
 ```kotlin
-UsersFixture.getRandomRegisterRequest(3).mapIndexed { i, request ->
-    logger.info { "$i 번째 회원가입 요청 정보: ${request.prettyJson()}" }
-}
+println(
+    UsersFixture.getRandomRegisterRequest(3).prettyJson(),
+)
 ```
 
-- `prettyJson()` 메서드는 따로 확장 함수를 만들어 `writerWithDefaultPrettyPrinter()`를 사용하여 JSON을 예쁘게 출력합니다.
+> `prettyJson()` 메서드는 따로 확장 함수를 만들어 Json을 예쁘게 출력하는 기능을 추가했습니다.
 
 ### 출력 결과
 
 아래와 같이 랜덤한 회원가입 요청 정보를 생성할 수 있습니다. 
 
-```bash
-0 번째 회원가입 요청 정보: {
-  "email" : "4Gk@Em3CSqnzQAeuiNGmCoNIhLH5DQnQ4H.x-1GfsdqQfyDEt5Urd2QqVFC67w8IBdU7qcsTYc1.nvOQXTRTpZQTXnXmoAsaGErbRRwcZNqNy",
-  "phone" : "010-8958-1138",
-  "name" : "뎐꼌뼄솥흚빲꿪",
-  "password" : "|jc]Xm.b_)p=Dpp{1mUAFeZB\\js*s2~}~o~wLf cX!OVtRFvC8SvPJu<cKrBCdS)1:kqFx9+9'i]XJ;k@bO`_;3*%6dl66>f&3-BDe&W8?~&)lyLo~<Riny'(qdN]*0pn))k;&|zS[p2_sw]h7W:L7AJcXCrW2@fuxI{)e(G=uM@l,<7}J{]ZMzFsia~Vmor?Dfaj-pNOamBLF<ZE[0+i;Wz85Fk-L)V\"efIMV[B=z(Btl^8?'D<vdxvnDN\\2{+2~%1N.h_|p+8^pDJ$L'TyO="
-}
-1 번째 회원가입 요청 정보: {
-  "email" : "ZV-1rMXl4m9Gkn1-gT-ro.sTX-z9A_zfK.GPa6Yj_5ei7sYxnaXtvW5tqtIBynZxb+ojf8c3RPYX1HnWTYMeQqWcy%VYjq@51jrLjwj-3PzpstJfJI6gTKwfycaiP.kfOonZqkRpkWhVpeIJirtqTCWoKSoEHIsAnzIpniEmTqAuPjzMQQaUwDlrdXPDloAtoSbUqiWbQCIoFQVQW",
-  "phone" : "010-502-2868",
-  "name" : "뻕덟뗈찼틊",
-  "password" : "k_f@V[zOpP|dyq,roQIFSXHp(IcI2h$_6nwS\\W)'HBL4R<'A#:A<EoD2q[h<hQkrm0_P^^UM*0dM6aPW1Tdq#8#v F#Aib@=}A5:,iUax+{BY!pR9)j#w%}4/mpK&vPoRv\\+D|%NwS7yRoYl'} wq4o.w\\3Qtw0T>Db..~9sxu^qvGb#lj@}q;=|\"GCon~K$]vt&B7B?78VO"
-}
-2 번째 회원가입 요청 정보: {
-  "email" : ".oac8CNLzEDGqZ-YSNo9vhvBVrXabdCuzJEO4NxHJ8vjyOaei9+EV0%-F.B6ZraK@uh4DA-RMPqXuz27kyRmaPzrvLi41j386N3JJPG1gsU7IF3zZhHzUkJAN0G4dEFRYK9h1ner9x.NY0ejSdf72UCt.lQYnWCAMdOVVv",
-  "phone" : "011-944-2995",
-  "name" : "촟굗쑵쨃쎢",
-  "password" : "{mv@t#ej_Fu8%2H\\%r'\\C( 2c=`yR{!65}0>'`Ro\"#esDe3p HLfvli~L`JtdZa{yvcD[g*+X\"xw{.t>vKsa5A/t1<\"`[w~>_1CG-35eC79H':S%'X]ficGO%$'msP,ph@yKlf[I3h;1s@8*/MZLn8hz\\)Lef43Y@J..[rG2!\\#bH1z2|vIoL`lF8_ 5(R-N#=3*{8yC-^4I^7:46k>!>bu+aQjKkrd\"+{y04eoMpANt/2*U-%l2d8${lfi=xC5I_u*INl12$f(D5D(6WH&fkmKf[`%2 -i]~"
-}
+```json
+[ {
+  "email" : "JD_PJfkJPEUPugIC%STbwvIA9emM@pBYfF4vxOVPJATLMUTZ7uJdxE628L9HPbAAtbbu.ZKKZxqtK",
+  "phone" : "010-711-9539",
+  "name" : "홳테뮊붇쑕뻗붡샥쬼",
+  "password" : "e@?H{n L\\#rWlsT^PM23\"#RQUS/@iEK;\"kW@poS\\[$,yMsc52_<peT d2p`E5am(2}QgZTXTpj,'K(rX~O:C=ffBvE'HJ63sq<AFZ.FL Uw%k\"b&=5c@s,;WYjn5{B,Vijx]p8 q4T8K);[q%c,`}4BT'&qoo}_FY!W8/4Ej6i!+~!te`Ho;{364TJmK,-PqdIM-=:D@>F~&)26pW'S\\9\"5TG21/&;N8lM=ZS%`}R\\ @t1AaL^;kBVx_|A*ioW;-O[*2!Y|s=E'_$7M1|)5Yu8O}9A5,/8O:AQ`,|Z^bR^Tn`L=u+c"
+}, {
+  "email" : "ZJTxPio0khu6E+FGagD5wMmGitx.K1TTPQ.d2c_+KN+azf3gI049pZNuVI_E0UHR%5tJJBOv.@nEk7DUqAeUgHYMPIu1SyDrUKbtly2B3G3s5CN7QiFLU0b8rtbDIK699swITAt2sO.qSdjH4IxyRtdn4ZI2iwQ.QfpaZlctB",
+  "phone" : "010-997-3963",
+  "name" : "쩀쫔빙끦졇헡쑳쭹",
+  "password" : "YcYA.n'FR`[>5per7|sNneO7!@K~u]9MgB&p0[ !q=H.F'i\"Y/Qa*]^ip28c'\\qsn^XZ34X(()PX&NEF!D` qQQxo>\\EA9&:3n*/gO!)# L1DAb{IxmH~.1{.+]5aQ>\\qH]>x&`}j3!(myqplYT7DK/Qm-A?dHqff`R`OZGg)F*7/H.srQ\"AXN0skCx_|7<~=LmT~a\"_V\\yyAzlMa'>PQg/EuwIU],p-^|t'D[#F'N\\A:.oF<`I8rIoNPzvKH.8ye`<7Y={<<K8KO>T \"fo}K:KPo1ScKB'"
+}, {
+  "email" : "R.0km.5@2oNfdzWLQdrMJBQ2Wn4TtFerKFfhzW2YrmuvgwKI.NfIokRDuBlbjkaESlQWEJJsllVlhrkUrGUjdhKcMNRPjoeuuhPuAUrImiNWlnZswiPSWYGvmzFIkxKcdUJFIas",
+  "phone" : "010-024-9565",
+  "name" : "G잭씵",
+  "password" : "[7RyTr!anY8oj|@xkx`:z5EXP YpI)v}+Bm$2nn7l+.f44Ce#-r6|,IrQ]Jcrc.dO9xX8x6/Ait)lx:4k29*:/TNnf]w+s\"!E!c^<W1bE}87_JiZ>|7q0,bHDns hwv<\"A$+o}whNH()&LHAQmaAJUG!m/C92dhH.p5Vc2m=GSWC7yM==:m(-`4};&y8XK|m;iH{eVlnF:\"J%C='=X`~eMWB+@3 []r]Qv-:.sL~rj54HAcR[lM>MdZqmyE#y*zi57_G(/8ptMnX`$Bqp4\\$\\f\\3-yW6K#O#[-}.}ga%EY(n\\CJ:rb'"
+} ]
 ```
 
 이러한 데이터를 사용하면, 개발 시 예상치 못한 예외 상황을 미리 확인할 수 있고, 다양한 케이스를 테스트할 수 있습니다. 
 또한, `data.sql` 파일과의 데이터를 비교하지 않아도 되므로, 테스트 코드가 더욱 간결해지고 유지보수성이 향상됩니다.
 
 이렇게 Fixture Monkey를 활용하면, 테스트 데이터 생성이 훨씬 간편해지고, 다양한 테스트 케이스를 쉽게 작성할 수 있습니다.
+
+
+## References
+
+{% linkpreview "https://naver.github.io/fixture-monkey/v1-1-0/" %}

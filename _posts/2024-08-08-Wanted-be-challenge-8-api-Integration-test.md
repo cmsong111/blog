@@ -59,13 +59,14 @@ Fixtures를 사용하면 테스트 코드가 간결해지고, 데이터 생성 �
 
 [Fixture-Monkey](/posts/fixture-monkey/)게시글을 참고하시면 더미데이터를 생성하는 방법을 확인할 수 있습니다.
 
-### JUnit5와 WebTestClient을 활용한 API 통합 테스트
+### JUnit5와 MockMvc를 활용한 API 통합 테스트
 
-JUnit5와 WebTestClient을 활용하여 API 통합 테스트를 진행합니다.
+JUnit5와 MockMvc를 활용하여 API 통합 테스트를 진행합니다.
 
-테스트 코드를 작성할 때에는 `DisplayName` 어노테이션을 활용하여 테스트 가시성을 높이고, 이너클래스와 `@Nested` 어노테이션을 활용하여 테스트 그룹을 나누면, 가시성을 높일 수 있습니다.
+스프링의 전체 컨테이너가 구성되기 위해 `@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)` 어노테이션을 사용합니다.
 
-아래처럼 Nested 클래스를 활용하여 테스트 그룹을 나누어 작성할 수 있습니다.
+RestFul API의 경우 Json 형식으로 요청과 응답을 주고받기 때문에, 반환값을 검사하기 위해 주로 JsonPath를 사용합니다.
+
 
 ```kotlin
 @Transactional
@@ -79,13 +80,19 @@ class AuthApiTest(
 ) : DescribeSpec(
     {
         extensions(SpringExtension)
-        
+
         describe("POST /api/v1/auth/register - 회원가입 API") {
             it("200 OK") {
+                // given
+                val registerRequest = UsersFixture.getRandomRegisterRequest().let {
+                    logger.info { "회원가입 요청 정보: ${it.prettyJson()}" }
+                    it
+                }
+
                 // when & then
                 mockMvc.post("/api/v1/auth/register") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = jacksonObjectMapper().writeValueAsString(UsersFixture.getRandomRegisterRequest())
+                    content = jacksonObjectMapper().writeValueAsString(registerRequest)
                 }.andExpect {
                     status().isCreated
                     content().contentType(MediaType.APPLICATION_JSON)
@@ -94,17 +101,19 @@ class AuthApiTest(
             }
 
             it("400 Bad Request (@Valid)") {
+                // given
+                val invalidRegisterRequest = RegisterRequest(
+                    email = "invalid-email",
+                    password = "invalid-password",
+                    name = "invalid-name",
+                    phone = "invalid-phone",
+                )
+                logger.info { "회원가입 요청 정보: ${invalidRegisterRequest.prettyJson()}" }
+
                 // when & then
                 mockMvc.post("/api/v1/auth/register") {
                     contentType = MediaType.APPLICATION_JSON
-                    content = jacksonObjectMapper().writeValueAsString(
-                        RegisterRequest(
-                            email = "invalid-email",
-                            password = "invalid-password",
-                            name = "invalid-name",
-                            phone = "invalid-phone",
-                        ),
-                    )
+                    content = jacksonObjectMapper().writeValueAsString(invalidRegisterRequest)
                 }.andExpect {
                     status().isBadRequest
                     content().contentType(MediaType.APPLICATION_JSON)
@@ -156,13 +165,25 @@ class AuthApiTest(
             }
 
             it("400 Bad Request (잘못된 요청)") {
+                // given
+                val alreadyRegisteredUser: RegisterRequest = UsersFixture.getRandomRegisterRequest().let {
+                    logger.info { "회원가입 정보: ${it.prettyJson()}" }
+                    authService.register(it)
+                    it
+                }
+                val invalidLoginRequest = UsersFixture.getRandomRegisterRequest().let {
+                    logger.info { "잘못된 로그인 요청 정보: ${it.prettyJson()}" }
+                    authService.register(it)
+                    it
+                }
+
                 // when & then
                 mockMvc.post("/api/v1/auth/login") {
                     contentType = MediaType.APPLICATION_JSON
                     content = jacksonObjectMapper().writeValueAsString(
                         mapOf(
-                            "email" to "invalid-email",
-                            "password" to "invalid-password",
+                            "email" to alreadyRegisteredUser.email,
+                            "password" to invalidLoginRequest.password,
                         ),
                     )
                 }.andExpect {
@@ -174,7 +195,7 @@ class AuthApiTest(
     },
 ) {
     companion object {
-        val logger = KotlinLogging.logger {}
+        val logger: KLogger = KotlinLogging.logger {}
     }
 }
 ```
