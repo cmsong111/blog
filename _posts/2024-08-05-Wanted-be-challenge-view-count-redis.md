@@ -32,6 +32,8 @@ image:
 
 개발의 편의(?)를 위해 create 정적메소드와, createKey 정적 메소드를 생성합니다.
 
+User Agent는 해시값으로 저장합니다.
+
 ```kotlin
 {% raw %}import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
@@ -61,9 +63,16 @@ data class ArticleView(
         }
 
         fun createKey(
-            articleId: Long, ip: String, userAgent: String,
+            articleId: Long,
+            ip: String,
+            userAgent: String,
         ): String {
-            return "article_views:$articleId:$ip:$userAgent"
+            val newIp: String = ip.replace(':', '.')
+            val hashUserAgent: String = MessageDigest.getInstance("SHA-256")
+                .digest(userAgent.toByteArray())
+                .joinToString("") { "%02x".format(it) }
+                .take(10)
+            return "$articleId:${newIp}_$hashUserAgent"
         }
     }
 }{% endraw %}
@@ -71,18 +80,17 @@ data class ArticleView(
 
 ### 조회수 레포지토리
 
-`KeyValueRepository`를 상속받아 Redis에 저장할 수 있는 레포지토리를 생성합니다.
-
-내부의 `ListCrudRepository`가 자동으로(?) finAll(), save()같은 메소드를 제공해줍니다.
-
+`CrudRepository`를 상속받아 Redis에 저장할 수 있는 레포지토리를 생성합니다.
 
 ```kotlin
-{% raw %}import org.project.portfolio.article.entity.ArticleView
-import org.springframework.data.keyvalue.repository.KeyValueRepository
+{% raw %}package org.project.portfolio.article.domain
+
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
+import org.springframework.data.repository.CrudRepository
 
 @EnableRedisRepositories
-interface ArticleRedisRepository : KeyValueRepository<ArticleView, String>{% endraw %}
+interface ArticleViewRepository : CrudRepository<ArticleView, String>
+{% endraw %}
 ```
 
 ### Post Service
@@ -157,15 +165,9 @@ Redis에 저장된 데이터를 확인해보면, `article_views`라는 키로 �
 
 `article_views:게시글ID:IP:UserAgent` 형식으로 저장되어 있습니다.
 
-> 키 값이 조금 길다 싶으면 MD5 해시(앞 10글자만) 로 저장하는 방법도 있습니다.
-{: .prompt-info }
-
-
-![Redis 캡쳐](/assets/images/2024-08-05/screenshot-01.png)
+![Redis 캡쳐](/assets/images/2024-08-05/screenshot-03.png)
 
 TTL도 86400초(24시간)로 잘 설정되어 있습니다.
-
-![Redis 캡쳐](/assets/images/2024-08-05/screenshot-02.png)
 
 ## 정리
 
