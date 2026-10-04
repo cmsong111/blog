@@ -1,7 +1,12 @@
 {
   "name": "Jekyll",
   "image": "mcr.microsoft.com/devcontainers/jekyll:2-bullseye",
-  "onCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+  // onCreateCommand runs before ANY postCreateCommand, including the base image's own
+  // `/usr/local/post-create.sh` (which runs `bundle install`). The image ships
+  // /usr/local/bundle subdirs owned by root, so fix ownership here or bundler fails
+  // with Bundler::PermissionError for the `vscode` user.
+  "onCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder} && sudo chown -R \"$(id -u):$(id -g)\" \"${GEM_HOME:-/usr/local/bundle}\"",
+  "forwardPorts": [4000, 35729],
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "customizations": {
     "vscode": {
