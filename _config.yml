@@ -226,6 +226,8 @@ exclude:
   - tools
   - README.md
   - plan.md
+  - agent.md
+  - writing-tone.md
   - LICENSE
   - purgecss.js
   - "*.config.js"

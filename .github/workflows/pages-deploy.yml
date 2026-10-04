@@ -9,6 +9,8 @@ on:
       - README.md
       - LICENSE
       - plan.md
+      - agent.md
+      - writing-tone.md
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
