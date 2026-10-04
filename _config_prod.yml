@@ -1,0 +1,7 @@
+# 프로덕션(배포) 환경 전용 오버라이드 설정
+# GitHub Actions 배포 시 적용: bundle exec jekyll build --config _config.yml,_config_prod.yml
+
+# 전역 이미지 CDN 엔드포인트 (jsDelivr 오픈소스 Multi-CDN)
+# '/'로 시작하는 모든 미디어 리소스(포스트 이미지, 아바타 등)에 자동으로 접두어로 추가됩니다.
+# 로컬 개발 환경(_config.yml)에서는 빈 값으로 유지되어 로컬 상대 경로가 그대로 사용됩니다.
+cdn: 'https://cdn.jsdelivr.net/gh/cmsong111/blog@main'
