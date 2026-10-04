@@ -6,6 +6,7 @@
   // /usr/local/bundle subdirs owned by root, so fix ownership here or bundler fails
   // with Bundler::PermissionError for the `vscode` user.
   "onCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder} && sudo chown -R \"$(id -u):$(id -g)\" \"${GEM_HOME:-/usr/local/bundle}\"",
+  "forwardPorts": [4000, 35729],
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "customizations": {
     "vscode": {
