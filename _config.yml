@@ -214,6 +214,7 @@ exclude:
   - docs
   - tools
   - README.md
+  - plan.md
   - LICENSE
   - purgecss.js
   - rollup.config.js
