@@ -6,7 +6,7 @@ categories: [Blog, GitHub-Pages]
 tags: [Chirpy, Jekyll, GitHub-Pages]
 mermaid: true
 image:
-  path: https://camo.githubusercontent.com/7deb9e4905ab1e73cec83fa80f3a5d0c7f613e6b522a9fdc41d5c79fad37eda8/68747470733a2f2f6368697270792d696d672e6e65746c6966792e6170702f636f6d6d6f6e732f646576696365732d6d6f636b75702e706e67
+  path: https://chirpy-img.netlify.app/commons/devices-mockup.png
 ---
 
 ## 블로그 Header 설정하기
