@@ -12,3 +12,13 @@
 .is-collapsed {
   max-height: none !important;
 }
+
+/* 게시글 상세 페이지 상단 커버 이미지 및 캡션 영역 숨김 (홈 썸네일 및 og:image는 유지) */
+article > header .post-meta > div:has(.preview-img) {
+  display: none !important;
+}
+
+article > header .preview-img,
+article > header figcaption {
+  display: none !important;
+}

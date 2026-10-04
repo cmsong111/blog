@@ -69,9 +69,16 @@ Chirpy는 이러한 외부 라이브러리 및 커스텀 메타데이터 삽입�
 > `async` 속성을 부여하면 브라우저가 HTML을 파싱하는 흐름을 차단하지 않고 백그라운드에서 스크립트를 다운로드하므로, 블로그 초기 렌더링 속도와 코어 웹 바이탈(Core Web Vitals) 성능 점수를 유지할 수 있습니다.
 {: .prompt-info }
 
-코드 반영 후 GitHub에 푸시하여 배포가 완료되면, 크롬 브라우저에서 블로그에 접속한 뒤 개발자 도구(F12)의 **Elements** 탭을 열어 `<head>` 태그 내에 스크립트가 정상적으로 주입되었는지 확인합니다.
+코드 반영 후 배포가 완료되면, 브라우저에서 페이지 소스 보기(Ctrl+U 또는 Cmd+Option+U)를 열어 `<head>` 태그 내에 발급받은 `adsbygoogle.js` 스크립트가 온전히 주입되었는지 확인합니다.
 
-![브라우저 개발자 도구 Elements 탭에서 metadata-hook을 통해 주입된 애드센스 스크립트 태그 확인 화면](/assets/images/2025-04-01/metadata-hook-adsense-inspect.png)
+```html
+<!-- 실제 렌더링된 <head> 태그 확인 예시 -->
+<head>
+  <meta charset="utf-8">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9883771255224638" crossorigin="anonymous"></script>
+</head>
+```
 
 ---
 
@@ -117,6 +124,10 @@ google.com, pub-9883771255224638, DIRECT, f08c47fec0942fa0
 애드센스 사이트 관리 화면에서도 도메인 상태가 초록색 **준비됨(Ready)**으로 정상 전환된 것을 확인했습니다.
 
 ![구글 애드센스 사이트 관리 화면의 namju.kim 준비됨 및 승인 완료 상태](/assets/images/2025-04-01/adsense-site-ready.png)
+
+승인 완료 후 자동 광고를 활성화하면 아래와 같이 본문 콘텐츠 사이에 인아티클/디스플레이 광고가 자연스럽게 배치됩니다.
+
+![블로그 본문 내 인아티클 광고 배치 미리보기](/assets/images/2025-04-01/adsense-article-preview.png)
 
 ---
 

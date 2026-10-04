@@ -38,7 +38,12 @@ flowchart LR
 
 Jekyll은 `_data/` 폴더 내의 YAML, JSON 파일을 전역 `site.data` 변수로 자동 파싱합니다. 카테고리별 정보를 독립적으로 관리하기 위해 `_data/tags/` 폴더를 만들고, 카테고리 식별자(Slug)와 일치하는 YAML 파일을 작성합니다.
 
-![_data/tags/ 하위의 YAML 메타데이터 파일 구조](/assets/images/2025-03-11/yaml-data-structure.png)
+```
+_data/
+└── tags/
+    ├── wanted-be-challenge.yaml
+    └── spring-boot.yaml
+```
 
 실제 블로그에 적용한 `_data/tags/wanted-be-challenge.yaml` 설정 예시입니다:
 
@@ -146,15 +151,19 @@ layout: page
 
 ### 브라우저 렌더링 결과
 
-로컬 서버를 실행하여 적용된 카테고리 화면을 확인해 보았습니다.
+로컬 서버(`http://localhost:4000`)를 실행하여 적용된 카테고리 화면을 확인해 보았습니다.
 
 ![프리온보딩 BE 챌린지 카테고리 배너 및 설명 박스 적용 화면](/assets/images/2025-03-11/category-wanted-challenge.png)
 
-원티드 프리온보딩 BE 챌린지 페이지 상단에 대표 이벤트 배너와 마크다운 설명, 그리고 외부 링크가 미려하게 렌더링되었습니다.
+원티드 프리온보딩 BE 챌린지 페이지 상단에 대표 이벤트 배너와 마크다운 설명, 그리고 'Learn More' 외부 링크가 미려하게 렌더링되었습니다.
 
-![Spring Boot 카테고리 썸네일과 게시글 목록 렌더링 화면](/assets/images/2025-03-11/category-spring-boot.png)
+![카테고리 상단 배너 및 설명 영역 상세 화면](/assets/images/2025-03-11/category-banner-detail.png)
 
-설명 없이 썸네일과 링크만 정의한 Spring Boot 카테고리 역시 의도한 대로 깔끔하게 출력되는 것을 확인할 수 있습니다.
+배너와 설명 박스가 제목 상단과 자연스럽게 어우러지며, 시리즈를 처음 접하는 독자에게 명확한 가이드를 제공합니다.
+
+![메타데이터가 없는 일반 카테고리의 기본 화면](/assets/images/2025-03-11/category-default-view.png)
+
+메타데이터(`_data/tags/*.yaml`)를 정의하지 않은 일반 카테고리(예: `Development`)의 경우, 조건문(`{% raw %}{% if tag %}{% endraw %}`)에 의해 불필요한 빈 영역이나 깨진 이미지 없이 Chirpy 테마 본연의 깔끔한 목록으로 자연스럽게 폴백(Fallback)됩니다.
 
 ---
 
