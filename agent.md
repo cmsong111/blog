@@ -14,16 +14,14 @@
 - **배포 환경**: GitHub Pages (`.github/workflows/pages-deploy.yml`)
 - **개발 환경**: VS Code Dev Container (`.devcontainer/devcontainer.json`)
 
-### 주요 디렉토리 및 확장 구조
-
 | 경로 | 용도 및 주의사항 |
 | :--- | :--- |
-| `_posts/` | 블로그 포스트 마크다운 파일 (`YYYY-MM-DD-title.md`) |
+| `_posts/{대분류}/{중분류}/` | 계층형 카테고리 디렉토리 구조 및 블로그 포스트 마크다운 파일 (`YYYY-MM-DD-title.md`) |
 | `assets/images/YYYY-MM-DD/` | 각 포스트에 사용되는 스크린샷 및 이미지 자산 저장소 |
 | `_includes/metadata-hook.html` | **Chirpy 공식 확장 훅** (네이버 서치어드바이저, 애드센스 등 커스텀 태그 주입용). **절대 `_includes/head.html`을 통째로 덮어쓰지 말 것!** |
 | `_includes/linkpreview.html` | `jekyll-linkpreview` OG 지원 사이트용 미리보기 카드 템플릿 |
 | `_includes/linkpreview_nog.html` | OpenGraph가 없는 사이트용 fallback 템플릿 (프로토콜 상대 URL 에러 방지 필수) |
-| `_data/tags/*.yaml` | 카테고리 뷰어의 태그별 배너 썸네일, 설명, 공식 링크 메타데이터 |
+| `_plugins/category-folder-hook.rb` | `_posts/{대분류}/{중분류}/` 폴더 경로 기반 2계층 카테고리 자동 주입 훅 |
 | `_plugins/posts-lastmod-hook.rb` | Git 커밋 히스토리 기반 `last_modified_at` 자동 주입 훅 |
 
 ---
@@ -42,25 +40,44 @@ flowchart TD
 ```
 
 ### Step 1. 파일명 및 Front Matter 규격
-- **파일명**: `_posts/YYYY-MM-DD-kebab-case-title.md` (반드시 영문 소문자 케밥케이스 권장)
-- **발행 날짜 규칙**: 시리즈 연재 시 이전 글로부터 **매주 1개씩(7일 간격)** 날짜(`date:`)를 설정하여 꾸준한 포스팅 흐름을 구현합니다.
+- **파일명 및 저장 경로**: `_posts/{카테고리폴더}/YYYY-MM-DD-kebab-case-title.md` (예: `_posts/spring-boot/2026-05-01-spring-security-...md`, `_posts/blog/jekyll/2025-03-01-...md`)
+- **발행 날짜 규칙**: 시리즈 연재 시 이전 글로부터 **매주 1개씩(7일 간격)** 또는 일일 연재 규칙에 맞추어 날짜(`date:`)를 설정합니다.
 - **분량 기준**: 1개 포스트는 **5분 읽기 분량 (1,500 ~ 2,500자 내외)**으로, 문제/이유 ➔ 설정/코드 ➔ 검증의 완결성을 갖춥니다.
 - **공식 문서 기반**: 추측성 작성 금지. 해당 기술(Chirpy Wiki, Jekyll docs, Google/Naver Console, GitHub Docs)의 **공식 페이지 내용을 철저히 확인**하고 반영합니다.
-- **Front Matter 필수 형식**:
+- **카테고리(Category)와 태그(Tag)의 분리 원칙**:
+  - **카테고리 (Category)**:
+    - **역할**: 대주제와 주제별 분류 (1계층 또는 2계층 수직 구조).
+    - **자동 매핑**: `_plugins/category-folder-hook.rb`에 의해 `_posts/{폴더}/` 경로에 글을 넣으면 `categories`가 폴더명을 기반으로 자동 생성 및 주입됩니다 (Front Matter에 생략해도 폴더 기준 자동 생성).
+    - **탐색 화면**: 좌측 사이드바의 **Categories 탭(`/categories/`)**에서 탐색.
+    - **원칙**: 1개 포스트는 단 하나의 명확한 분류 체계에 귀속됩니다.
+  - **태그 (Tag)**:
+    - **역할**: 사용된 세부 기술 스택, 라이브러리, 특정 키워드의 수평적 모음 (`tags: [spring-boot, kotlin, jwt, redis, security]`).
+    - **탐색 화면**: 좌측 사이드바의 **Tags 탭(`/tags/`)**에서 알파벳순/건수별 뱃지 및 데스크톱 우측 사이드바의 **Trending Tags** 위젯에 노출.
+    - **원칙**: 여러 기술 키워드를 자유롭게 N개 부여하여 독자의 교차 검색과 필터링을 지원합니다.
+- **표준 카테고리 및 폴더 규격 (폴더명이 곧 카테고리명이 됨)**:
+  - `Spring > Feature`: `_posts/Spring/Feature/` (19편) -> `categories: ["Spring", "Feature"]`
+  - `Spring > AI`: `_posts/Spring/AI/` (4편) -> `categories: ["Spring", "AI"]`
+  - `Spring > Wanted-Challenge`: `_posts/Spring/Wanted-Challenge/` (11편) -> `categories: ["Spring", "Wanted-Challenge"]`
+  - `Dev`: `_posts/Dev/` (3편) -> `categories: ["Dev"]`
+  - `Dev > Book`: `_posts/Dev/Book/` (1편) -> `categories: ["Dev", "Book"]`
+  - `Java > Swing`: `_posts/Java/Swing/` (4편) -> `categories: ["Java", "Swing"]`
+  - `Blog > Jekyll`: `_posts/Blog/Jekyll/` (9편) -> `categories: ["Blog", "Jekyll"]`
+- **Front Matter 표준 형식 (categories 완전 생략, tags만 작성)**:
   ```yaml
   ---
   title: 글 제목 (직관적이고 명확한 기술 키워드 포함)
   description: 검색엔진 및 SNS 카드용 1~2문장 요약
   date: YYYY-MM-DD HH:MM:SS +0900
-  categories: [Blog, GitHub-Pages]
-  tags: [태그1, 태그2, 태그3]
+  tags: [태그1, 태그2, 태그3] # 검색 및 교차 필터링용 기술 키워드 N개 명시
   mermaid: true # 다이어그램 사용 시 true
   image:
     path: https://... 또는 /assets/images/YYYY-MM-DD/thumbnail.png
     alt: 대표 썸네일 설명
   ---
   ```
-  > 💡 `image:` 속성은 **홈 화면 목록의 썸네일 카드**와 **SNS 공유(OpenGraph `og:image`)** 용도로 계속 사용됩니다. 게시글 본문 상단에 거대하게 노출되던 커버 이미지는 `jekyll-theme-chirpy.scss`를 통해 자동 숨김 처리되어 있으므로 안심하고 지정하시면 됩니다.
+  > 💡 **담백하고 정제된 제목(Title) 원칙**:
+  > - 의문형(`~할 때?`, `~죽는 이유`, `~없다?`)이나 과장된 광고성 어그로 문구(`완벽 해결`, `초고속`, `원클릭`, `~의 모든 것`, `치명적 위험`, `~할 필요는 없다`)를 엄격히 금지합니다.
+  > - 기술 키워드와 적용 대상/목적을 명확히 명시하는 담백하고 깔끔한 엔지니어링 스타일로 작성합니다 (예: `Docker 멀티스테이지 빌드를 활용한 Spring Boot 이미지 최적화`, `Docker Compose Profiles와 Override를 활용한 로컬 개발 환경 분리`).
 
 ### Step 2. 이미지 및 스크린샷 배치 (필수 2~3장)
 - 시각적 증거(브라우저 렌더링 화면, 콘솔 관리자 대시보드, 모바일 반응형 뷰 등)를 **반드시 2~3장 이상** 배치합니다.

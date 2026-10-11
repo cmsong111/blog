@@ -7,7 +7,7 @@
 ## 1. 연재 개요 및 로드맵 구조
 
 - **기술 스택**: Kotlin 2.3, Java 25, Spring Boot 4.1, PostgreSQL 17, Redis 7, Spring AI/Gemini
-- **공통 카테고리**: `[spring-boot]` (+ 주제별 `spring-security`, `spring-ai`, `jpa`, `redis`)
+- **카테고리**: `[Spring, Feature]` (AI 관련 편은 `[Spring-AI]`)
 - **글쓰기 스타일**: [`writing-tone.md`](file:///Users/kimnamju/Documents/GitHub/blog/writing-tone.md) 스타일 1(문제 해결/트러블슈팅형) 및 스타일 2(Quick Start/튜토리얼형)
 - **분량**: 포스트당 5분 읽기 분량 (1,500 ~ 2,500자 내외)
 - **시각 자료**: 포스트당 실제 터미널/실행 화면 최소 2~3장 필수 배치 (`assets/images/YYYY-MM-DD/`, 여백 없이 타이트 크롭, 코드 캡처 금지)
@@ -32,10 +32,10 @@ flowchart TD
 ## 2. 시즌 1: Spring Security & 실전 인증 인프라 (우선 연재)
 
 ### 📄 포스트 1: 단일 스프링 부트에서 API(JWT)와 관리자 Web(세션) 멀티 SecurityFilterChain 정석 분리
-- **파일명**: `_posts/2026-05-01-spring-security-multi-filter-chain-jwt-session.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-01-spring-security-multi-filter-chain-jwt-session.md`
 - **발행일**: `2026-05-01 12:00:00 +0900`
 - **제목**: `단일 스프링 부트에서 API(JWT Stateless)와 관리자 Web(세션 FormLogin) 멀티 SecurityFilterChain 정석 구성하기`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, spring-security, kotlin, jwt, session, security-filter-chain]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-01/`
@@ -54,10 +54,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 2: Refresh Token Rotation(RTR) 동시성 경합과 토큰 재사용 감지(Theft Detection)
-- **파일명**: `_posts/2026-05-02-jwt-refresh-token-rotation-race-condition.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-02-jwt-refresh-token-rotation-race-condition.md`
 - **발행일**: `2026-05-02 12:00:00 +0900`
 - **제목**: `Refresh Token Rotation(RTR) 도입 시 동시 요청 경합(Race Condition)과 토큰 탈취 방지 대응기`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, spring-security, jwt, refresh-token, redis, concurrency]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-02/`
@@ -76,10 +76,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 3: 무상태(Stateless) JWT 환경에서 전체 로그아웃 & 회원 탈퇴 시 액세스 토큰 즉시 무효화
-- **파일명**: `_posts/2026-05-03-stateless-jwt-instant-revocation-redis.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-03-stateless-jwt-instant-revocation-redis.md`
 - **발행일**: `2026-05-03 12:00:00 +0900`
 - **제목**: `무상태(Stateless) JWT의 한계 넘기: 전체 로그아웃과 탈퇴 시 액세스 토큰 즉시 무효화하는 전략`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, spring-security, jwt, redis, token-revocation]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-03/`
@@ -98,10 +98,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 4: 1:N 다중 소셜 계정 연동 모델링과 사용자/관리자 로그인 진입점 분리
-- **파일명**: `_posts/2026-05-04-multi-social-login-account-linking.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-04-multi-social-login-account-linking.md`
 - **발행일**: `2026-05-04 12:00:00 +0900`
 - **제목**: `카카오·구글·네이버 다중 소셜 계정 연동(1:N) 모델링과 사용자/관리자 로그인 진입점 분리`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, oauth2, social-login, jpa, kotlin]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-04/`
@@ -122,10 +122,10 @@ flowchart TD
 ## 3. 시즌 2: 분산 배치 & 외부 데이터 파이프라인
 
 ### 📄 포스트 5: Spring Batch 없이 만드는 Redis ShedLock + DB 리스 기반 경량 분산 작업 실행기(Job Runner)
-- **파일명**: `_posts/2026-05-05-lightweight-distributed-job-runner-shedlock.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-05-lightweight-distributed-job-runner-shedlock.md`
 - **발행일**: `2026-05-05 12:00:00 +0900`
 - **제목**: `Spring Batch 없이 만드는 Redis ShedLock + DB 리스 기반의 경량 분산 작업 실행기(Job Runner)`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, redis, shedlock, batch, distributed-lock, kotlin]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-05/`
@@ -144,10 +144,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 6: 대규모 배치 작업의 중단과 이어 달리기: JSON 체크포인트 상태 머신
-- **파일명**: `_posts/2026-05-06-batch-checkpoint-resume-pattern.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-06-batch-checkpoint-resume-pattern.md`
 - **발행일**: `2026-05-06 12:00:00 +0900`
 - **제목**: `대규모 배치 작업의 중단과 이어 달리기: JSON 체크포인트 상태 머신과 트랜잭션 롤백 격리`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, batch, checkpoint, transaction, postgresql]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-06/`
@@ -166,10 +166,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 7: 공공 데이터 포털 Open API 연동의 정석: Redis 분산 Rate Limiter와 429 지수 백오프
-- **파일명**: `_posts/2026-05-07-open-api-distributed-rate-limiter-backoff.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-07-open-api-distributed-rate-limiter-backoff.md`
 - **발행일**: `2026-05-07 12:00:00 +0900`
 - **제목**: `공공 데이터 포털 Open API 연동의 정석: Redis 분산 Rate Limiter, 429 지수 백오프, 보안 마스킹`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, open-api, rate-limiting, redis, rest-client, kotlin]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-07/`
@@ -188,10 +188,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 8: 외부 데이터 수집의 정석: Raw 데이터 불변 보존과 무중단 재파싱(Reparse) 아키텍처
-- **파일명**: `_posts/2026-05-08-raw-data-immutability-and-reparsing.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-08-raw-data-immutability-and-reparsing.md`
 - **발행일**: `2026-05-08 12:00:00 +0900`
 - **제목**: `외부 데이터 수집 파이프라인 설계: 원문(Raw Data) 불변 보존과 무중단 재파싱(Reparse) 아키텍처`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, jpa, data-pipeline, parsing, postgresql]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-08/`
@@ -212,10 +212,10 @@ flowchart TD
 ## 4. 시즌 3: Spring Boot + GenAI / Gemini 실전 연동
 
 ### 📄 포스트 9: Spring AI 대신 Google GenAI SDK를 쓴 이유: Google Search Grounding 메타데이터 보존
-- **파일명**: `_posts/2026-05-09-spring-ai-vs-google-genai-sdk-grounding.md`
+- **파일명**: `_posts/Spring/AI/2026-05-09-spring-ai-vs-google-genai-sdk-grounding.md`
 - **발행일**: `2026-05-09 12:00:00 +0900`
 - **제목**: `Spring AI 대신 Google GenAI SDK를 직접 쓴 이유: Google Search Grounding 메타데이터 보존하기`
-- **카테고리**: `[spring-ai]`
+- **카테고리**: `[Spring, AI]`
 - **태그**: `[spring-boot, spring-ai, gemini, google-genai, search-grounding, kotlin]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-09/`
@@ -234,10 +234,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 10: LLM 환각(Hallucination) 잡는 2단계 검증: 뉴스 기사 추출과 공공 API 교차 대조
-- **파일명**: `_posts/2026-05-10-llm-hallucination-ground-truth-verification.md`
+- **파일명**: `_posts/Spring/AI/2026-05-10-llm-hallucination-ground-truth-verification.md`
 - **발행일**: `2026-05-10 12:00:00 +0900`
 - **제목**: `LLM 환각(Hallucination) 잡는 2단계 검증: 뉴스 기사 탐색과 공공 Open API 실시간 교차 대조`
-- **카테고리**: `[spring-ai]`
+- **카테고리**: `[Spring, AI]`
 - **태그**: `[spring-boot, gemini, hallucination, open-api, data-verification]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-10/`
@@ -258,10 +258,10 @@ flowchart TD
 ## 5. 시즌 4: JPA 도메인 모델링 & 엔터프라이즈 운영
 
 ### 📄 포스트 11: JPA 엔티티 PK로 왜 UUIDv7을 선택했는가?
-- **파일명**: `_posts/2026-05-11-why-uuidv7-for-jpa-entity-pk.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-11-why-uuidv7-for-jpa-entity-pk.md`
 - **발행일**: `2026-05-11 12:00:00 +0900`
 - **제목**: `JPA 엔티티 PK로 왜 UUIDv7을 선택했는가? (UUIDv4의 B-Tree 인덱스 파편화 극복과 시간 순 정렬)`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, jpa, postgresql, uuidv7, database-indexing]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-11/`
@@ -280,10 +280,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 12: JPA @Version 낙관적 락으로 관리자 화면의 덮어쓰기(Lost Update) 방지하기
-- **파일명**: `_posts/2026-05-12-jpa-optimistic-locking-version-lost-update.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-12-jpa-optimistic-locking-version-lost-update.md`
 - **발행일**: `2026-05-12 12:00:00 +0900`
 - **제목**: `JPA @Version 낙관적 락(Optimistic Lock)으로 관리자 화면의 덮어쓰기(Lost Update) 방지하기`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, jpa, concurrency, optimistic-lock, thymeleaf]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-12/`
@@ -302,10 +302,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 13: JPA BaseEntity 소프트 삭제와 유니크 인덱스 충돌 방지 및 휴지통 패턴
-- **파일명**: `_posts/2026-05-13-jpa-soft-delete-unique-index-conflict-trash-bin.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-13-jpa-soft-delete-unique-index-conflict-trash-bin.md`
 - **발행일**: `2026-05-13 12:00:00 +0900`
 - **제목**: `JPA BaseEntity 소프트 삭제(Soft Delete) 시 복합 Unique 제약 충돌 방지와 관리자 휴지통(Trash) 패턴`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, jpa, soft-delete, unique-constraint, postgresql]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-13/`
@@ -324,10 +324,10 @@ flowchart TD
 ---
 
 ### 📄 포스트 14: 웹 요청 밖(배치·비동기 스레드)에서 JPA Auditing(@CreatedBy) NPE 해결하기
-- **파일명**: `_posts/2026-05-14-spring-data-jpa-auditor-aware-async-fix.md`
+- **파일명**: `_posts/Spring/Feature/2026-05-14-spring-data-jpa-auditor-aware-async-fix.md`
 - **발행일**: `2026-05-14 12:00:00 +0900`
 - **제목**: `스케줄러와 비동기 배치에서 JPA Auditing(@CreatedBy) 예외 해결하기: AuditorAware 안전화 전략`
-- **카테고리**: `[spring-boot]`
+- **카테고리**: `[Spring, Feature]`
 - **태그**: `[spring-boot, jpa, auditing, async, security-context, kotlin]`
 - **주요 레퍼런스**: Spring Boot 공식 레퍼런스 및 실무 아키텍처 예제
 - **이미지 폴더**: `assets/images/2026-05-14/`

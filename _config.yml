@@ -226,6 +226,7 @@ exclude:
   - tools
   - README.md
   - plan.md
+  - docker/plan.md
   - agent.md
   - writing-tone.md
   - LICENSE
