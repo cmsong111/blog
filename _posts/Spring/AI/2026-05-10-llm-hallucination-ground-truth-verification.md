@@ -1,5 +1,5 @@
 ---
-title: "LLM 환각(Hallucination) 잡는 2단계 검증: 뉴스 기사 탐색과 공공 Open API 실시간 교차 대조"
+title: "LLM 환각(Hallucination) 방지를 위한 기사 탐색 및 공공 API 교차 검증 파이프라인"
 description: LLM이 웹 검색 결과에서 추출한 판결 후보의 환각을 방어하기 위해 서버 정규화 규칙과 국가법령정보센터 Open API 실시간 교차 대조를 결합한 Ground Truth 검증 파이프라인을 구축합니다.
 date: 2026-05-10 12:00:00 +0900
 tags: [spring-boot, gemini, hallucination, open-api, data-verification]

@@ -1,5 +1,5 @@
 ---
-title: "기술 블로그 검색 노출 100% 공략: 네이버·구글·Bing 3대 포털 등록과 SNS 공유 카드 세팅"
+title: "Jekyll 블로그 검색 엔진 최적화(SEO) 및 포털 등록 가이드"
 description: 지킬 블로그의 구글 서치 콘솔, 네이버 서치어드바이저, Bing 웹마스터 도구 등록 방법과 Chirpy metadata-hook을 활용한 메타태그 주입, 그리고 카카오톡·슬랙 링크 공유 시 썸네일 카드가 깨지지 않게 설정하는 OpenGraph SEO 팁을 다룹니다.
 date: 2025-03-25 12:00:00 +0900
 tags: [SEO, Google-Search-Console, Naver-Search-Advisor, OpenGraph, Sitemap]
@@ -172,7 +172,7 @@ social_preview_image: https://avatars.githubusercontent.com/cmsong111
 
 ```yaml
 ---
-title: 기술 블로그 검색 노출 100% 공략: 네이버·구글·Bing 3대 포털 등록과 SNS 공유 카드 세팅
+title: Jekyll 블로그 검색 엔진 최적화(SEO) 및 포털 등록 가이드
 description: 지킬 블로그의 검색엔진 등록과 OpenGraph SEO 팁을 다룹니다.
 date: 2025-03-25 12:00:00 +0900
 image:

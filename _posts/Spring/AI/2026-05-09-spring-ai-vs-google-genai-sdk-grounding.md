@@ -1,5 +1,5 @@
 ---
-title: "Spring AI 대신 Google GenAI SDK를 직접 쓴 이유: Google Search Grounding 메타데이터 보존하기"
+title: "Google GenAI SDK를 활용한 Search Grounding 메타데이터 연동"
 description: Spring AI 2.0.1의 ChatResponse 변환 과정에서 유실되는 Google Search Grounding(출처 URL, 검색어) 메타데이터를 공식 Google GenAI SDK 직결을 통해 온전히 보존한 트러블슈팅을 다룹니다.
 date: 2026-05-09 12:00:00 +0900
 tags: [spring-boot, spring-ai, gemini, google-genai, search-grounding, kotlin]

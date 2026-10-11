@@ -1,5 +1,5 @@
 ---
-title: "Gemini API에서 원하는 DTO 포맷 100% 보장받기: JSON Schema 강제와 비용 최적화"
+title: "Gemini API 구조화된 출력(Structured Output)과 JSON Schema 적용"
 description: "gemini-3.5-flash-lite 모델에서 재시도 비용 없이 엄격한 JSON Schema를 강제하여 원하는 Kotlin DTO로 100% 안전하게 역직렬화하는 프롬프트 엔지니어링 및 SDK 연동 노하우를 소개합니다."
 date: 2026-05-15 12:00:00 +0900
 tags: [spring-boot, spring-ai, gemini, structured-output, json-schema]

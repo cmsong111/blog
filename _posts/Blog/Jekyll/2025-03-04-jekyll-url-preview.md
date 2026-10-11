@@ -1,5 +1,5 @@
 ---
-title: Jekyll 노션 스타일 URL 미리보기 구현과 TOC 충돌 해결기
+title: Jekyll OpenGraph URL 미리보기 카드 구현 및 TOC 충돌 해결
 description: jekyll-linkpreview 플러그인으로 북마크 카드를 구현할 때 발생한 목차(TOC) 오염 문제를 Liquid 커스텀 템플릿으로 해결한 트러블슈팅 기록입니다.
 date: 2025-03-04 12:00:00 +0900
 tags: [Chirpy, Jekyll, GitHub-Pages, LinkPreview, Liquid, OpenGraph, Troubleshooting]

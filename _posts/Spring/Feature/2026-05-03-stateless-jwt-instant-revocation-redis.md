@@ -1,5 +1,5 @@
 ---
-title: "무상태(Stateless) JWT의 한계 넘기: 전체 로그아웃과 탈퇴 시 액세스 토큰 즉시 무효화하는 전략"
+title: "Redis 블랙리스트를 활용한 무상태 JWT 즉시 무효화 전략"
 description: 무상태(Stateless) JWT 환경에서 사용자가 전체 로그아웃하거나 회원 탈퇴했을 때 잔여 유효시간이 남은 액세스 토큰을 Redis 기반으로 즉시 무효화하는 아키텍처를 다룹니다.
 date: 2026-05-03 12:00:00 +0900
 tags: [spring-boot, spring-security, jwt, redis, token-revocation]

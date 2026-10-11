@@ -1,5 +1,5 @@
 ---
-title: "대규모 배치 작업의 중단과 이어 달리기: JSON 체크포인트 상태 머신과 트랜잭션 롤백 격리"
+title: "배치 작업 체크포인트 상태 머신 설계와 트랜잭션 롤백 격리"
 description: 수만 건의 외부 데이터를 수집할 때 네트워크 단절이나 배포가 발생해도 처음부터 다시 시작하지 않고 안전하게 이어 실행하는 JSON 체크포인트 상태 머신 패턴을 소개합니다.
 date: 2026-05-06 12:00:00 +0900
 tags: [spring-boot, batch, checkpoint, transaction, postgresql]

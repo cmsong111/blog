@@ -1,5 +1,5 @@
 ---
-title: JPA 엔티티 PK로 왜 UUIDv7을 선택했는가? (UUIDv4의 B-Tree 인덱스 파편화 극복과 시간 순 정렬)
+title: JPA 엔티티 식별자(PK)로서의 UUIDv7 도입과 B-Tree 인덱스 최적화
 description: 분산 환경에서의 식별자 충돌 방지와 데이터베이스 B-Tree 인덱스 순차 삽입 성능을 동시에 보장하기 위해 엔티티 Primary Key로 UUIDv7을 채택한 기술적 배경과 벤치마크를 소개합니다.
 date: 2026-05-11 12:00:00 +0900
 tags: [spring-boot, jpa, postgresql, uuidv7, database-indexing]

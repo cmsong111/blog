@@ -1,5 +1,5 @@
 ---
-title: "Spring Security MockMvc 테스트 완전 정복: JWT 리소스 서버와 세션 체인 각각 검증하기"
+title: "Spring Security MockMvc 테스트를 통한 JWT 리소스 서버와 세션 체인 검증"
 description: 복잡한 멀티 SecurityFilterChain 환경에서 @WithMockUser와 커스텀 보안 어노테이션, MockMvc를 활용해 무상태 JWT API와 세션 기반 관리자 Web을 빈틈없이 검증하는 테스트 전략을 다룹니다.
 date: 2026-05-20 12:00:00 +0900
 tags: [spring-boot, spring-security, test, mockmvc, kotlin]

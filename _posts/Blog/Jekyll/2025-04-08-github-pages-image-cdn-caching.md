@@ -1,5 +1,5 @@
 ---
-title: GitHub Pages 이미지 대역폭 한계 극복하기 (jsDelivr 무료 글로벌 CDN 캐싱)
+title: jsDelivr CDN을 활용한 GitHub Pages 이미지 캐싱 최적화
 description: GitHub Pages의 월 100GB 트래픽 한계를 극복하기 위해, VS Code 로컬 작성 환경을 완벽히 유지하면서 배포 시에만 jsDelivr 글로벌 CDN으로 전역 자동 변환하는 환경 분리 아키텍처를 구현합니다.
 date: 2025-04-08 12:00:00 +0900
 tags: [GitHub-Pages, Jekyll, Chirpy, CDN, jsDelivr, Caching, Web-Performance]

@@ -1,5 +1,5 @@
 ---
-title: "스케줄러와 비동기 배치에서 JPA Auditing(@CreatedBy) 예외 해결하기: AuditorAware 안전화 전략"
+title: "비동기 배치 및 스케줄러 환경에서의 JPA Auditing AuditorAware 처리"
 description: 웹 요청 밖(비동기 스레드, 스케줄러, 배치 러너)에서 엔티티를 저장할 때 SecurityContext 부재로 인해 발생하는 JPA Auditing NullPointerException 및 감사자 예외를 안전하게 해결한 과정을 정리합니다.
 date: 2026-05-14 12:00:00 +0900
 tags: [spring-boot, jpa, auditing, async, security-context, kotlin]

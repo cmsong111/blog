@@ -1,5 +1,5 @@
 ---
-title: 개발자 정적 블로그에 구글 애드센스 승인받고 ads.txt 깔끔하게 연동하기
+title: Jekyll Chirpy 테마 구글 애드센스 및 ads.txt 설정
 description: GitHub Pages 기반 지킬 블로그에서 구글 애드센스 승인을 통과하는 실전 노하우와 Chirpy 테마의 metadata-hook을 이용한 애드센스 코드 삽입, ads.txt 크롤링 경고 완벽 해결법을 정리합니다.
 date: 2025-04-01 12:00:00 +0900
 tags: [Google-AdSense, AdSense, Monetization, ads.txt]

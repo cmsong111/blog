@@ -1,5 +1,5 @@
 ---
-title: "공공 데이터 포털 Open API 연동의 정석: Redis 분산 Rate Limiter, 429 지수 백오프, 보안 마스킹"
+title: "Open API 연동을 위한 Redis 분산 Rate Limiter와 지수 백오프 구현"
 description: 1초당 1회 호출 제한이 걸린 까다로운 공공 데이터 API를 다중 인스턴스 환경에서 안전하게 연동하기 위한 Redis 글로벌 호출 게이트와 지수 백오프, 보안 마스킹 전략을 정리합니다.
 date: 2026-05-07 12:00:00 +0900
 tags: [spring-boot, open-api, rate-limiting, redis, rest-client, kotlin]
