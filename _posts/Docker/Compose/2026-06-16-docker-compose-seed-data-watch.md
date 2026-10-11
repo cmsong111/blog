@@ -198,10 +198,10 @@ flowchart LR
         DB["PostgreSQL Container"]
     end
 
-    Src -->|Action: sync (즉시 파일 덮어쓰기)| Engine
-    Conf -->|Action: sync + restart| Engine
-    Engine -->|핫 싱크| App
-    Engine -->|설정 변경 감지 시 컨테이너 재시작| App
+    Src -->|"Action: sync (즉시 파일 덮어쓰기)"| Engine
+    Conf -->|"Action: sync + restart"| Engine
+    Engine -->|"핫 싱크"| App
+    Engine -->|"설정 변경 감지 시 컨테이너 재시작"| App
 ```
 
 ### 5.2 3가지 Watch Action 완벽 비교
