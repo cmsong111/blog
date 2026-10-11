@@ -22,3 +22,30 @@ article > header .preview-img,
 article > header figcaption {
   display: none !important;
 }
+
+/* Rouge 문법 강조기 에러(.err) 시 붉은 배경 제거 (@field, 한글 등) */
+.highlight .err {
+  color: inherit !important;
+  background-color: transparent !important;
+}
+
+/* 코드 블록 폰트 스택 확장 (설치된 프리텐다드/코딩 폰트 우선 + OS별 기본 한글 fallback) */
+pre,
+code,
+kbd,
+samp {
+  font-family:
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    'Liberation Mono',
+    'Courier New',
+    'Pretendard Variable',
+    Pretendard,
+    'D2Coding',
+    'Nanum Gothic Coding',
+    'Apple SD Gothic Neo',
+    'Malgun Gothic',
+    monospace !important;
+}
