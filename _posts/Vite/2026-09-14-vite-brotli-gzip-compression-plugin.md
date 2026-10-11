@@ -38,13 +38,11 @@ flowchart TD
         Gz["index.js.gz (29.1 kB)"]
         Br["index.js.br (24.8 kB)"]
     end
-
     Nginx -->|"1. Brotli 지원 여부 확인"| CheckBr{"index.js.br 존재?"}
     CheckBr -->|"Yes (brotli_static)"| ServeBr["Content-Encoding: br (24.8 kB 전송)"]
     CheckBr -->|"No"| CheckGz{"index.js.gz 존재?"}
     CheckGz -->|"Yes (gzip_static)"| ServeGz["Content-Encoding: gzip (29.1 kB 전송)"]
     CheckGz -->|"No"| ServeRaw["Content-Encoding 없음 (112.4 kB 전송)"]
-
     ServeBr --> Client
     ServeGz --> Client
     ServeRaw --> Client

@@ -24,15 +24,13 @@ flowchart LR
         Mobile["모바일 앱 / SPA"]
         AdminUser["사내 관리자 브라우저"]
     end
-
     subgraph SingleChain["단일 SecurityFilterChain 구성 시의 충돌"]
         Conflict1["무상태 JWT (Stateless) vs 브라우저 세션 (Stateful)"]
         Conflict2["인증 실패 시 JSON 401 vs 로그인 페이지 HTML 302 리다이렉트"]
         Conflict3["CSRF 비활성화 (REST) vs CSRF 토큰 필수 (Web Form)"]
     end
-
-    Mobile --> SingleChain
-    AdminUser --> SingleChain
+    Mobile --> Conflict1
+    AdminUser --> Conflict1
 ```
 
 대표적인 충돌 지점은 세 가지입니다:

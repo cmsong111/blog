@@ -30,19 +30,16 @@ Vite 플러그인의 `transformIndexHtml` 훅은 개발 서버가 `index.html`�
 ```mermaid
 flowchart TD
     RawHtml["원시 index.html 파일 로드"] --> HookCall["transformIndexHtml(html, ctx) 호출"]
-
     subgraph DescriptorProcessing["HtmlTagDescriptor 파싱 및 배치"]
         direction TB
         HeadPrepend["head-prepend : 문자 인코딩(charset) 등 최우선순위"]
         Head["head : 일반 CSS 링크, meta, title"]
         BodyPrepend["body-prepend : 안내 배너, 로딩 인디케이터"]
         Body["body : 메인 모듈 스크립트, CDN 외부 라이브러리"]
-
         HeadPrepend --> Head --> BodyPrepend --> Body
     end
-
-    HookCall --> DescriptorProcessing
-    DescriptorProcessing --> FinalHtml["최종 변환된 HTML 반환<br/>(개발 서버 서빙 또는 dist/index.html 출력)"]
+    HookCall --> HeadPrepend
+    Body --> FinalHtml["최종 변환된 HTML 반환<br/>(개발 서버 서빙 또는 dist/index.html 출력)"]
 ```
 
 ### 2.1 두 가지 반환 방식

@@ -35,7 +35,6 @@ sequenceDiagram
     actor Browser as 브라우저 (localhost:5173)
     participant Vite as Vite Dev Server (localhost:5173)
     participant Backend as 백엔드 API (localhost:8080)
-
     Note over Browser,Vite: 브라우저는 단일 출처(localhost:5173)로 인식
     Browser->>Vite: GET /api/v1/users/me (Cookie: SESSIONID=...)
     Note over Vite: 1. server.proxy 라우트 매칭<br/>2. rewrite: /api/v1 제거<br/>3. changeOrigin: Host 헤더 변경

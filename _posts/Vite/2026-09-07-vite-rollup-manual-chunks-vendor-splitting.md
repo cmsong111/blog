@@ -46,7 +46,6 @@ flowchart TD
         A --> A4["비즈니스 로직"]
         NoteA["비즈니스 코드 1줄 수정 시 1.4MB 전체 캐시 파기"]
     end
-
     subgraph ChunkSplitting["[개선 후] manualChunks 세분화"]
         B1["vendor-react-[hash].js (138kB)"]
         B2["vendor-ui-[hash].js (242kB)"]

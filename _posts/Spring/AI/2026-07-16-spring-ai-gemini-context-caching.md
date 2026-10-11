@@ -23,11 +23,9 @@ sequenceDiagram
     actor User as 사용자
     participant App as Spring Boot (context-caching)
     participant Gemini as Google Gemini 서버 메모리
-
     Note over App,Gemini: 1단계: 대용량 문서 1회 업로드 및 캐시 생성
     App->>Gemini: caches.create(문서 48,210 토큰, systemInstruction, ttl: 30분)
     Gemini-->>App: cachedContents/abc123xyz 생성 완료
-
     loop 2단계: 질문만 가볍게 반복 질의
         User->>App: "연차 이월 규정 요약해줘" (18 토큰)
         App->>Gemini: generateContent(cachedContentName: "abc123xyz", 질문: 18 토큰)
@@ -35,7 +33,6 @@ sequenceDiagram
         Gemini-->>App: 답변 + usage(cachedContentTokenCount: 48,210)
         App-->>User: 빠른 응답 반환 (~1.1초)
     end
-
     Note over App,Gemini: 3단계: 작업 완료 또는 문서 수정 시 캐시 삭제
     App->>Gemini: caches.delete("abc123xyz")
 ```

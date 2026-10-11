@@ -31,7 +31,6 @@ flowchart TD
         end
         OOM["Linux Host Kernel OOM Killer"]
     end
-
     C1 -- "대용량 엑셀 다운로드 / 메모리 누수 (14GB+ 점유)" --> OOM
     OOM -.->|"badness() 평가 후 강제 SIGKILL"| D1
     OOM -.->|"중요 서비스 희생"| C2
@@ -139,7 +138,6 @@ flowchart TD
         end
         OS["컨테이너 내부 기본 OS/쉘 오버헤드"]
     end
-
     H -.->|"초과 시 컨테이너 cgroup memory.max 도달"| KILL["cgroup OOM Killer 발동 (Exit Code 137)"]
 ```
 

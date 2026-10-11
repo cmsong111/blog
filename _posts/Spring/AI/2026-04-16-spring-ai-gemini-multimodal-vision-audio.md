@@ -25,7 +25,6 @@ flowchart TD
         T3 --> T4["LLM 텍스트 프롬프트 전달"]
         T4 --> T5["정형 JSON 변환"]
     end
-
     subgraph Native["Gemini 네이티브 멀티모달 파이프라인"]
         N1["입력 파일 (이미지 / 오디오)"] --> N2["Spring AI Media 바인딩"]
         N2 --> N3["Gemini 단일 호출 (generateContent)"]

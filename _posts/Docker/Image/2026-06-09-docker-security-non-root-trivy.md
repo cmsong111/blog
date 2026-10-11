@@ -41,18 +41,14 @@ flowchart TD
     subgraph Host["호스트 리눅스 커널 (Host Kernel)"]
         HK["커널 시스템 콜 처리 및 권한 검증 (UID 0 권한 인식)"]
     end
-
     subgraph ContainerA["위험: Root 컨테이너"]
         CA_P["애플리케이션 프로세스 (UID 0)"]
     end
-
     subgraph ContainerB["안전: Non-root 컨테이너"]
         CB_P["애플리케이션 프로세스 (UID 1001)"]
     end
-
     CA_P -->|"UID 0 특권 요청 (Breakout 잠재 위험)"| HK
     CB_P -->|"제한된 권한 (호스트 시스템 자원 접근 불가)"| HK
-
     style ContainerA fill:#ffebee,stroke:#c62828,stroke-width:2px
     style ContainerB fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
 ```
@@ -137,12 +133,10 @@ flowchart TD
         B1["Layer 1: COPY application.jar (150MB, 소유자 root)"] --> B2["Layer 2: RUN chown -R (150MB 복사본 생성, 소유자 appuser)"]
         B2 --> B3["최종 크기: 300MB+"]
     end
-
     subgraph Good["✅ COPY --chown 플래그 사용 시"]
         G1["Layer 1: RUN adduser appuser"] --> G2["Layer 2: COPY --chown=1001:1001 app.jar (150MB 단일 레이어)"]
         G2 --> G3["최종 크기: 150MB"]
     end
-
     style Bad fill:#ffebee,stroke:#c62828,stroke-width:1px
     style Good fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px
 ```
@@ -310,7 +304,6 @@ sequenceDiagram
     participant CI as GitHub Actions Runner
     participant Trivy as Trivy Scanner Engine
     participant Reg as 컨테이너 레지스트리
-
     Dev->>CI: git push / PR 오픈
     CI->>CI: Multi-stage Docker 이미지 빌드
     CI->>Trivy: 이미지 취약점 스캔 요청 (HIGH, CRITICAL)

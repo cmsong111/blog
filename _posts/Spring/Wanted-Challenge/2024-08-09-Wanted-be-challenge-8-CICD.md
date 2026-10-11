@@ -16,38 +16,30 @@ image:
 이 포스팅에서는 GitHub Actions를 활용하여 도커 이미지를 빌드하고, Docker Hub에 업로드한 후, Watchtower를 통해 개발 서버에 배포하는 방법을 설명한다.
 
 ```mermaid
-flowchart LR;
-
-    subgraph Local[로컬 개발 환경]
+flowchart LR
+    subgraph Local ["로컬 개발 환경"]
         direction TB
-        A[개발] -->|Commit| A1[로컬 Git]
+        A["개발"] -->|"Commit"| A1["로컬 Git"]
     end
-
-    Local -->|Push| GitHub
-
-    subgraph GitHub[GitHub]
+    subgraph GitHub ["GitHub"]
         direction TB
-        B[저장소] -->|GitHub Actions 실행| B1[테스트 진행]
-        B1 -->|성공 시| B2[OCI 이미지 패키징]
+        B["저장소"] -->|"GitHub Actions 실행"| B1["테스트 진행"]
+        B1 -->|"성공 시"| B2["OCI 이미지 패키징"]
     end
-
-    GitHub -->|DockerHub에 업로드| DockerHub
-
-
-    subgraph DockerHub[Docker Hub]
+    subgraph DockerHub ["Docker Hub"]
         direction TB
-        D2[Main 이미지] ~~~ D3
-        D3[Dev 이미지] ~~~ D4
-        D4[Feature 이미지] 
+        D2["Main 이미지"]
+        D3["Dev 이미지"]
+        D4["Feature 이미지"]
     end
-
-    subgraph Dev[개발 서버]
+    subgraph Dev ["개발 서버"]
         direction TB
-        Watchtower[Watchtower] -->|주기적 Polling 새로운 이미지 감지 | C[OCI 이미지 Pull]
-        C --> D[컨테이너 교체]
+        Watchtower["Watchtower"] -->|"주기적 Polling 감지"| C["OCI 이미지 Pull"]
+        C --> D["컨테이너 교체"]
     end
-
-    DockerHub --- |Polling| Dev
+    A1 -->|"Push"| B
+    B2 -->|"DockerHub 업로드"| D2
+    Watchtower -.->|"Polling"| D3
 ```
 
 ## Docker Hub

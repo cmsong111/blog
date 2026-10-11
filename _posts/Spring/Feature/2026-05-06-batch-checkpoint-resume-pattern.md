@@ -294,7 +294,6 @@ sequenceDiagram
     participant Store as JobStateStore (REQUIRES_NEW)
     participant Importer as JudgmentImportService
     participant DB as PostgreSQL (Business & Meta)
-
     Batch->>Context: processResult("prec:214589", nextJsonCursor, action)
     Context->>Context: check(스프링 부트 예제 애플리케이션) (리스 만료 & 취소 요청 검증)
     Context->>Store: recordResult(runId, itemKey, nextCursor)

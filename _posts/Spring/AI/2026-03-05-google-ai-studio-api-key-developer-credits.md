@@ -34,7 +34,6 @@ flowchart TD
         F1 --> F3["사용자 데이터 모델 학습 활용 가능"]
         F1 --> F4["개발/프로토타입 전용"]
     end
-
     subgraph PaidTier["종량제 티어 (Pay-as-you-go)"]
         P1["API 호출"] --> P2["표준 처리 티어 (serviceTier: standard)"]
         P3["고객 데이터 학습 배제 (보안 보장)"]

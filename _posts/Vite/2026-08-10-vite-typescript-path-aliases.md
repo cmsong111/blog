@@ -36,8 +36,8 @@ import { formatDate } from '../../../../utils/formatDate';
 ```mermaid
 flowchart TD
     subgraph TwoToolsProblem["경로 별칭의 이중 설정 불일치"]
-        TS["tsconfig.json (compilerOptions.paths)"] -->|경로 해석| IDE["VS Code 타입 검사 & 자동완성 (정상)"]
-        Vite["vite.config.ts (resolve.alias 미설정 시)"] -->|모듈 미발견 에러| DevServer["Vite 런타임 & 빌드 (Cannot find module)"]
+        TS["tsconfig.json (compilerOptions.paths)"] -->|"경로 해석"| IDE["VS Code 타입 검사 & 자동완성 (정상)"]
+        Vite["vite.config.ts (resolve.alias 미설정 시)"] -->|"모듈 미발견 에러"| DevServer["Vite 런타임 & 빌드 (Cannot find module)"]
     end
 ```
 

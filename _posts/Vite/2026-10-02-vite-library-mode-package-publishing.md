@@ -30,20 +30,19 @@ flowchart LR
         TS --> Comp
         TS --> Hooks
     end
-
     subgraph ViteBuild["Vite build.lib & Plugins"]
         Rollup["Rollup 번들러"]
         DtsPlugin["vite-plugin-dts"]
     end
-
     subgraph Artifacts["dist/ 산출물"]
         ESM["dist/my-design-system.js (ESM)"]
         CJS["dist/my-design-system.umd.cjs (CJS/UMD)"]
         CSS["dist/style.css"]
         DTS["dist/**/*.d.ts (타입 정의)"]
     end
-
-    Source --> ViteBuild
+    Comp --> Rollup
+    Hooks --> Rollup
+    TS --> DtsPlugin
     Rollup --> ESM
     Rollup --> CJS
     Rollup --> CSS

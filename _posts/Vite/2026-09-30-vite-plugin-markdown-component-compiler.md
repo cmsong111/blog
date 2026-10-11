@@ -30,13 +30,10 @@ Vite의 `transform(code, id)` 훅은 요청된 모든 파일의 원시 텍스트
 ```mermaid
 flowchart TD
     RawFile[".md 파일 요청<br/>(예: /docs/architecture.md)"] --> FilterId{"id.endsWith('.md')<br/>확장자 검사"}
-
     FilterId -- "No" --> PassThrough["다음 플러그인으로 패스"]
     FilterId -- "Yes" --> ExtractFM["Front Matter 추출<br/>(title, author, tags 등)"]
-
     ExtractFM --> ParseMD["마크다운 본문 파싱<br/>(Markdown -> HTML AST)"]
     ParseMD --> Codegen["런타임 JS 코드 생성<br/>export const frontmatter<br/>export const html<br/>export default Component"]
-
     Codegen --> ReturnCode["컴파일된 ES Module 반환"]
     ReturnCode --> ClientRender["클라이언트 즉시 렌더링 & HMR 반영"]
 ```

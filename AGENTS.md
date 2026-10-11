@@ -107,11 +107,29 @@ flowchart TD
 - 코드는 독자가 그대로 복사/붙여넣기하여 실행할 수 있도록 의존성, 어노테이션, 파일 경로 주석을 명시합니다.
 - 말투는 단정한 **경어체(~합니다/~습니다)**, 1인칭은 **'저'** 또는 주어 생략을 유지합니다.
 
+#### 📊 Mermaid 다이어그램 문법 엄격 준수 수칙 (문법 오류 방지 필수)
+블로그에서 렌더링 에러(`Syntax error in graph`)가 빈번하게 발생하는 주요 원인을 차단하기 위해 아래 수칙을 철저히 준수합니다.
+
+1. **노드 라벨 따옴표 인용 필수 (Quote Node Labels)**:
+   - 노드 라벨 텍스트에 괄호 `()`, 대괄호 `[]`, 중괄호 `{}`, 슬래시 `/`, 쌍점 `:`, 앰퍼샌드 `&`, 쉼표 `,`, 줄바꿈 `\n` 등 **조금이라도 특수문자가 포함된 경우 반드시 큰따옴표(`"..."`)로 감싸야 합니다.**
+   - ❌ **오류 예시**: `A[Docker Engine (/var/run/docker.sock)]` ➔ 괄호 때문에 파싱 실패
+   - ⭕ **올바른 작성**: `A["Docker Engine (/var/run/docker.sock)"]`
+2. **표준 화살표 연결선 및 엣지 라벨 문법 준수**:
+   - `flowchart`에서는 반드시 `-->`, `-.->`, `==>` 표준 문법을 사용합니다 (`->`, `~>` 절대 금지).
+   - **연결선 라벨(`|...|`)에 특수문자나 공백이 포함된 경우 반드시 큰따옴표로 감싸야 합니다**: `-->|"1. git push (수정)"|`, `-->|"HTTP/WS 프록시"|` (따옴표 누락 시 렌더링 중단).
+3. **서브그래프(subgraph) 연결 및 스타일링 주의사항**:
+   - 화살표의 목적지로 서브그래프 ID 자체를 직접 지정하지 말고, **서브그래프 내부의 구체적인 노드 ID로 연결**해야 합니다.
+   - `class SubgraphName styleClass;` 형태로 서브그래프에 직접 클래스를 부여하지 않습니다.
+4. **HTML 태그 배제**:
+   - 레이블 내부에 `<br>`, `<font>` 등 원시 HTML 태그를 직접 삽입하지 말고 `\n` 또는 별도의 텍스트 노드로 분리합니다.
+5. **Front Matter 일치 여부 확인**:
+   - 본문에 ````mermaid```` 코드 블록이 하나라도 존재하면 Front Matter에 반드시 `mermaid: true`가 선언되어 있어야 합니다.
+
 ---
 
 ## 3. 품질 및 빌드 검증 (Quality Assurance)
 
-글 작성이 끝나면 커밋 전 반드시 컨테이너 안에서 빌드와 유효성 검사를 수행해야 합니다.
+글 작성이 끝나면 커밋 전 반드시 컨테이너 안에서 빌드, 유효성 검사, **Mermaid 문법 교차 검증**을 수행해야 합니다.
 
 ```bash
 # 1. 사이트 빌드 검증
@@ -121,8 +139,21 @@ bundle exec jekyll build -d /tmp/_site
 bundle exec htmlproofer /tmp/_site \
   --disable-external \
   --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
+
+# 3. Mermaid 문법 및 Front Matter 정밀 검증 (특수문자 따옴표 누락 전수 검사)
+python3 -c "
+import glob, re
+for f in glob.glob('_posts/**/*.md', recursive=True):
+    content = open(f, encoding='utf-8').read()
+    for block in re.findall(r'```mermaid\n(.*?)\n```', content, re.DOTALL):
+        for line in block.split('\n'):
+            line = line.strip()
+            # 따옴표 없이 특수문자(), / 등이 들어간 노드 정의 적발
+            if re.search(r'[A-Za-z0-9_]+\[[^\"\n]*[\(\)\/:][^\"\n]*\]', line):
+                print(f'🚨 [Mermaid Syntax Error] {f}: {line}')
+"
 ```
-- `HTML-Proofer finished successfully (0 failures)` 결과를 확인한 후에만 보고를 진행합니다.
+- `HTML-Proofer finished successfully (0 failures)` 및 Mermaid 문법 검사에서 에러가 없는 것을 확인한 후에만 보고를 진행합니다.
 
 ---
 

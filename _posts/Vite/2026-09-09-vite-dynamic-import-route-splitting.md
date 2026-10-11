@@ -47,7 +47,6 @@ flowchart TD
         HTML --> Preload["<link rel='modulepreload' href='HomeView.js'>"]
         CoreJS --> Home["HomeView.js (즉시 렌더링)"]
     end
-
     subgraph UserAction["2. 사용자 네비게이션 또는 호버 이벤트"]
         Hover["메뉴 링크 Hover / 뷰포트 진입"] --> Prefetch["import('./ProductDetail.js') 프리페치 트리거"]
         Prefetch --> BrowserCache["브라우저 HTTP 캐시에 사전 저장"]

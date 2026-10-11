@@ -52,8 +52,8 @@ Chirpy 테마는 테마 소스 코드 전체를 포크(Fork)하는 대신, 필�
 
 ```mermaid
 flowchart LR
-    A["chirpy-starter 템플릿"] -->|Use this template| B["<username>.github.io"]
-    B -->|git push| C["GitHub Actions CI"]
+    A["chirpy-starter 템플릿"] -->|"Use this template"| B["<username>.github.io"]
+    B -->|"git push"| C["GitHub Actions CI"]
     C -->|pages-deploy.yml| D["GitHub Pages 호스팅"]
 ```
 

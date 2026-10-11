@@ -52,7 +52,6 @@ flowchart TD
     Dev["vite.config.dev.ts (개발 환경)<br/>• 로컬 서버 & 프록시<br/>• HMR WebSocket<br/>• 빠른 빌드 옵션"]
     
     Prod["vite.config.prod.ts (프로덕션 환경)<br/>• Terser drop_console<br/>• manualChunks 분할<br/>• 에셋 해시 네이밍"]
-
     Base -->|"mergeConfig()"| Dev
     Base -->|"mergeConfig()"| Prod
 ```

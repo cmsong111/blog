@@ -34,12 +34,10 @@ Vite 내부에는 에셋 처리를 전담하는 핵심 플러그인(`vite:asset`
 ```mermaid
 flowchart TD
     A["import asset from './file.ext'"] --> B{"URL 쿼리 파라미터 존재 여부"}
-
     B -- "?raw" --> C["파일 내용을 UTF-8 문자열로 변환<br/>export default '...'"]
     B -- "?url" --> D["크기 무관하게 정적 에셋으로 방출<br/>export default '/assets/file-[hash].ext'"]
     B -- "?inline" --> E["크기 무관하게 Base64 Data URI 변환<br/>export default 'data:mime;base64,...'"]
     B -- "쿼리 없음 (Default)" --> F{"파일 크기 <= assetsInlineLimit (4KB)"}
-
     F -- "Yes (작은 파일)" --> E
     F -- "No (큰 파일)" --> D
 ```

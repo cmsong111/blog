@@ -23,14 +23,12 @@ sequenceDiagram
     actor User as 브라우저 (사용자)
     participant Server as Spring Boot (ChatClient)
     participant Gemini as Google Gemini API
-
     Note over User,Gemini: 1. 동기 블로킹 (call) - 평균 4~8초 체감 대기
     User->>Server: POST /api/chat (질문)
     Server->>Gemini: generateContent (동기 호출)
     Note over Server: 모델이 전체 문장을 다 쓸 때까지 Thread 대기
     Gemini-->>Server: 완성된 전체 응답 (JSON)
     Server-->>User: 200 OK (전체 텍스트 한 번에 표시)
-
     Note over User,Gemini: 2. 리액티브 스트리밍 (stream + SSE) - 0.3초 즉시 출력 시작
     User->>Server: GET /api/chat/stream (SSE 연결)
     Server->>Gemini: streamGenerateContent (Flux 청크 요청)

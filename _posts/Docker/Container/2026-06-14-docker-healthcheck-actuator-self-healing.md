@@ -22,7 +22,7 @@ mermaid: true
 
 ```mermaid
 flowchart TD
-    Client["클라이언트 / API Gateway"] -->|HTTP GET /api/v1/orders| DockerHost["Docker Host (Port: 8080)"]
+    Client["클라이언트 / API Gateway"] -->|"HTTP GET /api/v1/orders"| DockerHost["Docker Host (Port: 8080)"]
     DockerHost --> Container["Container (PID 1: java -jar)"]
     
     subgraph InsideContainer["컨테이너 내부"]
@@ -30,13 +30,10 @@ flowchart TD
         Pool["HikariCP / Thread Pool (완전 고갈 / Deadlock)"]
         JVM --- Pool
     end
-
-    Container -.->|응답 지연 / 무응답 (Hang)| DockerHost
+    Container -.->|"응답 지연 / 무응답 (Hang)"| DockerHost
     DockerHost --x|504 Gateway Timeout| Client
-
-    DockerDaemon["Docker Daemon"] -.->|PID 1 생존 여부만 확인| Container
+    DockerDaemon["Docker Daemon"] -.->|"PID 1 생존 여부만 확인"| Container
     DockerDaemon --> Status["docker ps: Up 5 hours (정상으로 오판!)"]
-
     style Status fill:#f8d7da,stroke:#dc3545,stroke-width:2px
     style Pool fill:#fff3cd,stroke:#ffc107,stroke-width:2px
 ```
@@ -131,16 +128,13 @@ flowchart LR
         L2["데드락 여부"]
         L3["내부 치명적 손상"]
     end
-
     subgraph Readiness["/actuator/health/readiness (Readiness Probe)"]
         R1["DB 커넥션 풀 가용"]
         R2["외부 캐시/브로커 연결"]
         R3["트래픽 수신 준비 완료"]
     end
-
-    DockerHC["Docker HEALTHCHECK"] -->|컨테이너 재시작 판단용| Liveness
-    Proxy["Nginx / 로드밸런서"] -->|트래픽 라우팅 차단/재개 판단용| Readiness
-
+    DockerHC["Docker HEALTHCHECK"] -->|"컨테이너 재시작 판단용"| L1
+    Proxy["Nginx / 로드밸런서"] -->|"트래픽 라우팅 차단/재개 판단용"| R3
     style Liveness fill:#d1ecf1,stroke:#0c5460,stroke-width:2px
     style Readiness fill:#d4edda,stroke:#155724,stroke-width:2px
 ```
@@ -196,16 +190,15 @@ $ curl -s http://localhost:8080/actuator/health/liveness
 
 ```mermaid
 flowchart TD
-    App["Spring Boot Container (app)"] -->|wget liveness probe| HC["Docker HEALTHCHECK"]
-    HC -->|실패 3회 누적| Status["Container State: unhealthy"]
+    App["Spring Boot Container (app)"] -->|"wget liveness probe"| HC["Docker HEALTHCHECK"]
+    HC -->|"실패 3회 누적"| Status["Container State: unhealthy"]
     
     Socket["/var/run/docker.sock"]
     Status -.-> Socket
     
-    Autoheal["Autoheal Container (사이드카 데몬)"] -->|Docker 이벤트 모니터링| Socket
-    Autoheal -->|unhealthy 감지 즉시 명령| Restart["docker restart app"]
+    Autoheal["Autoheal Container (사이드카 데몬)"] -->|"Docker 이벤트 모니터링"| Socket
+    Autoheal -->|"unhealthy 감지 즉시 명령"| Restart["docker restart app"]
     Restart --> App
-
     style Autoheal fill:#e2e3e5,stroke:#383d41,stroke-width:2px
     style Restart fill:#f8d7da,stroke:#dc3545,stroke-width:2px
 ```

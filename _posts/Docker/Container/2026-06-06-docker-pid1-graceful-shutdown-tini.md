@@ -101,7 +101,7 @@ flowchart TD
     subgraph Container["컨테이너 네임스페이스 (Shell Form)"]
         PID1["PID 1: /bin/sh"]
         PID2["PID 7: java -jar app.jar (자식 프로세스)"]
-        PID1 -->|fork/exec| PID2
+        PID1 -->|"fork/exec"| PID2
     end
     
     DockerDaemon -->|"1. SIGTERM 전송"| PID1

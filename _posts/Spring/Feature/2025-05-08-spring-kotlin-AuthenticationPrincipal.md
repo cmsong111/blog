@@ -61,9 +61,8 @@ fun getNotifications(
 title: AuthenticationPrincipal 
 ---
 flowchart LR
-    A[(SecurityContextHolder)] --> B
-    B[HandlerMethodArgumentResolver] --X--> C
-    C[RestController]
+    A[("SecurityContextHolder")] --> B["HandlerMethodArgumentResolver"]
+    B --x C["RestController"]
 ```
 
 즉 HandlerMethodArgumentResolver에서 `@AuthenticationPrincipal`을 사용하여 인증된 사용자 정보를 가져오려고 할 때, SecurityContextHolder에 인증정보가 없어서 500 오류가 발생합니다.

@@ -24,7 +24,6 @@ sequenceDiagram
     participant SpringApp as Spring Boot 백엔드
     participant Gemini as Google Gemini 3.5
     participant GoogleSearch as 구글 웹 검색 인덱스
-
     Client->>SpringApp: GET /api/search/grounded ("이번 주 IT 주요 소식 알려줘")
     SpringApp->>Gemini: generateContent(tools: [GoogleSearch])
     Note over Gemini: 질문 분석 결과 최신 웹 검색 필요 판단

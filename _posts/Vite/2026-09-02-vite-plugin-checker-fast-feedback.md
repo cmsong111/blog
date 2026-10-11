@@ -52,16 +52,15 @@ flowchart TD
         Esbuild --> FastHMR["즉각적인 HMR 반영 (< 100ms)"]
         FastHMR --> ClientWS["@vite/client WebSocket"]
     end
-
     subgraph WorkerThread["백그라운드 스레드 (Node Worker)"]
         FileChange["파일 변경 이벤트"] --> CheckerEngine["vite-plugin-checker 엔진"]
         CheckerEngine --> TsWorker["Worker 1: tsc --noEmit"]
         CheckerEngine --> EslintWorker["Worker 2: ESLint Linter"]
-        TsWorker & EslintWorker --> DiagnosticAggregator["오류 진단 집계"]
+        TsWorker --> DiagnosticAggregator["오류 진단 집계"]
+        EslintWorker --> DiagnosticAggregator
     end
-
     FileChange -.-> Req
-    DiagnosticAggregator -- "오류 발생 시 통보" --> OverlayHub["브라우저 에러 오버레이 & 터미널 출력"]
+    DiagnosticAggregator -->|"오류 발생 시 통보"| OverlayHub["브라우저 에러 오버레이 & 터미널 출력"]
     OverlayHub --> ClientWS
 ```
 

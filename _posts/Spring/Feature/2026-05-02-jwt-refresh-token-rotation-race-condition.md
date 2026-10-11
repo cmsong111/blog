@@ -27,7 +27,6 @@ sequenceDiagram
     actor Client as 브라우저 (Client)
     participant Server as 인증 서버 (Spring Boot)
     participant Redis as 세션 스토어 (Redis)
-
     Client->>Server: POST /api/v1/auth/refresh (기존 RT-1 전달)
     Server->>Redis: RT-1 유효성 검증 및 즉시 폐기/교체 마킹
     Server->>Redis: 신규 발급된 RT-2 메타데이터 저장
@@ -54,7 +53,6 @@ sequenceDiagram
     actor TabB as 탭 B (요청 2)
     participant Server as Spring Boot (Thread Pool)
     participant Redis as Redis Database
-
     TabA->>Server: POST /refresh (동일 RT-1)
     TabB->>Server: POST /refresh (동일 RT-1)
     

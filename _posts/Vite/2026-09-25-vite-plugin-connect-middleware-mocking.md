@@ -34,7 +34,6 @@ Vite의 개발 서버(`ViteDevServer`)는 내부적으로 Node.js 진영의 고�
 ```mermaid
 flowchart LR
     Browser["브라우저 요청<br/>GET /api/v1/users/me"] --> ViteDevServer["Vite Dev Server<br/>(Connect Middleware Engine)"]
-
     subgraph MiddlewareChain["Connect 미들웨어 파이프라인"]
         direction TB
         M_Cors["1. corsMiddleware"]
@@ -42,14 +41,12 @@ flowchart LR
         M_Transform["3. viteTransformMiddleware<br/>(ESM 모듈 변환)"]
         M_Static["4. viteServeStaticMiddleware<br/>(정적 파일 서빙)"]
         M_Html["5. viteHtmlFallbackMiddleware<br/>(SPA fallback)"]
-
         M_Cors --> M_CustomMock
-        M_CustomMock -- "매칭 성공 시 응답 종료 (res.end)" --> Res["브라우저로 JSON 반환"]
-        M_CustomMock -- "미매칭 시 next() 호출" --> M_Transform
+        M_CustomMock -->|"매칭 성공 시 응답 종료 (res.end)"| Res["브라우저로 JSON 반환"]
+        M_CustomMock -->|"미매칭 시 next() 호출"| M_Transform
         M_Transform --> M_Static --> M_Html
     end
-
-    ViteDevServer --> MiddlewareChain
+    ViteDevServer --> M_Cors
 ```
 
 Vite 플러그인의 `configureServer(server)` 훅은 이 미들웨어 스택에 직접 접근할 수 있는 `server.middlewares` 인스턴스를 제공합니다.

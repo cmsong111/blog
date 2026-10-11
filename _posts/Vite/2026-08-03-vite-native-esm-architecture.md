@@ -78,13 +78,12 @@ flowchart TD
         Browser["브라우저 (<script type='module'>)"]
         Server["Vite HTTP Dev Server (Connect 기반)"]
         Esbuild["esbuild Transformer"]
-
         Server -->|"1. Server Ready (즉시 기동: ~180ms)"| Browser
         Browser -->|"2. HTTP GET /src/main.tsx"| Server
         Server -->|"3. 온디맨드 단일 파일 변환"| Esbuild
         Esbuild -->|"4. 표준 JS/CSS 모듈 반환"| Server
         Server -->|"5. 200 OK (ESM Response)"| Browser
-        Browser -->|"6. main.tsx 내부 import 구문 파싱 -> GET /src/App.tsx"| Server
+        Browser -->|"6. main.tsx 내부 import 구문 파싱 ➔ GET /src/App.tsx"| Server
     end
 ```
 

@@ -26,7 +26,6 @@ sequenceDiagram
     autonumber
     actor Browser as 브라우저
     participant Vite as Vite Dev Server (기존 On-demand 방식)
-
     Browser->>Vite: 1. GET /index.html
     Vite-->>Browser: index.html 서빙
     Browser->>Vite: 2. GET /src/main.tsx
@@ -57,14 +56,12 @@ flowchart TD
         WarmupWorker --> PreTransform["clientFiles 선별 대상 사전 트랜스파일<br/>(AST 파싱, 플러그인 변환 수행)"]
         PreTransform --> Cache["메모리 ModuleGraph에 캐시 적재 완료"]
     end
-
     subgraph BrowserConnect["2. 브라우저 첫 접속 시점"]
         UserReq["사용자 첫 페이지 접속 (localhost:5173)"]
         UserReq --> CacheHit{"모듈 그래프 캐시 확인"}
         CacheHit -- "Hit (사전 변환 완료)" --> InstantServe["대기 없이 즉시 서빙 (< 2ms)"]
         CacheHit -- "Miss" --> OnDemand["필요 시 On-demand 변환"]
     end
-
     Cache -.-> CacheHit
 ```
 

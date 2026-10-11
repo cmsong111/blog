@@ -34,27 +34,21 @@ flowchart TD
     subgraph Host["Host Machine (macOS / Linux / Windows)"]
         Dev["개발자 IDE (IntelliJ IDEA)"]
         Spring["Spring Boot App (Local Port: 8080)"]
-        Dev -->|디버깅 & 실행| Spring
+        Dev -->|"디버깅 & 실행"| Spring
     end
-
     subgraph DockerEnv["Docker Compose (local-network)"]
         direction TB
-        PG["PostgreSQL 17 Container\n(local-postgres:5432)"]
-        RD["Redis 7 Container\n(local-redis:6379)"]
-        VolPG[("postgres_data\n(Named Volume)")]
-        VolRD[("redis_data\n(Named Volume)")]
-
+        PG["PostgreSQL 17 Container<br/>(local-postgres:5432)"]
+        RD["Redis 7 Container<br/>(local-redis:6379)"]
+        VolPG[("postgres_data<br/>(Named Volume)")]
+        VolRD[("redis_data<br/>(Named Volume)")]
         PG --- VolPG
         RD --- VolRD
     end
-
-    Spring -->|localhost:5432\n(JDBC URL)| PG
-    Spring -->|localhost:6379\n(Lettuce Driver)| RD
-
-    classDef host fill:#e8f4fd,stroke:#2b7de9,stroke-width:2px;
-    classDef docker fill:#eef9f0,stroke:#2e7d32,stroke-width:2px;
-    class Host host;
-    class DockerEnv docker;
+    Spring -->|"localhost:5432 (JDBC URL)"| PG
+    Spring -->|"localhost:6379 (Lettuce Driver)"| RD
+    style Host fill:#e8f4fd,stroke:#2b7de9,stroke-width:2px;
+    style DockerEnv fill:#eef9f0,stroke:#2e7d32,stroke-width:2px;
 ```
 
 컨테이너들은 Docker 브리지 네트워크(`local-network`) 내부에서 안전하게 격리되며, 호스트 머신의 Spring Boot 애플리케이션이 접근할 수 있도록 지정된 포트(5432, 6379)로 포트 포워딩됩니다. 또한 컨테이너가 내려가더라도 개발 데이터가 유실되지 않도록 **네임드 볼륨(Named Volume)**으로 데이터를 영속화합니다.

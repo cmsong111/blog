@@ -56,8 +56,8 @@ x86_64 리눅스 커널의 로더(ELF Loader)가 ARM64 명령어로 구성된 �
 flowchart TD
     Client["도커 클라이언트 (docker pull myapp:1.0.0)"] --> ManifestList["OCI Manifest List (myapp:1.0.0)"]
     
-    ManifestList -->|플랫폼이 linux/amd64인 경우| AmdManifest["linux/amd64 Manifest"]
-    ManifestList -->|플랫폼이 linux/arm64인 경우| ArmManifest["linux/arm64 Manifest"]
+    ManifestList -->|"플랫폼이 linux/amd64인 경우"| AmdManifest["linux/amd64 Manifest"]
+    ManifestList -->|"플랫폼이 linux/arm64인 경우"| ArmManifest["linux/arm64 Manifest"]
     
     AmdManifest --> AmdLayer["x86_64 바이너리 레이어들"]
     ArmManifest --> ArmLayer["ARM64 바이너리 레이어들"]

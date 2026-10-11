@@ -25,7 +25,6 @@ sequenceDiagram
     participant Advisor as ToolCallingAdvisor
     participant Gemini as Google Gemini API
     participant Tools as @Tool OrderTools 빈
-
     User->>API: POST /api/tools/chat ("ORD-1002 배송 상태 알려줘")
     API->>Advisor: chatClient.prompt().tools(orderTools).call()
     Advisor->>Gemini: 1차 호출 (프롬프트 + getOrderStatus JSON Schema 도구 명세)

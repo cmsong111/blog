@@ -61,12 +61,11 @@ flowchart LR
     subgraph Stage1["Stage 1: Builder (Temurin 21 JDK)"]
         S1_SRC["소스 코드 & Gradle"] --> S1_BUILD["./gradlew bootJar"]
         S1_BUILD --> S1_JAR["application.jar 생성"]
-        S1_CACHE["빌드 도구/캐시/소스코드"] -.->|컨테이너 종료 시 폐기| S1_DISCARD["폐기"]
+        S1_CACHE["빌드 도구/캐시/소스코드"] -.->|"컨테이너 종료 시 폐기"| S1_DISCARD["폐기"]
     end
-
     subgraph Stage2["Stage 2: Runner (Temurin 21 JRE Alpine)"]
         S2_BASE["최소 경량 JRE 런타임"]
-        S1_JAR -->|COPY --from=builder| S2_APP["application.jar 복사"]
+        S1_JAR -->|"COPY --from=builder"| S2_APP["application.jar 복사"]
         S2_BASE --> S2_APP
         S2_APP --> S2_FINAL["최종 프로덕션 이미지 (~190MB)"]
     end
@@ -93,13 +92,12 @@ flowchart TD
         F2 --> F3["Docker 레이어 전체 캐시 깨짐"]
         F3 --> F4["매 빌드마다 60MB 레이어 새로 업로드"]
     end
-
     subgraph LayeredJAR["Spring Boot Layered JAR 방식"]
         L1["코드 1줄 변경"]
-        L2["dependencies (50MB) -> 캐시 유지 (Hit!)"]
-        L3["spring-boot-loader (500KB) -> 캐시 유지 (Hit!)"]
-        L4["snapshot-dependencies (0KB) -> 캐시 유지 (Hit!)"]
-        L5["application (50KB) -> 변경된 레이어만 재빌드"]
+        L2["dependencies (50MB) ➔ 캐시 유지 (Hit!)"]
+        L3["spring-boot-loader (500KB) ➔ 캐시 유지 (Hit!)"]
+        L4["snapshot-dependencies (0KB) ➔ 캐시 유지 (Hit!)"]
+        L5["application (50KB) ➔ 변경된 레이어만 재빌드"]
         L1 --> L5
     end
 ```
@@ -197,12 +195,11 @@ ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS org.springframework.boot.loader.la
 ```mermaid
 flowchart TD
     subgraph Stage1["1. Builder Stage (JDK 21)"]
-        G_CACHE["gradlew & build.gradle 캐시"] --> G_DEP["의존성 사전 다운로드"]
+        G_CACHE["gradlew 및 build.gradle 캐시"] --> G_DEP["의존성 사전 다운로드"]
         G_DEP --> G_SRC["src/ 복사"]
         G_SRC --> G_BUILD["bootJar 실행"]
         G_BUILD --> JAR["application.jar"]
     end
-
     subgraph Stage2["2. Extractor Stage (JRE 21)"]
         JAR --> EXTRACT["layertools extract"]
         EXTRACT --> L1["dependencies/"]
@@ -210,7 +207,6 @@ flowchart TD
         EXTRACT --> L3["snapshot-dependencies/"]
         EXTRACT --> L4["application/"]
     end
-
     subgraph Stage3["3. Runner Stage (JRE 21 Alpine)"]
         USER["비루트 appuser 생성"] --> C1["COPY dependencies/ (캐시 적중률 99%)"]
         C1 --> C2["COPY spring-boot-loader/"]
@@ -218,9 +214,7 @@ flowchart TD
         C3 --> C4["COPY application/ (자주 변경됨)"]
         C4 --> RUN["JarLauncher 실행"]
     end
-
-    Stage1 --> Stage2
-    Stage2 --> Stage3
+    L4 -.->|"의존성 계층 복사"| C1
 ```
 
 ---

@@ -47,21 +47,17 @@ sequenceDiagram
     participant Node2 as Instance Node-2
     participant Redis as Redis (ShedLock)
     participant DB as PostgreSQL (JobStateStore)
-
     par 동시 발화
         Scheduler->>Node1: start("judgment-collection-job")
         Scheduler->>Node2: start("judgment-collection-job")
     end
-
     Node1->>Redis: locks.lock("job:judgment-collection-job", lease=10m)
     Note over Node1,Redis: 락 획득 성공 (SimpleLock 반환)
     Node2->>Redis: locks.lock("job:judgment-collection-job", lease=10m)
     Note over Node2,Redis: 락 획득 실패 (Optional.empty)
     Node2-->>Scheduler: ALREADY_RUNNING 예외 반환 후 안전 종료
-
     Node1->>DB: begin(스프링 부트 예제 애플리케이션) -> JobRun #1042 생성 (leaseUntil = now + 10m)
     Node1->>Node1: jobExecutor 풀에 비동기 위임
-
     loop 각 항목 처리 (1 ~ N건)
         Node1->>Node1: context.check(스프링 부트 예제 애플리케이션) (중단 플래그 & 리스 만료 검증)
         opt 리스 잔여시간 5분 미만 도달 시
@@ -70,7 +66,6 @@ sequenceDiagram
         end
         Node1->>DB: states.record(SUCCEEDED, checkpoint) [REQUIRES_NEW]
     end
-
     Node1->>DB: finish(SUCCEEDED)
     Node1->>Redis: lock.unlock(스프링 부트 예제 애플리케이션) (락 해제)
 ```

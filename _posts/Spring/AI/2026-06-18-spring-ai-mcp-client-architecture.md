@@ -26,17 +26,14 @@ sequenceDiagram
     participant Gemini as Google Gemini
     participant OrderServer as order-server (HTTP: 8092)
     participant ArticleServer as article-server (STDIO CLI)
-
     Host->>OrderServer: HTTP POST /mcp (initialize 핸드셰이크)
     Host->>ArticleServer: 자식 프로세스 stdin/stdout (initialize 핸드셰이크)
     
     OrderServer-->>Host: 도구 목록 반환 [get_order_status, cancel_order, ...]
     ArticleServer-->>Host: 도구 목록 반환 [createArticle, deleteArticle, ...]
-
     Host->>Filter: 수집된 원본 도구 전달
     Note over Filter: 파괴적인 도구(deleteArticle, cancel_order) 제거
     Filter-->>Client: 검증된 허용 목록 도구만 주입
-
     Client->>Gemini: ChatClient 프롬프트에 허용 도구 스키마 전달
     Note over Gemini: 질문 분석 결과 list_orders_by_customer 호출 요청
     Gemini-->>Client: FunctionCall(name: "list_orders_by_customer")

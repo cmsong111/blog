@@ -24,7 +24,6 @@ flowchart TD
         P2 --> P3{"Jackson 역직렬화 실패?"}
         P3 -- "실패" --> P4["재시도(Retry) 호출 비용 발생"]
     end
-
     subgraph NativeWay["2. Provider-Native JSON Schema (Constrained Decoding)"]
         N1["Java/Kotlin DTO 정의"] --> N2["JSON Schema 자동 추출"]
         N2 --> N3["Gemini 옵션에 response_schema 주입"]

@@ -34,7 +34,6 @@ sequenceDiagram
     participant HTML as index.html
     participant CSS as index.css
     participant Font as 폰트 파일 (Pretendard.woff2)
-
     Note over User, Font: [일반 로딩: 폰트 다운로드 지연 발생]
     User->>HTML: 1. HTML 요청 및 수신
     User->>CSS: 2. CSS 스타일시트 다운로드
@@ -43,7 +42,6 @@ sequenceDiagram
     User->>Font: 5. 폰트 다운로드 시작 (지연 시작)
     Note over User: FOIT 발생 (텍스트 투명 상태)
     Font-->>User: 6. 폰트 수신 완료 후 화면 렌더링
-
     Note over User, Font: [Vite Preload 파이프라인 최적화]
     User->>HTML: 1. HTML 수신 (link rel=preload 파싱)
     par 병렬 즉시 요청

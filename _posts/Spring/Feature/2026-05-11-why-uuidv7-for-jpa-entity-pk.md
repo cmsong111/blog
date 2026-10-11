@@ -24,10 +24,8 @@ flowchart LR
         A["BIGINT AUTO_INCREMENT<br/>(Identity / Sequence)"]
         B["UUIDv4<br/>(Random UUID)"]
     end
-
     A --> A_PRO["장점: B-Tree 우측 끝 순차 삽입<br/>8바이트의 가벼운 인덱스 용량"]
     A --> A_CON["단점: 분산 노드 채번 충돌<br/>ID 열거 공격 위험 (보안 취약)<br/>DB INSERT 전 ID 발급 불가"]
-
     B --> B_PRO["장점: 클라이언트/서버 분산 발급<br/>128비트 전역 고유성 &amp; 유추 불가"]
     B --> B_CON["치명적 단점: 완전한 무작위성<br/>B-Tree 리프 노드 페이지 분할 (Page Split)<br/>인덱스 비대화 &amp; 디스크 랜덤 I/O 폭증"]
 ```

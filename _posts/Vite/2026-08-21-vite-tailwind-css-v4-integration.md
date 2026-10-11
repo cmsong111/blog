@@ -38,7 +38,6 @@ flowchart TD
         D1 --> E1["PostCSS Autoprefixer / CSSNano 체이닝"]
         E1 --> F1["최종 번들 CSS (느린 빌드 시간)"]
     end
-
     subgraph V4["Tailwind CSS v4 (Oxide & Lightning CSS)"]
         A2["소스 코드 (.tsx / .vue)"] --> B2["@tailwindcss/vite 플러그인"]
         B2 --> C2["Rust Oxide 고속 AST 스캐너 (Zero-config 파일 감지)"]

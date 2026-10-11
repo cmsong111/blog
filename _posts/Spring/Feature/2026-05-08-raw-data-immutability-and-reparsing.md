@@ -51,17 +51,16 @@ flowchart LR
 flowchart TD
     subgraph Phase1["1단계: 수집 및 원문 불변 보존 (Collection Phase)"]
         API["외부 Open API"] -->|호출| Client["LawPrecedentClient"]
-        Client -->|원본 JSON| Import["JudgmentImportService.collect(스프링 부트 예제 애플리케이션)"]
-        Import -->|원본 그대로 INSERT/UPDATE| RawDB[("raw_judgments 테이블\n(rawJson 불변 보존)")]
-        RawDB -->|1차 파싱 시도| Parser["JudgmentParser\n(parserVersion: law-prec-v4)"]
-        Parser -->|성공 시 도메인 저장| MainDB[("judgments 도메인 테이블")]
-        Parser -.->|실패 시 보류 기록| Pending["raw.parseError 기록\n(원문은 그대로 유지)"]
+        Client -->|"원본 JSON"| Import["JudgmentImportService.collect(스프링 부트 예제 애플리케이션)"]
+        Import -->|"원본 그대로 INSERT/UPDATE"| RawDB[("raw_judgments 테이블\n(rawJson 불변 보존)")]
+        RawDB -->|"1차 파싱 시도"| Parser["JudgmentParser\n(parserVersion: law-prec-v4)"]
+        Parser -->|"성공 시 도메인 저장"| MainDB[("judgments 도메인 테이블")]
+        Parser -.->|"실패 시 보류 기록"| Pending["raw.parseError 기록\n(원문은 그대로 유지)"]
     end
-
     subgraph Phase2["2단계: 로컬 무중단 재파싱 (Reparse Phase)"]
-        Batch["judgment-reparse 배치 작업"] -->|외부 호출 0건| RawDB
-        RawDB -->|최신 파서로 재해석| Parser
-        Parser -->|멱등적 업데이트| MainDB
+        Batch["judgment-reparse 배치 작업"] -->|"외부 호출 0건"| RawDB
+        RawDB -->|"최신 파서로 재해석"| Parser
+        Parser -->|"멱등적 업데이트"| MainDB
     end
 ```
 

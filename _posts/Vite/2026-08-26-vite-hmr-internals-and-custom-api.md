@@ -29,25 +29,21 @@ flowchart TD
         ModGraph["모듈 그래프 탐색 (ModuleGraph)"]
         HmrContext["HMR 컨텍스트 생성 & 경계 계산"]
         WsServer["WebSocket Server (server.ws)"]
-
         Watcher --> ModGraph
         ModGraph --> HmrContext
         HmrContext --> WsServer
     end
-
     subgraph Browser["브라우저 런타임 (@vite/client)"]
         WsClient["WebSocket Client"]
         BoundaryCheck{"HMR 경계 수용 여부<br/>(hot.accept 등록?)"}
         FetchNewMod["신규 모듈 동적 Import<br/>import(path + '?t=' + timestamp)"]
         SwapModule["모듈 실행 및 교체<br/>(hot.dispose -> 새 모듈 실행)"]
         FullReload["전체 페이지 새로고침<br/>(location.reload())"]
-
         WsClient --> BoundaryCheck
         BoundaryCheck -- "수용 (Boundary 일치)" --> FetchNewMod
         FetchNewMod --> SwapModule
         BoundaryCheck -- "미수용 (최상단 도달)" --> FullReload
     end
-
     WsServer -- "WS: { type: 'update', updates: [...] }" --> WsClient
 ```
 

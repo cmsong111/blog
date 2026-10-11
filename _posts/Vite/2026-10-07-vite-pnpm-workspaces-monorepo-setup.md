@@ -26,13 +26,11 @@ flowchart TD
             SharedUI["@namju/shared-ui (디자인 시스템)"]
             SharedUtils["@namju/shared-utils (공통 유틸)"]
         end
-
         subgraph Apps["apps/ (Vite 애플리케이션)"]
             ClientWeb["apps/client-web (사용자 포털)"]
             AdminWeb["apps/admin-web (관리자 콘솔)"]
         end
     end
-
     SharedUI -.->|"workspace:*"| ClientWeb
     SharedUI -.->|"workspace:*"| AdminWeb
     SharedUtils -.->|"workspace:*"| ClientWeb

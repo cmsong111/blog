@@ -53,12 +53,11 @@ RUN ./gradlew bootJar --no-daemon -x test
 
 ```mermaid
 flowchart TD
-    A["COPY gradlew, gradle, build.gradle.kts"] -->|캐시 적중 (CACHED)| B["의존성 정의 레이어"]
+    A["COPY gradlew, gradle, build.gradle.kts"] -->|"캐시 적중 (CACHED)"| B["의존성 정의 레이어"]
     B --> C["COPY src src (소스 1줄 변경 발생!)"]
-    C -->|해시 변경으로 캐시 파기!| D["RUN ./gradlew bootJar"]
+    C -->|"해시 변경으로 캐시 파기!"| D["RUN ./gradlew bootJar"]
     D --> E["❌ 텅 빈 /root/.gradle 디렉터리"]
     E --> F["🌐 수백 MB 의존성 재다운로드 (3~4분 소요)"]
-
     style C fill:#ffebee,stroke:#c62828,color:#b71c1c
     style D fill:#ffebee,stroke:#c62828,color:#b71c1c
     style F fill:#ffcdd2,stroke:#b71c1c,color:#b71c1c
@@ -109,15 +108,12 @@ flowchart LR
     subgraph BuildEngine["Docker BuildKit Daemon"]
         CM[("BuildKit 영속 캐시 저장소<br>/var/lib/docker/buildkit/cache")]
     end
-
     subgraph BuildContainer["임시 빌드 컨테이너 (/workspace)"]
         CMD["RUN --mount=type=cache,target=/root/.gradle<br>./gradlew bootJar"]
         DIR["/root/.gradle (마운트 포인트)"]
     end
-
-    CM <===>|빌드 실행 중 실시간 읽기/쓰기 바인드| DIR
-    DIR -.->|빌드 완료 후 즉시 분리| X["최종 이미지 레이어에는 포함되지 않음!"]
-
+    CM <===>|"빌드 실행 중 실시간 읽기/쓰기 바인드"| DIR
+    DIR -.->|"빌드 완료 후 즉시 분리"| X["최종 이미지 레이어에는 포함되지 않음!"]
     style CM fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
     style DIR fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
 ```

@@ -25,16 +25,13 @@ flowchart TD
     subgraph Config["단일 설정 진입점"]
         ViteConfig["vite.config.ts\n(별칭, 플러그인, CSS 설정)"]
     end
-
     subgraph DualEngines["Vite 공용 파이프라인"]
         Transform["esbuild & Rollup 플러그인 파이프라인"]
     end
-
     subgraph Targets["실행 환경"]
         Dev["개발 서버 / 프로덕션 빌드 (Vite)"]
         TestRunner["단위 및 통합 테스트 러너 (Vitest)"]
     end
-
     ViteConfig --> Transform
     Transform --> Dev
     Transform --> TestRunner

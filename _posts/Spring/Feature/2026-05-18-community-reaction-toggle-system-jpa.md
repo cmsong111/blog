@@ -220,7 +220,6 @@ sequenceDiagram
     participant Svc as ReactionService
     participant Repo as ReactionRepository
     participant DB as PostgreSQL
-
     User->>Ctrl: PUT /api/v1/articles/{id}/reaction (type: RELIEVED)
     Ctrl->>Svc: react(articleId, userId, RELIEVED)
     Svc->>Repo: findByArticleIdAndUserId(articleId, userId)

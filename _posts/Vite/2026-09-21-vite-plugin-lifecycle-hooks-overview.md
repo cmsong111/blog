@@ -31,13 +31,11 @@ flowchart TD
         H_configResolved["configResolved(resolvedConfig)<br/>최종 확정된 설정 캐싱"]
         H_config --> H_configResolved
     end
-
     subgraph DevHooks["2. 개발 서버 단계 (Vite 전용)"]
         H_configureServer["configureServer(server)<br/>Connect 미들웨어 / WebSocket 등록"]
         H_configurePreview["configurePreviewServer(server)<br/>미리보기 서버 미들웨어 등록"]
         H_handleHotUpdate["handleHotUpdate(ctx)<br/>HMR 변경 감지 및 커스텀 메시지 전송"]
     end
-
     subgraph BuildHooks["3. 모듈 변환 및 빌드 파이프라인 (Rollup 공용)"]
         H_options["options(opts)<br/>Rollup 옵션 정제"]
         H_buildStart["buildStart(opts)<br/>빌드 컨텍스트 초기화"]
@@ -47,12 +45,10 @@ flowchart TD
         H_transformIndexHtml["transformIndexHtml(html, ctx)<br/>index.html 태그 주입 및 변환"]
         H_generateBundle["generateBundle(opts, bundle)<br/>최종 출력 번들 조작"]
         H_closeBundle["closeBundle()<br/>빌드 종료 리소스 정리"]
-
         H_options --> H_buildStart --> H_resolveId --> H_load --> H_transform --> H_transformIndexHtml --> H_generateBundle --> H_closeBundle
     end
-
-    ConfigHooks --> DevHooks
-    ConfigHooks --> BuildHooks
+    H_configResolved --> H_configureServer
+    H_configResolved --> H_options
 ```
 
 ### 2.1 서버 및 설정 훅 (Configuration Hooks)

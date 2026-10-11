@@ -49,7 +49,6 @@ sequenceDiagram
     participant Compose as Docker Compose
     participant DB as PostgreSQL 컨테이너
     participant App as Spring Boot 컨테이너
-
     Dev->>Compose: docker compose up
     Compose->>DB: 컨테이너 생성 및 PID 시작 (Created -> Running)
     Note over Compose: 기본 depends_on 충족! 즉시 다음 컨테이너 실행
@@ -181,21 +180,18 @@ services:
 ```mermaid
 flowchart TD
     subgraph Infrastructure ["인프라 서비스 구동"]
-        P["postgres (Starting)"] -->|pg_isready 성공| PH["postgres (healthy)"]
-        R["redis (Starting)"] -->|redis-cli ping 성공| RH["redis (healthy)"]
+        P["postgres (Starting)"] -->|"pg_isready 성공"| PH["postgres (healthy)"]
+        R["redis (Starting)"] -->|"redis-cli ping 성공"| RH["redis (healthy)"]
     end
-
     subgraph ApplicationGate ["Docker Compose 의존성 게이트"]
         PH --> Gate{"모든 condition: service_healthy 만족?"}
         RH --> Gate
     end
-
     subgraph AppBoot ["애플리케이션 구동"]
         Gate -->|Yes| App["spring-app 컨테이너 실행"]
         App --> Hikari["HikariCP Connection Pool 초기화 성공"]
         App --> RedisConn["Lettuce / Redisson 연결 성공"]
     end
-
     classDef ok fill:#2ea44f,stroke:#22863a,color:#ffffff;
     classDef wait fill:#f66a0a,stroke:#d03592,color:#ffffff;
     class PH,RH,Hikari,RedisConn ok;
@@ -228,8 +224,8 @@ Spring Boot 내부에서 Flyway를 실행할 수도 있지만, 다음과 같은 
 
 ```mermaid
 flowchart LR
-    DB["1. postgres\n(service_healthy)"] -->|완전 준비 완료| M["2. flyway-migration\n(1회성 DDL 적용)"]
-    M -->|종료 코드 0 확인\nservice_completed_successfully| A["3. spring-app\n(애플리케이션 기동)"]
+    DB["1. postgres\n(service_healthy)"] -->|"완전 준비 완료"| M["2. flyway-migration\n(1회성 DDL 적용)"]
+    M -->|"종료 코드 0 확인\nservice_completed_successfully"| A["3. spring-app\n(애플리케이션 기동)"]
 ```
 
 ### 5.1. 완성형 `compose.yaml` 아키텍처

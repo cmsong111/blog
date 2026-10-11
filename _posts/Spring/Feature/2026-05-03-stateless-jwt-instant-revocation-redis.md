@@ -68,7 +68,6 @@ sequenceDiagram
     participant Redis as Redis (TokenVersionStore)
     participant DB as UserRepository (RDB)
     participant Controller as Business API
-
     Client->>Filter: API 요청 (Bearer AccessToken)
     Note over Filter: 1차: 암호화 서명(HS256) 및 exp 검증
     alt 서명 위조 또는 만료

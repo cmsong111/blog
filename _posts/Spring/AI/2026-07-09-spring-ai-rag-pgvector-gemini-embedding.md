@@ -26,7 +26,6 @@ sequenceDiagram
     participant Embedding as Google GenAI Embedding (gemini-embedding-001)
     participant PgVector as PostgreSQL 17 (pgvector HNSW)
     participant Gemini as Google Gemini Chat (gemini-3.5-flash-lite)
-
     Client->>RagService: POST /api/rag/ask ("남은 연차 내년 이월 가능?")
     RagService->>QA: chatClient.prompt().advisors(qaAdvisor).call()
     QA->>Embedding: 질문 텍스트 벡터화 요청 (768차원)

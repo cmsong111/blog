@@ -27,29 +27,23 @@ sequenceDiagram
     actor AdminB as 운영자 B (admin_park)
     participant Server as Spring Boot 서버
     participant DB as PostgreSQL (articles)
-
     AdminA->>Server: 11:40:00 GET /admin/articles/1/edit (조회)
     Server->>DB: SELECT * FROM articles WHERE id = 1
     DB-->>Server: title: "초기 제목", version: 1
     Server-->>AdminA: 수정 폼 렌더링 (version: 1)
-
     AdminB->>Server: 11:40:10 GET /admin/articles/1/edit (조회)
     Server->>DB: SELECT * FROM articles WHERE id = 1
     DB-->>Server: title: "초기 제목", version: 1
     Server-->>AdminB: 수정 폼 렌더링 (version: 1)
-
     Note over AdminA,AdminB: 두 운영자가 각자 브라우저에서 장시간 본문 수정 작업 수행
-
     AdminA->>Server: 11:42:15 POST /admin/articles/1/edit (저장)
     Server->>DB: UPDATE articles SET title = "A의 수정본" WHERE id = 1
     DB-->>Server: UPDATE 1 (성공)
     Server-->>AdminA: 수정 완료 안내 (302 Redirect)
-
     AdminB->>Server: 11:42:18 POST /admin/articles/1/edit (3초 뒤 저장)
     Server->>DB: UPDATE articles SET title = "B의 수정본" WHERE id = 1
     DB-->>Server: UPDATE 1 (덮어쓰기 성공!)
     Server-->>AdminB: 수정 완료 안내 (302 Redirect)
-
     Note over DB: ⚠️ 운영자 A가 심혈을 기울여 수정한 내용이 영구 소실됨!
 ```
 

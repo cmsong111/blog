@@ -81,10 +81,9 @@ flowchart TD
     Client["외부 클라이언트 패킷<br/>(Dst: Host-IP:8080)"] --> Eth0["호스트 eth0 인터페이스"]
     Eth0 --> PREROUTING["iptables PREROUTING 체인"]
     PREROUTING --> DOCKER_CHAIN["DOCKER 체인 (DNAT 변환)"]
-    DOCKER_CHAIN -->|"Dst IP/Port 치환<br/>(172.17.0.2:80)"| Docker0["docker0 브릿지 인터페이스"]
+    DOCKER_CHAIN -->|"Dst IP/Port 치환 (172.17.0.2:80)"| Docker0["docker0 브릿지 인터페이스"]
     Docker0 --> Veth["veth pair 가상 이더넷"]
     Veth --> Container["컨테이너 eth0<br/>(Nginx 리스닝: 80)"]
-
     LocalClient["호스트 로컬 프로세스<br/>(localhost:8080)"] -.-> DockerProxy["docker-proxy 프로세스<br/>(유저 공간 포워딩 보조)"]
     DockerProxy -.-> Container
 ```
@@ -133,14 +132,13 @@ flowchart LR
         B_Bridge["docker0 가상 브릿지 + iptables DNAT"]
         B_Veth["veth pair 격리 장벽"]
         B_Cont["컨테이너 독립 Network Stack (eth0: 172.17.0.2)"]
-        B_Host <--> B_Bridge <--> B_Veth <--> B_Cont
+        B_Host --- B_Bridge --- B_Veth --- B_Cont
     end
-
     subgraph HostMode ["Host 네트워크 모드 (--network host)"]
         direction TB
         H_Host["호스트 Network Stack (eth0, lo, iptables 직접 공유)"]
         H_Cont["컨테이너 프로세스 (격리 네임스페이스 없음)"]
-        H_Host <-->|"포트 포워딩 오버헤드 0<br/>네이티브 소켓 직접 바인딩"| H_Cont
+        H_Host ---|"포트 포워딩 오버헤드 0 (네이티브 소켓 바인딩)"| H_Cont
     end
 ```
 

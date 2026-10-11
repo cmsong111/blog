@@ -26,7 +26,6 @@ flowchart TD
         A3 --> A4["컨트롤러 비즈니스 로직만 실행"]
         A4 --> A5["⚠️ 필터 오설정, 토큰 변조, 세션 누수 탐지 불가"]
     end
-
     subgraph RealFilterSimulation["실전 MockMvc 보안 체인 검증"]
         B1["실제 HTTP 요청 인입 (Bearer Token / Cookie)"] --> B2["FilterChainProxy가 URL 패턴으로 체인 매칭"]
         B2 --> B3["BearerTokenAuthenticationFilter / CsrfFilter 실행"]
@@ -153,7 +152,6 @@ sequenceDiagram
     participant JwtProvider as JwtAuthenticationProvider
     participant Handler as ApiSecurityHandlers
     participant Repo as NullSecurityContextRepository
-
     Client->>Filter: GET /api/v1/users/me (Header: Bearer {token})
     alt 토큰 유효
         Filter->>JwtProvider: 토큰 서명, 만료, token_type 클레임 검증

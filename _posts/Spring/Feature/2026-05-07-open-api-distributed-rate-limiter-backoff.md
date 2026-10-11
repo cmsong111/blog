@@ -132,18 +132,14 @@ sequenceDiagram
     participant Node2 as Instance Node-2
     participant Redis as Redis (LawApiRequestGate)
     participant External as 공공 데이터 포털 API
-
     Node1->>Redis: execute(SLOT, key, 1000ms)
     Redis-->>Node1: delay = 0ms (슬롯 선점 성공)
     Node1->>External: GET /DRF/lawSearch.do (호출 시작)
-
     Note over Node2: 200ms 뒤 Node-2 요청 발생
     Node2->>Redis: execute(SLOT, key, 1000ms)
     Redis-->>Node2: delay = 800ms (슬롯 점유 중)
     Node2->>Node2: Thread.sleep(800ms)
-
     External-->>Node1: 200 OK (응답 수신 완료)
-
     Note over Node2: 800ms 수면 후 재확인
     Node2->>Redis: execute(SLOT, key, 1000ms)
     Redis-->>Node2: delay = 0ms (슬롯 선점 성공)

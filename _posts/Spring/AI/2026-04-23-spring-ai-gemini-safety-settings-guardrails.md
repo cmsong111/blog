@@ -24,7 +24,6 @@ sequenceDiagram
     participant API as SafetyController
     participant Service as SafeChatService
     participant Gemini as Google Gemini API
-
     User->>API: GET /api/safety/chat (message, level: STRICT)
     API->>Service: chat(message, STRICT)
     Service->>Gemini: prompt().options(safetySettings) 호출
@@ -42,7 +41,6 @@ sequenceDiagram
         Service-->>API: SafeChatResponse (content)
         API-->>User: 200 OK
     end
-
     opt 차단 발생 시
         Service-->>API: throws SafetyBlockedException
         API-->>User: 400 Bad Request (RFC 9457 ProblemDetail)

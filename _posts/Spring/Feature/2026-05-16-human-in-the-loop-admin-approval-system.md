@@ -50,7 +50,6 @@ stateDiagram-v2
         NEEDS_REVIEW --> NEW: 관리자 식별 정보 보정 (correct)
         NEEDS_REVIEW --> REJECTED: 관리자 반려 (reject)
     }
-
     VERIFIED --> IMPORTED: 관리자 승인 후 가져오기 (approve)
     IMPORTED --> [*]
 ```

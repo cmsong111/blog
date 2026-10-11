@@ -40,31 +40,28 @@ image:
 
 ```mermaid
 flowchart TD
-    A["1. Gemini Search & Structure<br/>(웹 검색 1회 + JSON 구조화 1회)"] --> B["1단계 서버 규칙 검증 (DiscoveryRules)"]
+    A["1. Gemini Search 및 구조화<br/>(웹 검색 1회 + JSON 구조화 1회)"] --> B["1단계 서버 규칙 검증 (DiscoveryRules)"]
     
     subgraph S1 ["1단계: 서버 결정론적 정규화 & 환각 차단"]
         B --> B1{"출처 화이트리스트<br/>groundingChunks 대조"}
-        B1 -- "조작 출처" --> R1["출처 제외 / 후보 거부"]
-        B1 -- "통과" --> B2{"사건번호 본문 바운딩<br/>(?&lt;!\\d)...(?!\\d)"}
-        B2 -- "본문 미존재" --> R2["caseNumber = null (격리)"]
-        B2 -- "통과" --> B3["법원 약칭 정규화 & 지원 공백 분리<br/>(서울고법 형사1부 ➔ 서울고등법원)"]
+        B1 -->|"조작 출처"| R1["출처 제외 / 후보 거부"]
+        B1 -->|"통과"| B2{"사건번호 본문 정규식 바운딩 검증"}
+        B2 -->|"본문 미존재"| R2["caseNumber = null (격리)"]
+        B2 -->|"통과"| B3["법원 약칭 정규화 & 지원 공백 분리<br/>(서울고법 형사1부 ➔ 서울고등법원)"]
         B3 --> B4["선고일 형태소 대조 & 복합 중복키 생성<br/>(case:2026노412@서울고등법원)"]
     end
-
     B4 --> C[("DB 적재: JudgmentDiscovery<br/>상태: NEW / AWAITING_SOURCE")]
     
     C --> D["2단계 실시간 공공 API 교차 대조<br/>(DiscoveryVerifier)"]
-
     subgraph S2 ["2단계: 국가법령정보센터 실시간 대조 (Ground Truth)"]
         D --> D1["LawPrecedentClient.list(caseNumber)"]
         D1 --> D2{"3-Tuple 완전 일치 검증<br/>(사건번호 + 법원명 + 선고일)"}
-        D2 -- "3개 축 100% 일치" --> D3{"지원 데이터 출처 검증<br/>(SUPPORTED_SOURCES)"}
-        D3 -- "대법원 판례 (JSON 지원)" --> V["원문 확인 (VERIFIED) 전이<br/>precSerial 확정"]
-        D3 -- "HTML 전용 출처 (#61)" --> RV["검토 필요 (NEEDS_REVIEW)"]
-        D2 -- "공식 API 미등록 (0건)" --> AW["원문 대기 (AWAITING_SOURCE)<br/>14일간 주기적 재대조"]
-        D2 -- "사건번호 같으나 법원/날짜 불일치" --> RV
+        D2 -->|"3개 축 100% 일치"| D3{"지원 데이터 출처 검증<br/>(SUPPORTED_SOURCES)"}
+        D3 -->|"대법원 판례 (JSON 지원)"| V["원문 확인 (VERIFIED) 전이<br/>precSerial 확정"]
+        D3 -->|"HTML 전용 출처 (#61)"| RV["검토 필요 (NEEDS_REVIEW)"]
+        D2 -->|"공식 API 미등록 (0건)"| AW["원문 대기 (AWAITING_SOURCE)<br/>14일간 주기적 재대조"]
+        D2 -->|"사건번호 같으나 불일치"| RV
     end
-
     V --> H["관리자 검토 및 승인 (HITL)"]
     H --> IMP["공식 원문 수집 (Import Raw)<br/>raw_judgments 적재"]
 ```

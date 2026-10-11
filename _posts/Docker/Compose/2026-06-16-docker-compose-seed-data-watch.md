@@ -44,7 +44,6 @@ sequenceDiagram
     participant Entry as docker-entrypoint.sh
     participant Volume as DB Volume (/var/lib/postgresql/data)
     participant Engine as PostgreSQL Server
-
     Dev->>Docker: docker compose up -d
     Docker->>Entry: 컨테이너 기동 및 스크립트 실행
     Entry->>Volume: 기존 데이터베이스 클러스터 존재 여부 검사
@@ -188,16 +187,13 @@ flowchart LR
         Conf["설정 파일 (application.yml, .env)"]
         Seed["시드 스크립트 (initdb/*.sql)"]
     end
-
     subgraph Watcher ["Docker Compose Watch Engine"]
         Engine["develop: watch 이벤트 감지"]
     end
-
     subgraph Containers ["Docker 컨테이너"]
         App["App Container (Spring/Node)"]
         DB["PostgreSQL Container"]
     end
-
     Src -->|"Action: sync (즉시 파일 덮어쓰기)"| Engine
     Conf -->|"Action: sync + restart"| Engine
     Engine -->|"핫 싱크"| App

@@ -19,18 +19,17 @@ image:
 
 ```mermaid
 flowchart LR
-    User["사용자 (Client)"] -->|1. POST /api/ask| Service["AssistantService<br/>(RAG + ChatClient)"]
-    Service -->|2. 검색| KB["KnowledgeBase<br/>(사내 규정 문서)"]
-    Service -->|3. 추론 호출| Gemini["Google Gemini 3.5<br/>(gemini-3.5-flash-lite)"]
+    User["사용자 (Client)"] -->|"1. POST /api/ask"| Service["AssistantService<br/>(RAG + ChatClient)"]
+    Service -->|"2. 검색"| KB["KnowledgeBase<br/>(사내 규정 문서)"]
+    Service -->|"3. 추론 호출"| Gemini["Google Gemini 3.5<br/>(gemini-3.5-flash-lite)"]
     
-    Service -.->|4. Micrometer Observation| Meter["Micrometer Core"]
-    Meter -->|/actuator/prometheus| Prom["Prometheus (9090)"]
+    Service -.->|"4. Micrometer Observation"| Meter["Micrometer Core"]
+    Meter -->|"/actuator/prometheus"| Prom["Prometheus (9090)"]
     Prom --> Grafana["Grafana 대시보드 (3000)"]
-    Meter -->|Span 내보내기| Zipkin["Zipkin 분산 추적 (9411)"]
-
-    User -->|5. POST /api/evaluate/*| EvalService["EvaluationService"]
-    EvalService -->|Judge 프롬프트| GeminiJudge["Gemini 심사 모델<br/>(RelevancyEvaluator)"]
-    EvalService -.->|6. 통과율 기록| Meter
+    Meter -->|"Span 내보내기"| Zipkin["Zipkin 분산 추적 (9411)"]
+    User -->|"5. POST /api/evaluate/*"| EvalService["EvaluationService"]
+    EvalService -->|"Judge 프롬프트"| GeminiJudge["Gemini 심사 모델<br/>(RelevancyEvaluator)"]
+    EvalService -.->|"6. 통과율 기록"| Meter
 ```
 
 ---
@@ -109,7 +108,7 @@ management:
 Spring AI는 `ChatModel`과 `ChatClient`가 동작할 때 다음과 같은 핵심 메트릭을 자동으로 기록합니다:
 
 1. **`gen_ai.client.token.usage` (카운터)**:
-   - 태그: `gen_ai.system="google_genai"`, `gen_ai.request.model="gemini-3.5-flash-lite"`, `gen_ai.token.type="input"|"output"|"total"`
+   - 태그: `gen_ai.system="google_genai"`, `gen_ai.request.model="gemini-3.5-flash-lite"`, `gen_ai.token.type=|"input"|"output"|"total"`
    - 실시간 토큰 소모 속도와 과금 예상액을 계산하는 근거가 됩니다.
 2. **`gen_ai.client.operation` (타이머)**:
    - 모델 네트워크 통신 및 추론에 소요된 순수 지연 시간을 측정합니다.

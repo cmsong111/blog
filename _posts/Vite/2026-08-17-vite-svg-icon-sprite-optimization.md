@@ -39,24 +39,21 @@ flowchart LR
         SVG2["src/assets/icons/dashboard.svg"]
         SVG3["src/assets/icons/settings.svg"]
     end
-
     subgraph VitePlugin["2. vite-plugin-svg-icons 파이프라인"]
         Scan["디렉토리 스캔 및 감시 (Chokidar)"]
-        SVGO["SVGO 최적화<br/>(불필요한 xmlns, 주석, stroke 제거)"]
-        Symbol["<symbol id='icon-[name]'> 태그로 변환"]
-        Sheet["단일 <svg id='__svg__icons__dom__'> 생성"]
+        SVGO["SVGO 최적화<br/>(불필요한 속성 및 주석 제거)"]
+        Symbol["symbol 태그 변환"]
+        Sheet["단일 SVG 스프라이트 시트 생성"]
         Scan --> SVGO --> Symbol --> Sheet
     end
-
     subgraph RuntimeDOM["3. 브라우저 런타임 주입"]
         Virtual["import 'virtual:svg-icons-register'"]
         DOMInsert["body 상단에 숨겨진 SVG 스프라이트 DOM 마운트"]
-        UseTag["<svg><use xlink:href='#icon-dashboard' /></svg>"]
+        UseTag["use 태그 기반 아이콘 렌더링"]
         Virtual --> DOMInsert --> UseTag
     end
-
-    Filesystem --> VitePlugin
-    VitePlugin --> RuntimeDOM
+    SVG2 --> Scan
+    Sheet --> Virtual
 ```
 
 개발 서버에서는 파일 변경을 감시(Watcher)하여 새로운 SVG 파일이 추가되거나 수정되면 브라우저 새로고침 없이 즉시 스프라이트 시트가 갱신(HMR)됩니다.

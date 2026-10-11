@@ -79,7 +79,6 @@ sequenceDiagram
     participant H as 호스트 터널 인터페이스 (MTU 1420)
     participant R as 외부 방화벽 / 라우터
     participant S as 외부 API 서버
-
     C->>B: 1500 바이트 패킷 전송 (DF=1)
     B->>H: 호스트 라우팅 테이블로 패킷 전달
     Note over H: MTU(1420) 초과 감지!<br/>DF=1이므로 분할 불가

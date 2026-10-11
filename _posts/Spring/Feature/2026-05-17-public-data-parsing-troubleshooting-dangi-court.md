@@ -21,11 +21,9 @@ image:
 ```mermaid
 flowchart TD
     Raw["공공 판례 API 응답 원문 (JSON)"] --> Check{"파싱 및 정합성 대조"}
-
-    Check -->|이슈 1| Issue1["선고일자: 42880215<br>(단기 4288년 = 1955년인데 4000년대로 파싱)"]
-    Check -->|이슈 2| Issue2["법원명 불일치<br>목록: '서울고등법원' vs 본문: '서울고법 형사1부'"]
-    Check -->|이슈 3| Issue3["병합 사건번호 오탐<br>목록: '4285민상169' vs 본문: '4285민상169 내지 177'"]
-
+    Check -->|"이슈 1"| Issue1["선고일자: 42880215<br>(단기 4288년 = 1955년인데 4000년대로 파싱)"]
+    Check -->|"이슈 2"| Issue2["법원명 불일치<br>목록: '서울고등법원' vs 본문: '서울고법 형사1부'"]
+    Check -->|"이슈 3"| Issue3["병합 사건번호 오탐<br>목록: '4285민상169' vs 본문: '4285민상169 내지 177'"]
     Issue1 --> Fail1["LocalDate 변환 오류 또는 미래 날짜 적재"]
     Issue2 --> Fail2["동일 사건임에도 목록/본문 불일치로 수집 보류"]
     Issue3 --> Fail3["단순 contains 사용 시 1691번 사건과의 오탐 충돌"]
@@ -117,20 +115,19 @@ flowchart LR
         D2["수원지법 안산지원"]
         D3["서울고법 형사1부"]
     end
-
     subgraph RegexEngine["정규화 엔진 (JudgmentParser / DiscoveryRules)"]
-        R1["(?<=[가-힣])고법(?=$|\\s) -> 고등법원"]
-        R2["(?<=[가-힣])지법(?=$|\\s) -> 지방법원"]
-        R3["^(.*(?:법원|지원)) -> 재판부 절삭"]
+        R1["고법 접미사 정규식 치환 ➔ 고등법원"]
+        R2["지법 접미사 정규식 치환 ➔ 지방법원"]
+        R3["재판부 절삭 정규식 ➔ 법원 및 지원 추출"]
     end
-
     subgraph CleanResult["표준 공식 명칭"]
         C1["서울고등법원"]
         C2["수원지방법원 안산지원"]
         C3["서울고등법원 (형사1부 분리)"]
     end
-
-    DirtyInput --> RegexEngine --> CleanResult
+    D1 --> R1 --> C1
+    D2 --> R2 --> C2
+    D3 --> R3 --> C3
 ```
 
 ### 정규식 기반 법원명 정규화 구현
@@ -239,7 +236,6 @@ sequenceDiagram
     participant DB as PostgreSQL (raw_judgments)
     participant Parser as JudgmentParser (v4)
     participant Core as judgments (도메인 엔티티)
-
     Admin->>DB: WHERE parser_version < 'law-prec-v4' 원문 조회
     DB-->>Parser: 저장되어 있던 불변 원본 JSON 전달
     Note over Parser: 1. 단기 연호 서기 변환<br/>2. 법원 약칭 고법/지법 해소<br/>3. 숫자 경계 정규식 대조

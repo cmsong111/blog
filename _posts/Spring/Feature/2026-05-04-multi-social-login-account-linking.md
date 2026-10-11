@@ -197,7 +197,6 @@ sequenceDiagram
     participant Client as 프론트엔드 (SPA)
     participant Server as 백엔드 서버
     participant IdP as 소셜 제공자 (Kakao/Google)
-
     Note over User,Server: 1. 계정 연결(Link) 시작
     Client->>Server: POST /api/v1/users/me/social-accounts/{provider}/link
     Server-->>Client: 1회용 link_ticket이 포함된 OAuth2 인가 URL 반환

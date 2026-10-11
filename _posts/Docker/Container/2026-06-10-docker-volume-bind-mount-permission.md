@@ -44,16 +44,14 @@ flowchart TD
             TMP["tmpfs Mount\n(비영속 메모리 스토리지)"]
         end
     end
-
     subgraph Container["컨테이너 (Container)"]
         NV_Mount["/var/lib/postgresql/data"]
         BM_Mount["/app/src"]
         TMP_Mount["/tmp/secure-keys"]
     end
-
-    NV -->|고성능 데이터 격리| NV_Mount
-    BM -->|양방향 실시간 동기화| BM_Mount
-    TMP -->|초고속 보안 임시 저장| TMP_Mount
+    NV -->|"고성능 데이터 격리"| NV_Mount
+    BM -->|"양방향 실시간 동기화"| BM_Mount
+    TMP -->|"초고속 보안 임시 저장"| TMP_Mount
 ```
 
 ### 스토리지 유형별 특성 비교
@@ -85,7 +83,6 @@ sequenceDiagram
     participant HostUser as 호스트 사용자 (kimnamju, UID: 1000)
     participant Kernel as 리눅스 커널 VFS
     participant ContainerProc as 컨테이너 프로세스 (appuser, UID: 1001)
-
     HostUser->>Kernel: 호스트에 ./logs 디렉터리 생성 (소유자 UID: 1000, 권한: 755)
     Note over Kernel: 디렉터리 권한: rwxr-xr-x<br/>소유자(1000)만 쓰기 가능!
     ContainerProc->>Kernel: 바인드 마운트된 /app/logs에 log.txt 생성 시도 (UID: 1001)

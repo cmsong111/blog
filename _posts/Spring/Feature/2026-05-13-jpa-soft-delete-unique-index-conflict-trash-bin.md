@@ -58,11 +58,9 @@ flowchart LR
         R1["Row 1: test@example.com<br>deleted_at: 2027-01-02"]
         R2["Row 2: test@example.com<br>deleted_at: NULL"]
     end
-
     subgraph PartialIndex["부분 유니크 인덱스 (WHERE deleted_at IS NULL)"]
         Idx["test@example.com (Row 2만 포함)"]
     end
-
     Table -. "deleted_at IS NULL 조건 만족 행만 인덱싱" .-> PartialIndex
 ```
 
@@ -297,7 +295,6 @@ flowchart TD
         Q1["judgmentRepository.findById(id)"] --> R1["Hibernate 자동 변환:<br>SELECT ... WHERE id = ? AND deleted_at IS NULL"]
         R1 --> Fail["❌ 항상 조회 실패 (null 반환)"]
     end
-
     subgraph NativeSQL["관리자 휴지통 서비스 (AdminTrashService)"]
         Q2["NamedParameterJdbcTemplate"] --> R2["네이티브 SQL 직접 실행:<br>SELECT ... WHERE deleted_at IS NOT NULL"]
         R2 --> Success["✅ 삭제된 데이터 조회 및 복구 성공"]

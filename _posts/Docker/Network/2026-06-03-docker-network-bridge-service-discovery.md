@@ -50,15 +50,12 @@ flowchart TD
         VETH1["veth-app (호스트 인터페이스)"] <--> BR
         VETH2["veth-db (호스트 인터페이스)"] <--> BR
     end
-
     subgraph NetNS1 ["컨테이너: app-server (netns)"]
         ETH1["eth0 (172.20.0.3)"]
     end
-
     subgraph NetNS2 ["컨테이너: postgres-db (netns)"]
         ETH2["eth0 (172.20.0.2)"]
     end
-
     ETH1 <== "veth pair (가상 케이블 쌍)" ==> VETH1
     ETH2 <== "veth pair (가상 케이블 쌍)" ==> VETH2
 ```
@@ -126,7 +123,6 @@ sequenceDiagram
     participant DNS as 내장 DNS (127.0.0.11)
     participant Daemon as 도커 데몬 (libnetwork)
     participant ExtDNS as 외부 업스트림 DNS (호스트 DNS)
-
     App->>DNS: "postgres-db" A 레코드 질의 (UDP:53)
     DNS->>Daemon: 동일 네트워크 내 컨테이너 이름/별칭 매핑 테이블 조회
     alt 동일 사용자 정의 네트워크에 존재하는 서비스

@@ -24,7 +24,6 @@ flowchart TD
         SubProcess["자식 프로세스 (java -jar app.jar)"]
         Client1 -- "stdin / stdout 파이프" --> SubProcess
     end
-
     subgraph HttpArch["2️⃣ Streamable HTTP 서버 (mcp-server-webmvc)"]
         Client2["Cursor / 사내 AI 포털 / MCP Client"]
         TomcatServer["Spring Boot 4.1 내장 Tomcat (포트 8092)"]

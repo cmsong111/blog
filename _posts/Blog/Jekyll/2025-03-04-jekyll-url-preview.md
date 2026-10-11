@@ -37,10 +37,10 @@ image:
 
 ```mermaid
 flowchart LR
-    A["마크다운 내 linkpreview 태그"] -->|Jekyll 빌드| B["jekyll-linkpreview 플러그인"]
-    B -->|HTTP 요청 & OG 크롤링| C["외부 웹사이트"]
-    C -->|og:title, og:image, og:description| B
-    B -->|_includes/linkpreview.html| D["미려한 북마크 카드 UI"]
+    A["마크다운 내 linkpreview 태그"] -->|"Jekyll 빌드"| B["jekyll-linkpreview 플러그인"]
+    B -->|"HTTP 요청 & OG 크롤링"| C["외부 웹사이트"]
+    C -->|"og:title, og:image, og:description"| B
+    B -->|"_includes/linkpreview.html"| D["미려한 북마크 카드 UI"]
 ```
 
 ### 1) Gemfile 의존성 추가

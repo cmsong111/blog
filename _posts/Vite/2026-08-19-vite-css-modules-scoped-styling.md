@@ -37,12 +37,10 @@ flowchart TD
         B --> C["고유 해시 클래스명 생성<br/>Button_container__a8B3c"]
         C --> D["매핑 객체 생성<br/>{ container: 'Button_container__a8B3c' }"]
     end
-
     subgraph OutputPhase["2. 빌드 산출물 분리"]
         D --> E["클라이언트로 JS 객체 내보내기<br/>export default { container: '...' }"]
         C --> F["정적 CSS 청크로 번들링<br/>dist/assets/index-[hash].css"]
     end
-
     E --> G["컴포넌트 런타임: &lt;button className={styles.container}&gt;"]
 ```
 

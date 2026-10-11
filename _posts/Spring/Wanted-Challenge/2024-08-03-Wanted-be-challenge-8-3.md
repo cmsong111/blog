@@ -16,17 +16,13 @@ classDiagram
         <<interface>>
         +uploadFile(file: MultipartFile): String
     }
-
     class AWSS3StorageService {
         -amazonS3Client: AmazonS3Client
     }
-
     class MinIOStorageService {
         -restClient: RestClient
     }
-
     class MockStorageService
-
     StorageService <|.. AWSS3StorageService
     StorageService <|.. MinIOStorageService
     StorageService <|.. MockStorageService

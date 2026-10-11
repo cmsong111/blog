@@ -47,14 +47,12 @@ flowchart LR
         S["JSON Schema Map\n(DiscoveryPrompts.schema)"]
         J["Jackson JsonMapper\n(Zero-Retry Parsing)"]
     end
-
     subgraph GeminiEngine["Gemini Engine (gemini-3.5-flash-lite)"]
         CD["Constrained Decoding\n(Schema Enforced)"]
     end
-
-    P -->|프롬프트 전달| CD
+    P -->|"프롬프트 전달"| CD
     S -->|responseJsonSchema| CD
-    CD -->|100% Valid JSON 응답| J
+    CD -->|"100% Valid JSON 응답"| J
 ```
 
 Gemini 디코더가 JSON 스키마를 강제하므로 마크다운 백틱(` ```json `), 주석, 불필요한 서두 텍스트 생성이 원천 차단되며, 정의된 키와 타입만을 가진 완전한 JSON이 보장됩니다.

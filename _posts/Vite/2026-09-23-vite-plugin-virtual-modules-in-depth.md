@@ -41,7 +41,6 @@ sequenceDiagram
     participant Vite as Vite 모듈 해석기
     participant Plugin as 커스텀 플러그인
     participant FS as 파일시스템 (Disk)
-
     App->>Vite: import meta from 'virtual:build-meta'
     Vite->>Plugin: resolveId('virtual:build-meta')
     Note over Plugin: 가상 모듈 식별자 감지<br/>식별자 앞에 \0 접두사 추가

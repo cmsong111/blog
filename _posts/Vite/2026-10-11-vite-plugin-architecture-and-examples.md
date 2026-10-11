@@ -35,7 +35,6 @@ flowchart TD
         Dev_Legacy -.-> Divergence
         Build_Legacy -.-> Divergence
     end
-
     subgraph ModernVite["Vite 8 (Rolldown 단일 통합 엔진: Unified Rust)"]
         Unified_Core["단일 Rust 번들러 코어<br/><b>Rolldown</b> (Oxc 기반 Rust 엔진)"]
         Unified_Dev["개발 서버: Rolldown 기반 초고속 사전 번들링"]
@@ -95,12 +94,10 @@ flowchart TD
         H_configResolved["configResolved() : 확정된 설정 읽기 및 캐싱"]
         H_config --> H_configResolved
     end
-
     subgraph DevServerPhase["2. 개발 서버 단계 (Dev Server - Vite 전용)"]
         H_configureServer["configureServer() : Connect 미들웨어 및 WebSocket 등록"]
         H_handleHotUpdate["handleHotUpdate() : 커스텀 HMR 제어"]
     end
-
     subgraph BuildPipelinePhase["3. 빌드 및 변환 파이프라인 (Rollup & Rolldown 공용)"]
         H_options["buildStart() / options()"]
         H_resolveId["resolveId() : 모듈 경로 해석 (가상 모듈 식별)"]
@@ -108,12 +105,10 @@ flowchart TD
         H_transform["transform() : 파일 단위 코드 변환"]
         H_transformIndexHtml["transformIndexHtml() : index.html 태그 동적 주입"]
         H_closeBundle["buildEnd() / closeBundle()"]
-
         H_options --> H_resolveId --> H_load --> H_transform --> H_transformIndexHtml --> H_closeBundle
     end
-
-    ConfigPhase --> DevServerPhase
-    ConfigPhase --> BuildPipelinePhase
+    H_configResolved --> H_configureServer
+    H_configResolved --> H_options
 ```
 
 ### 3.1 플러그인의 기본 제어 속성

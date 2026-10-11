@@ -1,9 +1,0 @@
----
-title: 테스트
-description: 도메인 주도 개발을 시작하기 위한 책
-date: 2024-09-01 12:00:00 +0000
-tags: [DDD, 도메인 주도 개발, 책]
-mermaid: true
-image:
-  path: /assets/images/2024-09-01/ddd-book.png
----

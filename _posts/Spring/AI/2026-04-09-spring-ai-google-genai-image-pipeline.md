@@ -31,7 +31,6 @@ sequenceDiagram
     participant Worker as @Async ImageJobWorker
     participant Model as GoogleGenAiImageModel
     participant Storage as Local/S3 ImageStorage
-
     Client->>API: POST /api/images/jobs (prompt: "로봇 썸네일", aspectRatio: "16:9")
     API->>Service: submit(request) (상태: PENDING)
     API-->>Client: 202 Accepted { id: "e746d94d", status: "PENDING" }
@@ -43,7 +42,6 @@ sequenceDiagram
     Worker->>Storage: store(bytes, filename)
     Storage-->>Worker: 저장 경로 반환
     Worker->>Service: updateStatus(COMPLETED, filePath, mimeType)
-
     loop 상태 폴링
         Client->>API: GET /api/images/jobs/e746d94d
         API-->>Client: 200 OK { status: "COMPLETED", downloadUrl: "..." }

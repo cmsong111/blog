@@ -26,25 +26,22 @@ flowchart TD
         SrcApp["src/App.tsx (공통 컴포넌트)"]
         SrcClient["src/entry-client.tsx"]
         SrcServer["src/entry-server.tsx"]
-
         SrcClient --> ClientBuild["vite build --outDir dist/client"]
         SrcServer --> ServerBuild["vite build --ssr --outDir dist/server"]
-
-        ClientBuild --> DistClient["dist/client/\n(index.html, JS, CSS, manifest.json)"]
-        ServerBuild --> DistServer["dist/server/\n(entry-server.js)"]
+        ClientBuild --> DistClient["dist/client/<br/>(index.html, JS, CSS, manifest.json)"]
+        ServerBuild --> DistServer["dist/server/<br/>(entry-server.js)"]
     end
-
     subgraph Runtime["2. 프로덕션 SSR 런타임 (Run Time)"]
         UserReq["HTTP GET 요청"] --> ExpressServer["Node.js / Express 서버"]
         ExpressServer --> ReadTpl["dist/client/index.html 템플릿 로드"]
-        ExpressServer --> CallRender["dist/server/entry-server.js\nrender() 호출"]
+        ExpressServer --> CallRender["dist/server/entry-server.js<br/>render() 호출"]
         CallRender --> RenderHTML["서버 사이드 HTML 문자열 생성"]
         RenderHTML --> ReplaceTag["<!--app-html--> 슬롯 치환 & State 주입"]
         ReplaceTag --> HTTPResp["완성된 HTML 클라이언트 전송"]
         HTTPResp --> Browser["브라우저 하이드레이션 (entry-client)"]
     end
-
-    BuildPipeline --> Runtime
+    DistClient -.-> ReadTpl
+    DistServer -.-> CallRender
 ```
 
 ---

@@ -59,12 +59,10 @@ flowchart TD
             RootFS1["독립된 Root Filesystem (Distroless / JRE)"]
             AppProc["애플리케이션 프로세스 (Java/Go/Node)"]
         end
-
         subgraph NetshootCont ["netshoot 컨테이너 (디버깅 세션)"]
             RootFS2["netshoot Filesystem (tcpdump, curl, drill 내장)"]
             DebugTool["엔지니어 진단 세션 (zsh/bash)"]
         end
-
         subgraph SharedNetNS ["공유 네트워크 네임스페이스 (Target Net Namespace)"]
             Loopback["lo (127.0.0.1)"]
             Eth0["eth0 (172.20.0.5)"]
@@ -73,9 +71,8 @@ flowchart TD
             IPTableRules["iptables / conntrack 상태"]
         end
     end
-
-    TargetCont -.->|네트워크 네임스페이스 공유| SharedNetNS
-    NetshootCont -.->|--net container:my-backend-api| SharedNetNS
+    AppProc -.->|"네트워크 네임스페이스 공유"| Eth0
+    DebugTool -.->|"--net container:my-backend-api"| Eth0
 ```
 
 파일시스템과 프로세스 트리는 분리되어 있으므로 타깃 컨테이너의 런타임 환경은 전혀 훼손되지 않지만, **루프백(`127.0.0.1`), 가상 인터페이스(`eth0`), 라우팅 테이블, 열린 포트 소켓 목록은 완전히 동일한 시야**를 갖게 됩니다.
@@ -142,7 +139,6 @@ sequenceDiagram
     actor Client as 요청 컨테이너 (172.20.0.3)
     participant NetNS as 타깃 eth0 (172.20.0.5)
     participant App as 프로세스 (127.0.0.1:8080)
-
     Client->>NetNS: [SYN] 포트 8080 연결 요청
     Note over NetNS,App: 172.20.0.5:8080에 바인딩된 리스너 없음!
     NetNS-->>Client: [RST, ACK] 연결 거절 (Connection Refused)
@@ -182,13 +178,12 @@ flowchart TD
     
     PREROUTING --> RoutingDecision{"라우팅 결정<br/>(목적지가 로컬 호스트인가?)"}
     
-    RoutingDecision -->|YES: 호스트 로컬 프로세스용| INPUTChain["INPUT 체인 (filter 테이블)<br/>★ UFW 규칙이 동작하는 위치 ★"]
+    RoutingDecision -->|"YES: 호스트 로컬 프로세스용"| INPUTChain["INPUT 체인 (filter 테이블)<br/>★ UFW 규칙이 동작하는 위치 ★"]
     INPUTChain --> LocalProcess["호스트 OS 데몬 (SSH 등)"]
     
-    RoutingDecision -->|NO: 다른 인터페이스로 전달| FORWARDChain["FORWARD 체인 (filter 테이블)<br/>★ Docker가 자체 DOCKER 체인을 꽂아 ACCEPT ★"]
+    RoutingDecision -->|"NO: 다른 인터페이스로 전달"| FORWARDChain["FORWARD 체인 (filter 테이블)<br/>★ Docker가 자체 DOCKER 체인을 꽂아 ACCEPT ★"]
     FORWARDChain --> DockerBridge["docker0 / 사용자 브릿지 (veth)"]
     DockerBridge --> Container["타깃 컨테이너 (eth0)"]
-
     style INPUTChain fill:#f9d5d5,stroke:#c94c4c,stroke-width:2px
     style FORWARDChain fill:#d5f9d5,stroke:#4cc94c,stroke-width:2px
 ```

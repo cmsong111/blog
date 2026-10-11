@@ -39,10 +39,8 @@ sequenceDiagram
     participant HTML as dist/index.html
     participant Modern as Modern Bundle (ESM)
     participant Legacy as Legacy Bundle (SystemJS)
-
     User->>HTML: 페이지 접속 요청
     HTML-->>User: HTML 수신
-
     alt 모던 브라우저 (ESM 지원)
         Note over User: <script type="module"> 인식
         User->>Modern: index-modern.js 다운로드 및 실행

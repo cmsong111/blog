@@ -35,20 +35,22 @@ flowchart LR
         RawJPG["feature-mockup.jpg (1.2MB)"]
         RawSVG["app-logo.svg (68kB)"]
     end
-
     subgraph Pipeline["Vite 빌드 파이프라인"]
-        Optimizer["vite-plugin-image-optimizer\n(Sharp & SVGO Engine)"]
+        Optimizer["vite-plugin-image-optimizer<br/>(Sharp & SVGO Engine)"]
     end
-
     subgraph Dist["빌드 산출물 (dist/assets/images)"]
         OutAVIF["hero-banner.avif (248kB, -89%)"]
         OutWebP["hero-banner.webp (384kB, -84%)"]
         OutOptJPG["feature-mockup.webp (192kB, -85%)"]
         OutMinSVG["app-logo.min.svg (21kB, -69%)"]
     end
-
-    Source --> Optimizer
-    Optimizer --> Dist
+    RawPNG --> Optimizer
+    RawJPG --> Optimizer
+    RawSVG --> Optimizer
+    Optimizer --> OutAVIF
+    Optimizer --> OutWebP
+    Optimizer --> OutOptJPG
+    Optimizer --> OutMinSVG
 ```
 
 ---

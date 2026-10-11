@@ -94,13 +94,11 @@ sequenceDiagram
     participant App as AuditorAwareImpl (Singleton)
     participant Proxy as HttpServletRequest Proxy
     participant Holder as RequestContextHolder (ThreadLocal)
-
     Note over App,Holder: 케이스 1: 톰캣 HTTP 요청 스레드 (http-nio-exec)
     App->>Proxy: request.getHeader("X-Forwarded-For")
     Proxy->>Holder: currentRequestAttributes(스프링 부트 예제 애플리케이션)
     Holder-->>Proxy: ServletRequestAttributes 반환 (성공)
     Proxy-->>App: "192.168.1.15" 반환 (정상 동작)
-
     Note over App,Holder: 케이스 2: 백그라운드 스케줄러 스레드 (scheduling-1)
     App->>Proxy: request.getHeader("X-Forwarded-For")
     Proxy->>Holder: currentRequestAttributes(스프링 부트 예제 애플리케이션)

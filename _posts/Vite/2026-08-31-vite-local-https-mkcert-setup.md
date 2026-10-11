@@ -51,7 +51,7 @@ Vite에서 로컬 HTTPS 개발 환경을 구성할 때 주로 두 가지 방식�
 flowchart TD
     A["mkcert CLI 설치<br/>(brew install mkcert)"] --> B["로컬 루트 CA 생성 & OS 등록<br/>(mkcert -install)"]
     B --> C["localhost 전용 인증서 발급<br/>(mkcert localhost 127.0.0.1 ::1)"]
-    C --> D["localhost.pem & localhost-key.pem 생성"]
+    C --> D["localhost.pem 및 localhost-key.pem 생성"]
     D --> E["Vite server.https 설정 연동<br/>(vite.config.ts)"]
     E --> F["브라우저 접속 시 자물쇠 표시<br/>(완전한 Secure Context 확보)"]
 ```
@@ -133,7 +133,6 @@ sequenceDiagram
     actor Client as 브라우저 / curl
     participant TLS as TLS 핸드셰이크 (ALPN)
     participant Vite as Vite HTTPS Dev Server
-
     Client->>TLS: Client Hello (ALPN: h2, http/1.1 제안)
     TLS->>Vite: 서버 인증서 검증 (mkcert Local CA 확인)
     Vite-->>TLS: Server Hello (ALPN: h2 수락)

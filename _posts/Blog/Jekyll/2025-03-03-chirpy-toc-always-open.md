@@ -70,8 +70,8 @@ Chirpy는 [tocbot](https://tscanlin.github.io/tocbot/) 라이브러리를 기반
 
 ```mermaid
 flowchart TD
-    A["시행착오: style.css 직접 수정"] -->|Gem 빌드 시 파괴| B["모든 테마 스타일 유실!"]
-    C["정석 해결: assets/css/jekyll-theme-chirpy.scss"] -->|Sass 파이프라인 컴파일| D["안전한 커스텀 오버라이드 성공"]
+    A["시행착오: style.css 직접 수정"] -->|"Gem 빌드 시 파괴"| B["모든 테마 스타일 유실!"]
+    C["정석 해결: assets/css/jekyll-theme-chirpy.scss"] -->|"Sass 파이프라인 컴파일"| D["안전한 커스텀 오버라이드 성공"]
 ```
 
 ### ❌ 시행착오: `style.css` 또는 `style.scss` 직접 생성

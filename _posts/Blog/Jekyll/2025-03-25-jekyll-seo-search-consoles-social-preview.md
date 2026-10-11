@@ -26,23 +26,23 @@ flowchart LR
         Hook["_includes/metadata-hook.html<br/>(Naver Verification Meta)"]
         Sitemap["sitemap.xml & robots.txt"]
     end
-
     subgraph SearchEngines [3대 검색엔진]
         Google["구글 서치 콘솔"]
         Bing["Bing 웹마스터 도구"]
         Naver["네이버 서치어드바이저"]
     end
-
     subgraph SocialMedia [메신저 & SNS]
         Kakao["카카오톡 미리보기"]
         Slack["슬랙 링크 언펄링"]
     end
-
     Config --> Google
     Config --> Bing
     Hook --> Naver
-    Sitemap --> Google & Bing & Naver
-    Config -.->|og:image / og:description| Kakao & Slack
+    Sitemap --> Google
+    Sitemap --> Bing
+    Sitemap --> Naver
+    Config -.->|"og:image / og:description"| Kakao
+    Config -.->|"og:image / og:description"| Slack
 ```
 
 ---

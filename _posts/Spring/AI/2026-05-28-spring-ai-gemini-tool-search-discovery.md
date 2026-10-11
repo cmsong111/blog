@@ -25,7 +25,6 @@ sequenceDiagram
     participant Gemini as Google Gemini
     participant Index as LuceneToolIndex (20개 도구 색인)
     participant Tool as CommerceTools (trackParcel)
-
     User->>App: "운송장 4021-5678-0002 택배 지금 어디쯤이야?"
     App->>Index: 초기 부팅 시 도구 시그니처 색인 (BM25)
     

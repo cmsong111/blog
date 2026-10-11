@@ -56,7 +56,6 @@ flowchart TD
         Base --- P_Event
         Base --- P_Debug
     end
-
     subgraph LocalOnly["Git 비추적 (.gitignore)"]
         Override["compose.override.yaml (개인별 로컬 오버라이드)"]
         O_Port["로컬 디버깅 전용 외부 포트 노출 (예: DB 5433)"]
@@ -64,11 +63,9 @@ flowchart TD
         Override --- O_Port
         Override --- O_Env
     end
-
     Merge{"Docker Compose 자동 병합 Engine"}
     Base --> Merge
     Override --> Merge
-
     Command["CLI 명령어: docker compose --profile event up -d"] --> Merge
     Merge --> Final["최종 기동: Core + Event 서비스 + 개인별 포트/환경변수"]
 ```
