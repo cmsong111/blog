@@ -14,15 +14,15 @@
 - **배포 환경**: GitHub Pages (`.github/workflows/pages-deploy.yml`)
 - **개발 환경**: VS Code Dev Container (`.devcontainer/devcontainer.json`)
 
-| 경로 | 용도 및 주의사항 |
-| :--- | :--- |
-| `_posts/{대분류}/{중분류}/` | 계층형 카테고리 디렉토리 구조 및 블로그 포스트 마크다운 파일 (`YYYY-MM-DD-title.md`) |
-| `assets/images/YYYY-MM-DD/` | 각 포스트에 사용되는 스크린샷 및 이미지 자산 저장소 |
-| `_includes/metadata-hook.html` | **Chirpy 공식 확장 훅** (네이버 서치어드바이저, 애드센스 등 커스텀 태그 주입용). **절대 `_includes/head.html`을 통째로 덮어쓰지 말 것!** |
-| `_includes/linkpreview.html` | `jekyll-linkpreview` OG 지원 사이트용 미리보기 카드 템플릿 |
-| `_includes/linkpreview_nog.html` | OpenGraph가 없는 사이트용 fallback 템플릿 (프로토콜 상대 URL 에러 방지 필수) |
-| `_plugins/category-folder-hook.rb` | `_posts/{대분류}/{중분류}/` 폴더 경로 기반 2계층 카테고리 자동 주입 훅 |
-| `_plugins/posts-lastmod-hook.rb` | Git 커밋 히스토리 기반 `last_modified_at` 자동 주입 훅 |
+| 경로                               | 용도 및 주의사항                                                                                                                         |
+| :--------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| `_posts/{대분류}/{중분류}/`        | 계층형 카테고리 디렉토리 구조 및 블로그 포스트 마크다운 파일 (`YYYY-MM-DD-title.md`)                                                     |
+| `assets/images/YYYY-MM-DD/`        | 각 포스트에 사용되는 스크린샷 및 이미지 자산 저장소                                                                                      |
+| `_includes/metadata-hook.html`     | **Chirpy 공식 확장 훅** (네이버 서치어드바이저, 애드센스 등 커스텀 태그 주입용). **절대 `_includes/head.html`을 통째로 덮어쓰지 말 것!** |
+| `_includes/linkpreview.html`       | `jekyll-linkpreview` OG 지원 사이트용 미리보기 카드 템플릿                                                                               |
+| `_includes/linkpreview_nog.html`   | OpenGraph가 없는 사이트용 fallback 템플릿 (프로토콜 상대 URL 에러 방지 필수)                                                             |
+| `_plugins/category-folder-hook.rb` | `_posts/{대분류}/{중분류}/` 폴더 경로 기반 2계층 카테고리 자동 주입 훅                                                                   |
+| `_plugins/posts-lastmod-hook.rb`   | Git 커밋 히스토리 기반 `last_modified_at` 자동 주입 훅                                                                                   |
 
 ---
 
