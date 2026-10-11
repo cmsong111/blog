@@ -2,7 +2,7 @@
 title: GitHub Pages 커스텀 도메인 연결 및 HTTPS 설정
 description: GitHub Pages 기본 도메인 대신 독립 커스텀 도메인을 연결하고, DNS A/CNAME 레코드 설정부터 무료 Let's Encrypt SSL/HTTPS 보안 인증서 자동 발급까지 완벽하게 적용하는 가이드입니다.
 date: 2025-03-18 12:00:00 +0900
-tags: [GitHub-Pages, Domain, DNS, HTTPS, SSL]
+tags: [GitHub-Pages, Domain, DNS, https, ssl]
 mermaid: true
 image:
   path: /assets/images/2025-03-18/github-pages-custom-domain-settings.png

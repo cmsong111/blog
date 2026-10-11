@@ -215,13 +215,14 @@ flowchart LR
      ```
 
 2. **IF 노드 (조건 분기)**:
-   - 조건 식: `{{ $json.body.status }}` Equal to `DOWN`
+   - 조건 식: `{% raw %}{{ $json.body.status }}{% endraw %}` Equal to `DOWN`
    - 장애 상태일 때만 True 경로로 흘려보내 불필요한 알림 피로도를 방지합니다.
 
 3. **Telegram 노드 (즉시 경보)**:
    - Operation: `Send Text Message`
    - Chat ID: `${TELEGRAM_CHAT_ID}`
    - 메시지 본문 마크다운 포맷팅:
+     {% raw %}
      ```text
      🚨 [홈서버 장애 감지]
      - 서비스: {{ $json.body.service }}
@@ -229,6 +230,7 @@ flowchart LR
      - 시각: {{ $json.body.timestamp }}
      - 오류 내용: {{ $json.body.error_message }}
      ```
+     {% endraw %}
 
 4. **Notion 노드 (이력 아카이빙)**:
    - 장애 발생 여부와 상관없이 노션 '인프라 점검 일지' 데이터베이스에 새 페이지를 생성하여 발생 이력을 누적합니다.

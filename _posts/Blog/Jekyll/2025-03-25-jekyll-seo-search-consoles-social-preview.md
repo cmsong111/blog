@@ -2,7 +2,7 @@
 title: "Jekyll 블로그 검색 엔진 최적화(SEO) 및 포털 등록 가이드"
 description: 지킬 블로그의 구글 서치 콘솔, 네이버 서치어드바이저, Bing 웹마스터 도구 등록 방법과 Chirpy metadata-hook을 활용한 메타태그 주입, 그리고 카카오톡·슬랙 링크 공유 시 썸네일 카드가 깨지지 않게 설정하는 OpenGraph SEO 팁을 다룹니다.
 date: 2025-03-25 12:00:00 +0900
-tags: [SEO, Google-Search-Console, Naver-Search-Advisor, OpenGraph, Sitemap]
+tags: [seo, Google-Search-Console, Naver-Search-Advisor, OpenGraph, Sitemap]
 mermaid: true
 image:
   path: /assets/images/2025-03-25/sns-opengraph-card-preview.png
