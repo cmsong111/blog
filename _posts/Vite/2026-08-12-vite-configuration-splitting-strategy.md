@@ -143,12 +143,22 @@ export default mergeConfig(
           drop_debugger: true
         }
       },
+      // Vite 8(Rolldown)에서는 build.rolldownOptions 사용 권장 (객체형 manualChunks 미지원)
       rollupOptions: {
         output: {
-          // 브라우저 장기 캐싱을 위한 서드파티 벤더 청크 분할
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom'],
-            'vendor-ui': ['lucide-react', 'clsx', 'tailwind-merge']
+          // 브라우저 장기 캐싱을 위한 서드파티 벤더 청크 분할 (Vite 7·8 공용 함수형)
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return;
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            if (
+              id.includes('lucide-react') ||
+              id.includes('clsx') ||
+              id.includes('tailwind-merge')
+            ) {
+              return 'vendor-ui';
+            }
           },
           chunkFileNames: 'assets/js/[name]-[hash].js',
           entryFileNames: 'assets/js/[name]-[hash].js',

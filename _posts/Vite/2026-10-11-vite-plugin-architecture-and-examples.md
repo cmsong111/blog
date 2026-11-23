@@ -73,9 +73,9 @@ Evan You와 VoidZero 팀이 주도하여 개발한 **Rolldown**은 이 문제를
 
 - **Vite 7 (하이브리드 과도기)**:
   - 프로덕션의 안정성을 위해 여전히 **Rollup이 기본(Default) 번들러**로 동작합니다.
-  - Vite 6에서 도입된 `Environment API`(SSR 클라이언트/서버 런타임 분리)를 고도화하면서, Rolldown을 **실험적(opt-in) 엔진**(`build: { rolldown: true }`)으로 제공하여 점진적 마이그레이션과 생태계 플러그인 호환성을 검증하는 다리 역할을 합니다.
+  - Vite 6에서 도입된 `Environment API`(SSR 클라이언트/서버 런타임 분리)를 고도화하면서, Rolldown은 별도의 테스트 패키지(`rolldown-vite`) 형태로 제공되어 점진적 마이그레이션과 생태계 플러그인 호환성을 검증하는 다리 역할을 했습니다.
 - **Vite 8 (Rolldown 단일 통합 시대의 완성)**:
-  - **Rolldown이 공식 기본(Default) 번들러로 전면 채택**됩니다.
+  - **Rolldown이 공식 기본(Default) 번들러로 전면 채택**되었으며, 번들러 상세 설정도 `build.rollupOptions`에서 `build.rolldownOptions`로 전환되었습니다.
   - 개발 서버의 esbuild 사전 번들링과 프로덕션의 Rollup이 모두 Rolldown 단일 코어로 통합되어 **이중 번들러 불일치(Dual-Bundler Divergence)가 완전히 종식**됩니다.
   - 개발과 프로덕션이 100% 동일한 AST 및 번들링 규칙을 공유하므로 환경 간 버그가 원천 차단됩니다.
 

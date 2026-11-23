@@ -196,6 +196,4 @@ _번들 산출물 내부의 정적 문자열 치환 확인 및 preview 서버 �
 
 Vite의 `import.meta.env`와 모드 시스템은 브라우저 표준을 준수하면서도 유연한 빌드 타임 정적 치환을 제공합니다. 개발, 스테이징, 프로덕션 환경별로 `.env` 파일을 체계적으로 구성하고 TypeScript 인터페이스를 병합해 두면, 환경 변수로 인한 런타임 오류를 원천 차단할 수 있습니다.
 
-다음 글에서는 프로젝트 구조가 복잡해질 때 깊어지는 상대 경로 지옥을 해결하는 **TypeScript 경로 별칭 설정과 `vite-tsconfig-paths` 연동 전략**을 알아보겠습니다.
-
 {% linkpreview "https://vite.dev/guide/env-and-mode.html" %}

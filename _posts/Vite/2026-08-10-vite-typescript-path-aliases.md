@@ -214,6 +214,4 @@ export default defineConfig({
 
 경로 별칭은 대규모 프론트엔드 프로젝트의 코드 가독성과 유지보수성을 지탱하는 기본 뼈대입니다. `tsconfig.json`과 `vite.config.ts`를 개별 관리하며 발생하는 설정 불일치를 `vite-tsconfig-paths` 플러그인으로 일원화하고, `tsc --noEmit` 검증을 CI 파이프라인에 결합하면 안전하고 확장성 있는 개발 환경을 구축할 수 있습니다.
 
-다음 글에서는 단일 설정 파일이 비대해지는 문제를 방지하기 위해 **개발·스테이징·프로덕션 환경을 위한 `vite.config.ts` 모듈화 및 `mergeConfig` 분리 전략**을 살펴보겠습니다.
-
 {% linkpreview "https://www.npmjs.com/package/vite-tsconfig-paths" %}

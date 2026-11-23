@@ -86,6 +86,9 @@ export default defineConfig({
 - **장점**: 직관적이고 설정이 단순합니다.
 - **단점**: 서브 디펜던시(간접 의존성)가 자동으로 포함되지 않거나, 라이브러리 간 공통 내부 모듈이 엮일 때 의도치 않은 순환 의존성(Circular Dependency) 에러가 발생할 가능성이 높습니다.
 
+> **Vite 8(Rolldown) Breaking Change 주의**: Vite 8부터는 `manualChunks`의 **객체(Object) 형태가 완전히 제거**되어 그대로 사용하면 빌드 에러가 발생합니다. 또한 `build.rollupOptions`는 `build.rolldownOptions`로 이름이 변경되었으므로, Vite 8 환경에서는 아래의 **함수(Function) 형태**나 Rolldown 네이티브 `codeSplitting` 옵션을 사용해야 합니다.
+{: .prompt-warning }
+
 ### 3.2 함수(Function) 정의 방식
 
 모듈의 절대 파일 경로(`id`)를 인자로 받아 동적으로 청크 이름을 반환하는 방식입니다. 실무 프로젝트에서는 세밀한 필터링과 유연한 그룹화를 지원하는 함수 방식을 권장합니다.
