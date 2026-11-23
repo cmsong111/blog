@@ -22,12 +22,12 @@ Jekyll Chirpy 테마의 기본 카테고리 페이지는 폴더 아이콘과 글
 Jekyll의 **Data Files(`_data/`)** 기능과 **Liquid 템플릿 커스터마이징**을 활용하면, 카테고리가 늘어날 때마다 HTML을 직접 수정할 필요 없이 YAML 설정 파일 하나만 추가하여 배너와 설명을 깔끔하게 렌더링할 수 있습니다.
 
 ```mermaid
-flowchart LR
-    A["독자가 카테고리 페이지 접속"] --> B["_layouts/category.html 실행"]
-    B --> C{"_data/tags/{page.title}.yaml 존재 여부"}
-    C -- "데이터 있음" --> D["배너 썸네일 + 마크다운 설명 박스 주입"]
-    C -- "데이터 없음" --> E["기본 타이틀만 렌더링"]
-    D --> F["게시글 오름차순(1편부터) 정렬 목록 노출"]
+flowchart TD
+    A["카테고리 페이지 접속"] --> B["_layouts/category.html"]
+    B --> C{"_data/tags/*.yaml 존재?"}
+    C -->|"있음"| D["배너 + 설명 박스 주입"]
+    C -->|"없음"| E["기본 타이틀 렌더링"]
+    D --> F["게시글 오름차순 목록"]
     E --> F
 ```
 

@@ -23,11 +23,11 @@ GitHub Pages로 기술 블로그를 시작하면 기본적으로 `<username>.git
 셋째, **SEO(검색 엔진 최적화) 자산 누적**입니다. 플랫폼 기본 도메인을 사용하다가 나중에 도메인을 변경하면 그동안 축적된 구글 검색 순위와 백링크 점수가 단절될 위험이 있습니다. 처음부터 독자 도메인을 운영하면 모든 검색 지수를 온전히 내 자산으로 누적할 수 있습니다.
 
 ```mermaid
-flowchart LR
+flowchart TD
     User["방문자 브라우저"] -->|"namju.kim 접속"| DNS["DNS 네임서버"]
-    DNS -->|"A 레코드 (185.199.x.x)"| GitHubPages["GitHub Pages CDN"]
-    DNS -->|"CNAME (cmsong111.github.io)"| GitHubPages
-    GitHubPages -->|"Let's Encrypt 무료 SSL 인증서"| User
+    DNS -->|"A (185.199.x.x)"| GitHubPages["GitHub Pages CDN"]
+    DNS -->|"CNAME (github.io)"| GitHubPages
+    GitHubPages -->|"Let's Encrypt SSL 응답"| User
 ```
 
 ---

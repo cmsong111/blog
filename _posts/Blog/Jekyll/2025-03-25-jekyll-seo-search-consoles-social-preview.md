@@ -19,30 +19,17 @@ Jekyll(지킬)과 Chirpy 테마는 기본적으로 검색엔진 최적화(SEO)�
 이번 글에서는 **구글, 네이버, Bing 3대 검색엔진 등록부터 `_includes/metadata-hook.html`을 활용한 클린 메타태그 주입법, 사이트맵 제출, 그리고 SNS 공유 썸네일 카드 최적화**까지 한 번에 정리해 드립니다.
 
 ```mermaid
-flowchart LR
-    subgraph BlogSite [Jekyll Chirpy Blog]
-        direction TB
-        Config["_config.yml<br/>(SEO & Verifications)"]
-        Hook["_includes/metadata-hook.html<br/>(Naver Verification Meta)"]
-        Sitemap["sitemap.xml & robots.txt"]
-    end
-    subgraph SearchEngines [3대 검색엔진]
-        Google["구글 서치 콘솔"]
-        Bing["Bing 웹마스터 도구"]
-        Naver["네이버 서치어드바이저"]
-    end
-    subgraph SocialMedia [메신저 & SNS]
-        Kakao["카카오톡 미리보기"]
-        Slack["슬랙 링크 언펄링"]
-    end
-    Config --> Google
-    Config --> Bing
-    Hook --> Naver
-    Sitemap --> Google
-    Sitemap --> Bing
-    Sitemap --> Naver
-    Config -.->|"og:image / og:description"| Kakao
-    Config -.->|"og:image / og:description"| Slack
+flowchart TD
+    Config["_config.yml<br/>(Google/Bing 인증 · OG)"]
+    Hook["metadata-hook.html<br/>(Naver 인증)"]
+    Sitemap["sitemap.xml & robots.txt"]
+    Search["검색엔진 콘솔<br/>(Google · Bing · Naver)"]
+    SNS["메신저 미리보기<br/>(카카오톡 · 슬랙)"]
+
+    Config --> Search
+    Hook --> Search
+    Sitemap --> Search
+    Config -.->|"og:image / og:description"| SNS
 ```
 
 ---
@@ -207,6 +194,38 @@ curl -sL https://namju.kim | grep -E "verification|og:image"
 만약 이전에 공유한 적이 있어 이미지가 갱신되지 않는다면 각 플랫폼의 디버거 도구를 통해 캐시를 초기화할 수 있습니다:
 - **카카오톡**: [카카오 개발자 캐시 삭제 도구](https://developers.kakao.com/tool/clear/og)
 - **페이스북/메타**: [Facebook 공유 디버거](https://developers.facebook.com/tools/debug/)
+
+---
+
+## 트러블슈팅: Google Search Console에서 `sitemap.xml` "가져올 수 없음" 상태가 계속될 때
+
+블로그를 배포하고 `sitemap.xml`을 제출했는데, 브라우저에서는 파일이 정상적으로 열리는데도 Google Search Console의 `Sitemaps` 상태에 계속 **`가져올 수 없음(Couldn't fetch)`**이 표시되는 경우가 자주 발생합니다. 이때는 아래 순서로 원인을 점검하고 조치합니다.
+
+### 1. `curl`과 Googlebot User-Agent로 200 OK 및 XML 유효성 확인
+먼저 서버 응답 코드, `Content-Type`, 그리고 Googlebot 요청 시 차단이나 리다이렉트 루프가 없는지 터미널에서 직접 검증합니다.
+
+```bash
+# 1) HTTP 응답 헤더 및 200 OK 확인
+curl -I https://namju.kim/sitemap.xml
+
+# 2) Googlebot User-Agent로 실제 XML 본문 및 유효성 검증
+curl -sA "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" \
+  https://namju.kim/sitemap.xml | xmllint --noout - && echo "XML OK"
+```
+
+응답이 `HTTP/2 200`, `content-type: application/xml`이고 `xmllint` 검증을 통과했다면 사이트맵 파일 자체에는 문제가 없는 상태입니다.
+
+### 2. Search Console "실제 URL 테스트"로 크롤러 접근 검증
+Search Console 상단 검색창(URL 검사)에 `https://namju.kim/sitemap.xml` 전체 주소를 입력한 뒤 우측 상단의 **실제 URL 테스트**를 실행합니다. 결과 화면에서 **`페이지 가져오기: 성공`**으로 표시된다면 Google 크롤러가 실제로 파일에 정상 접근할 수 있다는 뜻입니다.
+
+### 3. 잔존 실패 기록 삭제 후 재제출 및 UI 대기(Pending) 특성 이해
+서버와 크롤러 접근이 모두 정상인데도 `가져올 수 없음`이 풀리지 않는 원인은 크게 두 가지입니다.
+
+- **초기 배포 실패 또는 구 서브도메인 기록 잔존**: 커스텀 도메인 연결 직후 SSL 인증서가 발급되기 전에 제출했거나, 과거 사용하던 서브도메인(예: `tech.*`)의 사이트맵 기록이 남아 있는 경우 실패 상태가 그대로 유지될 수 있습니다. 해당 항목을 클릭해 우측 상단 메뉴(`⋮`)에서 **사이트맵 삭제**를 실행한 뒤 `sitemap.xml`을 다시 제출합니다.
+- **재제출 직후 비동기 대기(Pending) 상태의 UI 표기**: Google Search Console은 사이트맵을 재제출한 직후 아직 백엔드 크롤링 큐에서 처리되지 않은 대기(Pending) 상태일 때도 UI에 **`가져올 수 없음`**으로 표시하는 특성이 있습니다. `curl` 검증과 실제 URL 테스트(`페이지 가져오기: 성공`)가 모두 통과했다면 반복 삭제·재제출을 하기보다 24~72시간 정도 기다리면 자연스럽게 **`성공`** 상태로 갱신됩니다.
+
+> 사이트맵을 여러 번 삭제하고 다시 제출하면 대기 큐가 초기화되어 오히려 처리가 늦어질 수 있습니다. `실제 URL 테스트`에서 가져오기가 성공했다면 한 번만 깔끔하게 재제출하고 기다리는 편이 좋습니다.
+{: .prompt-tip }
 
 ---
 

@@ -36,11 +36,11 @@ image:
 `jekyll-linkpreview`는 Jekyll 빌드 시점에 지정된 URL의 HTML을 크롤링하여 OpenGraph 메타 태그를 추출하고, 이를 HTML 카드 템플릿으로 렌더링해 주는 오픈소스 플러그인입니다.
 
 ```mermaid
-flowchart LR
-    A["마크다운 내 linkpreview 태그"] -->|"Jekyll 빌드"| B["jekyll-linkpreview 플러그인"]
-    B -->|"HTTP 요청 & OG 크롤링"| C["외부 웹사이트"]
-    C -->|"og:title, og:image, og:description"| B
-    B -->|"_includes/linkpreview.html"| D["미려한 북마크 카드 UI"]
+flowchart TD
+    A["linkpreview 태그 작성"] -->|"Jekyll 빌드"| B["jekyll-linkpreview"]
+    B -->|"HTTP 요청 및 OG 파싱"| C["외부 웹사이트"]
+    C -->|"og:title / og:image"| B
+    B -->|"_includes/linkpreview.html"| D["북마크 카드 UI"]
 ```
 
 ### 1) Gemfile 의존성 추가
@@ -218,8 +218,6 @@ plugins:
 
 ## 7. 마치며
 
-기본 제공되는 플러그인이라도 테마의 내장 기능(TOC 등)과 결합될 때 예상치 못한 마크업 충돌이 일어날 수 있습니다. 
+기본 제공되는 플러그인이라도 테마의 내장 기능(TOC 등)과 결합될 때 예상치 못한 마크업 충돌이 일어날 수 있습니다.
 
 단순히 플러그인 사용을 포기하는 대신, **Liquid 템플릿 오버라이드 메커니즘**을 활용하여 시각적 완성도와 테마 기능 무결성을 모두 지켜낼 수 있었습니다.
-
-다음 포스트(5편)에서는 Chirpy 테마의 카테고리 페이지를 단순한 게시글 목록 나열에서 벗어나, 주제별 시리즈 배너와 상세 소개 박스가 담긴 **'시리즈 허브'로 커스터마이징**하는 방법을 다루어 보겠습니다.

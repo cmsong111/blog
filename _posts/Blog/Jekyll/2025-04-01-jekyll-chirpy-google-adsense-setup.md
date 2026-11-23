@@ -12,14 +12,13 @@ image:
 > 개발자 기술 블로그를 꾸준히 운영하게 해주는 작은 원동력 중 하나는 바로 소소한 광고 수익입니다. 이번 글에서는 GitHub Pages와 Jekyll Chirpy 테마 기반 블로그에 구글 애드센스(Google AdSense) 승인을 단번에 통과한 실전 노하우와 테마 원본 코드를 보존하는 metadata-hook 스크립트 주입, 그리고 ads.txt 크롤링 경고 해결법을 정리합니다.
 
 ```mermaid
-flowchart LR
-    A["커스텀 도메인<br/>(namju.kim)"] --> B["구글 애드센스<br/>사이트 등록"]
-    B --> C["_includes/metadata-hook.html<br/>스크립트 주입"]
-    B --> D["루트 경로<br/>ads.txt 생성"]
-    C --> E["GitHub Pages 배포<br/>(GitHub Actions)"]
-    D --> E
-    E --> F["Googlebot 크롤링<br/>및 사이트 심사"]
-    F --> G["승인 완료<br/>(준비됨 상태)"]
+flowchart TD
+    A["커스텀 도메인 등록<br/>(namju.kim)"] --> B["metadata-hook.html<br/>스크립트 주입"]
+    A --> C["루트 경로<br/>ads.txt 생성"]
+    B --> D["GitHub Actions 배포"]
+    C --> D
+    D --> E["Googlebot 크롤링 및 심사"]
+    E --> F["승인 완료 (준비됨)"]
 ```
 
 ## 준비 사항

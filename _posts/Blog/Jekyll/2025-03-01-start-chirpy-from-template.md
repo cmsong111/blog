@@ -51,10 +51,10 @@ image:
 Chirpy 테마는 테마 소스 코드 전체를 포크(Fork)하는 대신, 필요한 설정과 포스트만 깔끔하게 관리할 수 있는 **Starter 템플릿**을 공식 권장합니다.
 
 ```mermaid
-flowchart LR
-    A["chirpy-starter 템플릿"] -->|"Use this template"| B["<username>.github.io"]
+flowchart TD
+    A["chirpy-starter 템플릿"] -->|"Use this template"| B["username.github.io 저장소"]
     B -->|"git push"| C["GitHub Actions CI"]
-    C -->|pages-deploy.yml| D["GitHub Pages 호스팅"]
+    C -->|"pages-deploy.yml"| D["GitHub Pages 호스팅"]
 ```
 
 ### Step 1. chirpy-starter 템플릿 사용
@@ -146,10 +146,8 @@ bundle exec jekyll serve --livereload
 
 ---
 
-## 6. 마무리 및 다음 단계
+## 6. 마무리
 
-이제 나만의 기술 블로그를 운영하기 위한 가장 기본적이면서도 견고한 뼈대가 완성되었습니다. 
+이제 나만의 기술 블로그를 운영하기 위한 가장 기본적이면서도 견고한 뼈대가 완성되었습니다.
 
 `main` 브랜치에 글을 작성하여 푸시하기만 하면 GitHub Actions가 알아서 검증과 빌드를 거쳐 전 세계에 무료로 배포해 주는 완전 자동화 시스템을 갖추게 되었습니다.
-
-다음 포스트에서는 블로그의 제목, 다국어 및 한국 시간대(KST) 설정, 방문자와 소통하기 위한 **Utterances 댓글 연동**, 그리고 프라이버시 친화적인 **GoatCounter 방문자 통계 연동** 등 필수적인 `_config.yml` 핵심 환경 설정법을 단계별로 다루어 보겠습니다.
