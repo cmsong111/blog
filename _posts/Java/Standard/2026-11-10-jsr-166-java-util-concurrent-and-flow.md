@@ -210,5 +210,3 @@ public class BackpressureDemo {
 ## 정리
 
 JSR-166은 단순히 몇 개의 유틸리티 클래스를 추가한 스펙이 아닙니다. `ExecutorService`로 실행 모델을 추상화하고, `ForkJoinPool`과 `CompletableFuture`로 병렬·비동기 조합을 정립했으며, `Flow` API로 리액티브 배압의 표준 계약을 마련했습니다. 덕분에 Java 21의 Virtual Threads 시대에도 기존 `java.util.concurrent` API를 그대로 유지하면서 동시성 처리량을 끌어올릴 수 있게 되었습니다.
-
-다음 편에서는 컴파일 타임에 어노테이션을 해석해 코드를 생성하는 표준 스펙인 **JSR-269(Pluggable Annotation Processing API)**와 MapStruct·Lombok의 내부 동작 차이를 살펴봅니다.

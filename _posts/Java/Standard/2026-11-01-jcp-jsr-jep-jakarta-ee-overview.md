@@ -8,7 +8,7 @@ mermaid: true
 
 > 스프링 부트 기반 백엔드 개발에서 일상적으로 사용하는 `@Entity`, `@NotBlank`, `@PostConstruct`, `HttpServletRequest` 등은 스프링 고유의 기능이 아니라 자바 표준 스펙입니다. 이 글에서는 자바 표준을 정의하고 검증하는 체계(JCP, JSR, JEP, RI, TCK)를 살펴보고, `javax.*`에서 `jakarta.*`로 네임스페이스가 전환된 배경과 앞으로 다룰 자바 표준 스펙 시리즈의 전체 로드맵을 정리합니다.
 
-> 본 시리즈는 Java 21 LTS 및 Spring Boot 3.4(Jakarta EE 10) 환경을 기준으로 작성되었습니다.
+> 본 시리즈는 Java 21 LTS 및 Spring Boot 3.4 ~ 4.x (Jakarta EE 10/11) 환경을 기준으로 작성되었습니다.
 {: .prompt-info }
 
 ---
@@ -177,6 +177,4 @@ rewrite {
 
 ## 정리
 
-자바 생태계가 30년 가까이 엔터프라이즈 백엔드의 표준으로 자리 잡을 수 있었던 핵심 동력은 **표준 API(JSR/Jakarta EE)와 벤더 구현체의 분리**에 있습니다. JCP와 OpenJDK JEP의 역할, 그리고 `javax.*`에서 `jakarta.*`로의 전환 배경을 이해해 두면 앞으로 다룰 개별 스펙들의 구조가 훨씬 입체적으로 보입니다.
-
-다음 글에서는 의존성 주입(DI)의 표준 스펙인 **JSR-330(Jakarta Dependency Injection)**을 살펴보고, Spring의 `@Autowired`와 어떤 차이가 있는지 실제 코드로 비교해 보겠습니다.
+자바 생태계가 30년 가까이 엔터프라이즈 백엔드의 표준으로 자리 잡을 수 있었던 핵심 동력은 **표준 API(JSR/Jakarta EE)와 벤더 구현체의 분리**에 있습니다. JCP와 OpenJDK JEP의 역할, 그리고 `javax.*`에서 `jakarta.*`로의 전환 배경을 이해해 두면 개별 스펙과 프레임워크의 내부 구조가 훨씬 입체적으로 보입니다.

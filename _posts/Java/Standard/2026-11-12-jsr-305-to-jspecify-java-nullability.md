@@ -137,12 +137,40 @@ class MemberService(
 
 ---
 
-## 시리즈를 마치며
+## 실무 도입 시 주의사항과 점진적 마이그레이션
 
-지금까지 12편에 걸쳐 자바 생태계를 지탱하는 표준 스펙의 흐름을 함께 살펴보았습니다.
+JSpecify를 실제 프로젝트에 적용할 때 자주 마주치는 함정과 도입 전략을 미리 정리해 두면 시행착오를 크게 줄일 수 있습니다.
+
+### 1. 어노테이션 자체는 런타임 Null 검증을 수행하지 않음
+- `org.jspecify:jspecify`의 어노테이션은 `RetentionPolicy.RUNTIME`을 갖지만, **JVM이 런타임에 자동으로 `Objects.requireNonNull()`을 삽입해 주지는 않습니다.**
+- 따라서 IDE(IntelliJ IDEA) 경고에만 의존하지 말고, Java 프로젝트라면 **Error Prone + NullAway**를 CI 빌드에 연동하고, Kotlin 혼용 프로젝트라면 **Kotlin 컴파일러의 Strict Mode**를 활성화해야 실질적인 방어선 역할을 합니다.
+
+### 2. 배열 타입에서의 `TYPE_USE` 어노테이션 위치 혼동
+JSpecify의 `@Nullable`은 `ElementType.TYPE_USE`이므로 배열에 적용할 때 위치에 따라 의미가 완전히 달라집니다.
+
+```java
+// 1) 배열 원소(String)가 null일 수 있음 (배열 자체는 Non-Null)
+@Nullable String[] nullableElements;
+
+// 2) 배열 참조 자체가 null일 수 있음 (배열 안의 원소는 Non-Null)
+String @Nullable [] nullableArray;
+
+// 3) 배열 자체와 내부 원소 모두 null일 수 있음
+@Nullable String @Nullable [] bothNullable;
+```
+
+### 3. 레거시 코드베이스 점진 도입 전략
+- 한 번에 프로젝트 전체에 `@NullMarked`를 적용하면 수백 개의 정적 분석 경고가 쏟아질 수 있습니다.
+- 새 도메인 패키지부터 `package-info.java`에 `@NullMarked`를 선언하고, 아직 정리가 안 된 일부 레거시 클래스나 메서드에만 **`@NullUnmarked`**를 붙여 단계적으로 마이그레이션하는 방식이 안전합니다.
+
+---
+
+## 마무리
+
+지금까지 12편에 걸쳐 자바 생태계를 지탱하는 핵심 표준 스펙의 흐름을 살펴보았습니다.
 
 - **표준 거버넌스(1편)**: JCP, JSR, JEP, 그리고 Jakarta EE로의 전환
-- **엔터프라이즈 핵심 스펙(2~8편)**: DI(JSR-330), Bean Validation(JSR-380), Servlet, JPA, JTA, Caching(JSR-107), Date & Time(JSR-310)
-- **언어·동시성·컴파일러·타입 안전성(9~12편)**: JMM(JSR-133), `java.util.concurrent` & Flow(JSR-166), Annotation Processing(JSR-269), 그리고 JSR-305에서 JSpecify로 이어지는 Nullability 표준화
+- **엔터프라이즈 핵심 스펙(2~7편)**: DI(JSR-330), Common Annotations(JSR-250), Bean Validation(JSR-303/380), JPA(JSR-338) & JTA(JSR-907), Servlet(JSR-340/369), Caching(JSR-107)
+- **Java SE·동시성·컴파일러·타입 안전성(8~12편)**: Date & Time(JSR-310), JMM(JSR-133), `java.util.concurrent` & Flow(JSR-166), Annotation Processing(JSR-269), 그리고 JSR-305에서 JSpecify로 이어지는 Nullability 표준화
 
-프레임워크는 시대에 따라 바뀌지만, 그 바닥에 깔린 **표준 스펙의 설계 의도와 제약 조건**을 이해하고 있으면 새로운 기술이나 메이저 버전 업그레이드를 마주했을 때 훨씬 단단하게 대응할 수 있습니다. 이 시리즈가 실무에서 마주하는 자바와 스프링의 동작 원리를 깊이 이해하는 데 작은 이정표가 되기를 바랍니다.
+프레임워크는 시대에 따라 바뀌지만, 그 바닥에 깔린 **표준 스펙의 설계 의도와 제약 조건**을 이해하고 있으면 새로운 기술이나 메이저 버전 업그레이드를 마주했을 때 훨씬 단단하게 대응할 수 있습니다.
