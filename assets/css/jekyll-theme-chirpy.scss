@@ -123,3 +123,51 @@ samp {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* =========================================================
+ * 모바일(< 768px) 한글 가독성 타이포그래피 최적화
+ * (Chirpy 영문 기본값 대비 모바일 폰트 크기 정돈)
+ * ========================================================= */
+@media (max-width: 767.98px) {
+  article header h1 {
+    font-size: 1.5rem;
+    line-height: 1.35;
+  }
+
+  .content {
+    font-size: 0.95rem;
+    line-height: 1.72;
+
+    h2 {
+      font-size: 1.25rem;
+      line-height: 1.35;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      line-height: 1.4;
+    }
+
+    h4 {
+      font-size: 1rem;
+    }
+  }
+
+  .table-wrapper > table {
+    thead th,
+    tbody tr td {
+      font-size: 0.85rem;
+      padding: 0.35rem 0.75rem;
+    }
+  }
+
+  .highlight pre,
+  code.highlighter-rouge {
+    font-size: 0.8rem;
+  }
+
+  #post-list .card-wrapper .card-title {
+    font-size: 1.1rem;
+    line-height: 1.4;
+  }
+}
