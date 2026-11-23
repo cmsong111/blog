@@ -27,7 +27,13 @@
 
     var ins = document.createElement('ins');
     ins.className = 'adsbygoogle';
-    ins.style.display = 'block';
+    ins.style.display = options.display || 'block';
+    if (options.width) {
+      ins.style.width = options.width;
+    }
+    if (options.height) {
+      ins.style.height = options.height;
+    }
     if (options.textAlign) {
       ins.style.textAlign = options.textAlign;
     }
@@ -143,40 +149,67 @@
       return;
     }
 
-    // 1. 본문 중간 인아티클 광고 자동 삽입 (h2 섹션 경계 기준)
-    var headings = Array.prototype.slice.call(content.querySelectorAll(':scope > h2'));
-    var insertIndices = [];
+    var isDesktop = window.matchMedia('(min-width: 768px)').matches;
 
-    if (headings.length >= 4) {
-      insertIndices.push(Math.floor(headings.length * 0.45));
-    }
-    if (headings.length >= 8) {
-      var secondIdx = Math.floor(headings.length * 0.78);
-      if (secondIdx > insertIndices[0] + 1) {
-        insertIndices.push(secondIdx);
-      }
-    }
+    // 1. 본문 중간 인아티클 광고: 데스크톱(>= 768px)에서만 h2 섹션 경계에 자동 삽입
+    //    (모바일에서는 본문 읽기 몰입을 위해 중간 광고 생략)
+    if (isDesktop) {
+      var headings = Array.prototype.slice.call(
+        content.querySelectorAll(':scope > h2')
+      );
+      var insertIndices = [];
 
-    insertIndices.forEach(function (idx) {
-      var targetH2 = headings[idx];
-      if (!targetH2 || !targetH2.parentNode) {
-        return;
+      if (headings.length >= 4) {
+        insertIndices.push(Math.floor(headings.length * 0.45));
       }
-      var inArticleAd = createAdContainer('ad-slot-in-article', SLOTS.inArticle, {
-        layout: 'in-article',
-        format: 'fluid',
-        textAlign: 'center'
+      if (headings.length >= 8) {
+        var secondIdx = Math.floor(headings.length * 0.78);
+        if (secondIdx > insertIndices[0] + 1) {
+          insertIndices.push(secondIdx);
+        }
+      }
+
+      insertIndices.forEach(function (idx) {
+        var targetH2 = headings[idx];
+        if (!targetH2 || !targetH2.parentNode) {
+          return;
+        }
+        var inArticleAd = createAdContainer(
+          'ad-slot-in-article',
+          SLOTS.inArticle,
+          {
+            layout: 'in-article',
+            format: 'fluid',
+            textAlign: 'center'
+          }
+        );
+        targetH2.parentNode.insertBefore(inArticleAd, targetH2);
+        pushAd();
       });
-      targetH2.parentNode.insertBefore(inArticleAd, targetH2);
-      pushAd();
-    });
+    }
 
     // 2. 포스트 본문 하단(카테고리/태그·댓글 직전) 수평형 광고
+    //    - 데스크톱(>= 768px): 본문 폭 내 수평형 (full-width-responsive 비활성화)
+    //    - 모바일(< 768px): 애드센스 공식 슬림 가로 배너(320x100) 고정
     if (!document.querySelector('.ad-slot-post-bottom')) {
-      var bottomAd = createAdContainer('ad-slot-post-bottom', SLOTS.postBottom, {
-        format: 'horizontal',
-        fullWidthResponsive: true
-      });
+      var bottomOptions = isDesktop
+        ? {
+            format: 'horizontal',
+            fullWidthResponsive: false
+          }
+        : {
+            display: 'inline-block',
+            width: '320px',
+            height: '100px'
+          };
+
+      var bottomAd = createAdContainer(
+        isDesktop
+          ? 'ad-slot-post-bottom'
+          : 'ad-slot-post-bottom ad-slot-post-bottom-mobile',
+        SLOTS.postBottom,
+        bottomOptions
+      );
       tailWrapper.parentNode.insertBefore(bottomAd, tailWrapper);
       pushAd();
     }
