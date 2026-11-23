@@ -4,7 +4,7 @@ description: JUnit5와 WebTestClient을 활용한 API 통합 테스트
 date: 2024-08-08 12:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 image:
-  path: https://static.wanted.co.kr/images/events/4818/6f9f8e47.jpg
+  path: /assets/images/2024-08-01/wanted-challenge-banner.jpg
 ---
 
 ## 테스트 케이스 설계
@@ -12,7 +12,7 @@ API 통합 테스트는 API의 동작을 검증하는 중요한 과정입니다.
 
 API 통합 테스트는 실제로 API를 호출하여 응답을 확인하는 방식으로 진행됩니다. 
  
-![테스트 스크린샷](/assets//images/2024-08-08/screenshot-1.png)
+![테스트 스크린샷](/assets/images/2024-08-08/screenshot-1.png)
 
 ### API 통합 테스트 시나리오
 

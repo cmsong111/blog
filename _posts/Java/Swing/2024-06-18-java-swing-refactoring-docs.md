@@ -4,7 +4,7 @@ description: Dokka를 활용한 코드 문서화 (with 배포)
 date: 2024-06-18 12:00:00 +0000
 tags: [Java, Swing, Refactoring, Dokka]
 image:
-  path: https://velog.velcdn.com/images/cmsong111/post/24a8b41a-49a7-4813-87f2-fe4b172fa200/image.png
+  path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---
 
 # Dokka를 활용한 코드 문서화 (with 배포)
@@ -53,7 +53,7 @@ Dokka를 사용하려면 다음 명령어를 입력하면 됩니다.
 
 ## 생성 결과
 
-![생성 결과](https://velog.velcdn.com/images/cmsong111/post/1b7aef35-d7af-4bb1-b53b-e5cf2df327ad/image.png)
+![생성 결과](/assets/images/2024-06-18/screenshot-1.png)
 
 개발자 모드로 접속하면 왼쪽 사이드에 목차가 표시됩니다. 그러나 파일 기반으로 접속하기 때문에 정상적으로 작동하지 않습니다. 웹 서버를 통해 확인하면 정상적으로 작동합니다.
 
@@ -156,12 +156,12 @@ jobs:
 3. /(root)로 설정합니다.
 4. Save를 클릭합니다.
 
-![](https://velog.velcdn.com/images/cmsong111/post/41111765-51a3-4bed-9164-b2e6e4fb26f0/image.png)
+![](/assets/images/2024-06-18/screenshot-2.png)
 
 ### 3. 확인
 
 GitHub Action 탭에서 배포 과정을 확인할 수 있습니다.
-![](https://velog.velcdn.com/images/cmsong111/post/cbf18b65-3608-48b9-b883-28416b62e09f/image.png)
+![](/assets/images/2024-06-18/screenshot-3.png)
 
 배포가 완료되면 docs 브랜치에 문서가 push된 것을 확인할 수 있습니다. 또한, docs에 배포된 링크를 통해 문서를 확인할 수 있습니다.
 
@@ -171,7 +171,7 @@ GitHub Action 탭에서 배포 과정을 확인할 수 있습니다.
 
 [https://cmsong111.github.io/Restaurant-information-system/](https://cmsong111.github.io/Restaurant-information-system/)
 
-![](https://velog.velcdn.com/images/cmsong111/post/aa3bc70a-7163-48a7-8e36-3bb35a0ddf43/image.png)
+![](/assets/images/2024-06-18/screenshot-4.png)
 
 위에서 사이드바에 나타나지 않던 목차가 정상적으로 표시되는 것을 확인할 수 있습니다.
 

@@ -4,7 +4,7 @@ description: JWT의 등록·공개·비공개 클레임 분류와 실제 서비�
 date: 2025-05-08 12:00:00 +0900
 tags: [jwt, security]
 image:
-  path: https://velog.velcdn.com/images/u-nij/post/1cd61745-8a19-4905-91fa-3b44fd9a86fa/image.png
+  path: /assets/images/2025-05-07/jwt-thumbnail.png
 ---
 ## JWT Payload 분류
 

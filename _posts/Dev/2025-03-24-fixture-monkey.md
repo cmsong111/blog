@@ -4,7 +4,7 @@ description: Fixture Monkey를 활용한 더미 데이터 생성
 date: 2025-03-24 12:00:00 +0000
 tags: [Fixture-Monkey, 더미데이터, 테스트]
 image:
-  path: https://user-images.githubusercontent.com/10272119/227154042-b43ab281-ac73-4648-ba8f-7f2146cde6d5.png
+  path: /assets/images/2025-03-24/fixture-monkey-banner.png
 ---
 
 ## 테스트용 더미 데이터 생성

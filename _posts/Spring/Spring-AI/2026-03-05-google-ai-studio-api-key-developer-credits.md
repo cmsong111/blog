@@ -181,4 +181,4 @@ _실제 curl 호출 응답: serviceTier가 standard로 지정되어 데이터 �
 3. AI Studio 프로젝트를 선불 결제 계정에 연결하여 `Tier 1 · 선불` 인프라를 활성화하는 방법
 4. `gemini-3.5-flash-lite` 엔드포인트를 통한 API 키 동작 및 `standard` 서비스 티어 검증
 
-다음 포스트에서는 이번에 발급받은 API 키를 기반으로 **Spring Boot 4.x / Spring AI 2.0.1의 공식 Google GenAI 스타터(`spring-ai-starter-google-genai`)**를 연동하고, `ChatClient` Fluent API를 활용한 동기 텍스트 생성과 구조화된 DTO 매핑을 구현해 봅니다.
+다음 포스트에서는 이번에 발급받은 API 키를 기반으로 **Spring Boot 4.x / Spring AI 2.0.1의 공식 Google GenAI 스타터(`spring-ai-starter-model-google-genai`)**를 연동하고, `ChatClient` Fluent API를 활용한 동기 텍스트 생성과 구조화된 DTO 매핑을 구현해 봅니다.

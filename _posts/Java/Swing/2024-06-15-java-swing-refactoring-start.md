@@ -4,7 +4,7 @@ description: 게시글 프로젝트 요구사항 분석
 date: 2024-06-15 12:00:00 +0000
 tags: [Java, Swing, Refactoring]
 image:
-  path: https://velog.velcdn.com/images/cmsong111/post/24a8b41a-49a7-4813-87f2-fe4b172fa200/image.png
+  path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---
 
 대학교에서 Java Swing으로 개발했던 프로젝트를 리팩토링을 진행할 예정이다.

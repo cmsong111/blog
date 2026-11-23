@@ -4,7 +4,7 @@ description: Retrofit2 라이브러리를 사용하여 HTTP API 호출을 쉽게
 date: 2024-06-17 12:00:00 +0000
 tags: [Java, Swing, Refactoring, Retrofit2]
 image:
-  path: https://velog.velcdn.com/images/cmsong111/post/24a8b41a-49a7-4813-87f2-fe4b172fa200/image.png
+  path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---
 ## 1. 기존 코드 분석
 
@@ -267,7 +267,7 @@ public class App {
 
 위와 같이 RetrofitProvider를 사용하여 API 호출 메소드를 사용할 수 있다.
 
-![요청 결과](https://velog.velcdn.com/images/cmsong111/post/ffc4161a-c5e5-483d-8c4f-fb3af848d4bc/image.png)
+![요청 결과](/assets/images/2024-06-17/screenshot-1.png)
 
 _IP는 블러 처리하였습니다._
 
@@ -277,7 +277,7 @@ https://gdsc-deu.github.io/blog/2024/05/27/Retrofit2.html) 에 작성해두었�
 
 ## 정리
 
-![](https://velog.velcdn.com/images/cmsong111/post/2303d9bb-a708-4565-b5bf-81e30a030f34/image.png)
+![](/assets/images/2024-06-17/screenshot-2.png)
 
 레트로핏2 라이브러리를 사용하여 HTTP API 호출을 쉽게 할 수 있었습니다.
 

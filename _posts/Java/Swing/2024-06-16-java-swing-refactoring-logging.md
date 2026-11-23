@@ -4,12 +4,12 @@ description: SLF4J 로깅 라이브러리 추가
 date: 2024-06-16 12:00:00 +0000
 tags: [Java, Swing, Refactoring, SLF4J, Logback]
 image:
-  path: https://velog.velcdn.com/images/cmsong111/post/24a8b41a-49a7-4813-87f2-fe4b172fa200/image.png
+  path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---
 
 기존 자바 스윙 프로젝트에서는 로깅을 위해 System.out.println()을 사용했습니다. 
 
-![System.out Replace 요청사진](https://velog.velcdn.com/images/cmsong111/post/a586053a-01f0-4d67-aefc-481817ed1f4c/image.png)
+![System.out Replace 요청사진](/assets/images/2024-06-16/screenshot-1.png)
 
 이는 성능 문제를 일으킬 수 있으며, 로깅 레벨을 조정할 수 없어 유연성이 부족합니다.
 
@@ -147,7 +147,7 @@ logger.warn("This is warn log");
 logger.error("This is error log");
 ```
 
-![로그 색상 설정](https://velog.velcdn.com/images/cmsong111/post/249d26bb-7f70-4570-a221-a2211d916425/image.png)
+![로그 색상 설정](/assets/images/2024-06-16/screenshot-2.png)
 
 로그 레벨에 따라 색상이 다르게 표시되는 것을 확인할 수 있습니다.
 

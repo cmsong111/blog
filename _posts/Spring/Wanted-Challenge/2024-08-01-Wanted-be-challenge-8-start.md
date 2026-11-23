@@ -4,7 +4,7 @@ description: 게시글 프로젝트 요구사항 분석
 date: 2024-08-01 12:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 image:
-  path: https://static.wanted.co.kr/images/events/4818/6f9f8e47.jpg
+  path: /assets/images/2024-08-01/wanted-challenge-banner.jpg
 ---
 ## 프리온보팅 BE 챌린지 8월 사전 과제
 

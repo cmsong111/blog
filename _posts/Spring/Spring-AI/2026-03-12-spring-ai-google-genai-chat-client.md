@@ -1,6 +1,6 @@
 ---
 title: "Spring AI Google GenAI ChatClient Fluent API 기본 구성과 동기 호출"
-description: Spring Boot 4.x 및 Spring AI 2.0.1 환경에서 Google GenAI 스타터(spring-ai-starter-google-genai)를 설정하고, ChatClient Fluent API를 통해 동기 텍스트 생성과 구조화된 객체 매핑을 구현합니다.
+description: Spring Boot 4.x 및 Spring AI 2.0.1 환경에서 Google GenAI 스타터(spring-ai-starter-model-google-genai)를 설정하고, ChatClient Fluent API를 통해 동기 텍스트 생성과 구조화된 객체 매핑을 구현합니다.
 date: 2026-03-12 12:00:00 +0900
 tags: [spring-ai, google-genai, gemini, chat-client, spring-boot]
 mermaid: true
@@ -9,7 +9,7 @@ image:
   alt: Spring AI Google GenAI 실시간 테스트 통과 콘솔
 ---
 
-> Spring Boot 4.x 및 Spring AI 2.0.1의 공식 Google GenAI 스타터(`spring-ai-starter-google-genai`)를 연동하여, `ChatClient` Fluent API를 구성하는 표준 패턴을 정리합니다. `gemini-3.5-flash-lite` 모델을 기반으로 시스템 프롬프트(페르소나) 주입, 동기 텍스트 호출, 그리고 `.entity()`를 활용한 DTO 구조화 매핑까지 실제 동작하는 예제 코드로 살펴봅니다.
+> Spring Boot 4.x 및 Spring AI 2.0.1의 공식 Google GenAI 스타터(`spring-ai-starter-model-google-genai`)를 연동하여, `ChatClient` Fluent API를 구성하는 표준 패턴을 정리합니다. `gemini-3.5-flash-lite` 모델을 기반으로 시스템 프롬프트(페르소나) 주입, 동기 텍스트 호출, 그리고 `.entity()`를 활용한 DTO 구조화 매핑까지 실제 동작하는 예제 코드로 살펴봅니다.
 
 ---
 
@@ -38,7 +38,7 @@ flowchart LR
 
 ### 1. build.gradle.kts 설정
 
-`spring-ai-bom:2.0.1`을 임포트하고, Google GenAI 전용 스타터인 `spring-ai-starter-google-genai`를 추가합니다:
+`spring-ai-bom:2.0.1`을 임포트하고, Google GenAI 전용 스타터인 `spring-ai-starter-model-google-genai`를 추가합니다:
 
 ```kotlin
 plugins {
@@ -58,7 +58,7 @@ dependencyManagement {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.ai:spring-ai-starter-google-genai")
+    implementation("org.springframework.ai:spring-ai-starter-model-google-genai")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
@@ -329,7 +329,7 @@ _REST 엔드포인트 호출 결과: /api/generate 및 /api/generate/book_
 ## 정리 및 다음 단계
 
 - **Spring AI 2.0.1의 `ChatClient` Fluent API**는 기존 `ChatModel` 대비 가독성과 생산성을 획기적으로 향상시킵니다.
-- `spring-ai-starter-google-genai`를 통해 최소한의 YAML 설정만으로 `gemini-3.5-flash-lite` 모델을 즉시 연동할 수 있습니다.
+- `spring-ai-starter-model-google-genai`를 통해 최소한의 YAML 설정만으로 `gemini-3.5-flash-lite` 모델을 즉시 연동할 수 있습니다.
 - `.entity(Class)`를 활용하면 프롬프트 작성자가 수동으로 JSON 파싱을 구현할 필요 없이 규격화된 DTO로 즉시 바인딩됩니다.
 
 하지만 동기(Synchronous) 방식의 `call()`은 모델이 전체 텍스트 생성을 마칠 때까지 클라이언트가 블로킹(대기)되어야 하므로 사용자의 체감 대기 시간이 길어집니다.

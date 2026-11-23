@@ -5,7 +5,7 @@ date: 2024-08-09 12:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 mermaid: true
 image:
-  path: https://static.wanted.co.kr/images/events/4818/6f9f8e47.jpg
+  path: /assets/images/2024-08-01/wanted-challenge-banner.jpg
 ---
 ## 전체적인 CICD 파이프라인
 

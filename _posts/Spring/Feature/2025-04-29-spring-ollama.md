@@ -4,12 +4,12 @@ description: 스프링 부트와 Spring AI를 활용하여 Ollama 모델을 통�
 date: 2025-04-29 12:00:00 +0000
 tags: [spring-boot, ai, ollama, spring-ai, kotlin]
 image:
-  path: https://docs.spring.io/spring-ai/reference/_images/spring-ai-integration-diagram-3.svg
+  path: /assets/images/2025-04-29/spring-ai-integration-diagram-3.svg
 ---
 
 스프링 부트에서 Spring AI를 활용해 Ollama 모델을 통합하는 방법을 소개합니다.
 
-> 본 문서는 Spring AI 1.0.0-M7 버전을 기준으로 작성되었습니다.
+> 본 문서는 Spring AI 1.0.0-M7 버전을 기준으로 작성되었습니다. Spring AI 1.0 GA 및 2.0.x 출시 이후의 최신 구성과 활용 예제는 [Spring AI 2.0.1 시리즈](/categories/spring-ai/)를 함께 참고해 주세요.
 {: .prompt-info }
 
 
