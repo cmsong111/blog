@@ -13,6 +13,7 @@ description: >-
 - **톤앤매너·템플릿·심화 집필 체크리스트**: [`references/writing-tone.md`](./references/writing-tone.md)
 - **블로그 운영·애드센스·정기 유지보수 플레이북**: [`references/operations-guide.md`](./references/operations-guide.md)
 - **자동 QA 검증 스크립트**: [`scripts/qa_check.py`](./scripts/qa_check.py)
+- **터미널 실행 결과 캡처 생성기**: [`scripts/render_terminal.py`](./scripts/render_terminal.py)
 
 ---
 
@@ -82,7 +83,23 @@ image:
 
 1. **로컬 내재화 우선 (외부 핫링크 금지)**: `velog.velcdn.com` 등 외부 호스팅 이미지에 의존하지 말고 `assets/images/YYYY-MM-DD/`에 저장해 `/assets/images/...` 경로로 참조합니다(이중 슬래시 `/assets//` 주의). 프로덕션 배포 시 `_config_prod.yml`의 jsDelivr CDN이 자동 적용됩니다.
 2. **용량 관리**: 단일 이미지 파일은 **1MB 이하**를 유지합니다(필요 시 PNG→WebP/JPG 변환 또는 리사이즈).
-3. **코드 이미지 캡처 금지**: 모든 코드·YAML·명령어는 복붙 가능한 마크다운 코드 블록으로 작성합니다.
+3. **시각 자료 유형별 제작 파이프라인 (코드 캡처 금지)**:
+   - **소스 코드·YAML·설정**: 반드시 복붙 가능한 마크다운 백틱 코드 블록으로 작성합니다(에디터 스크린샷 금지).
+   - **터미널 실행 결과(빌드·테스트·벤치마크·CLI 출력)**: 내장 스크립트 `scripts/render_terminal.py`로 일관된 다크 macOS 터미널 PNG를 생성해 `assets/images/YYYY-MM-DD/`에 저장합니다(이모지 대신 `✓`, `→`, `●` 기호 사용):
+     ```bash
+     cat << 'EOF' | python3 .agents/skills/blog-writing/scripts/render_terminal.py \
+       --title "zsh — ./gradlew test" \
+       --out assets/images/YYYY-MM-DD/test-result.png
+     [green]kimnamju@mbp[/]:[blue]~/projects/demo[/]$ ./gradlew test
+     [green]✓[/] SampleTest > 정상 동작 검증 [muted](38ms)[/]
+     [green]BUILD SUCCESSFUL[/] in 1s
+     EOF
+     ```
+   - **실제 웹 화면(대시보드·Swagger UI·콘솔·반응형 비교)**: 사용 가능한 브라우저 도구(Antigravity 내장 `browser` 서브에이전트, Chrome DevTools MCP, `aside` MCP 등)로 페이지를 열어 다음 절차로 캡처합니다:
+     1. 목적에 맞는 뷰포트 설정(데스크톱 `1280×800` 또는 모바일 `390×844`) 및 모든 이미지·차트 로딩 완료 확인
+     2. 불필요한 여백·사이드바를 제외하고 핵심 UI 요소만 **타이트 크롭(Tight Crop)** 캡처
+     3. API 키(`AIza...`, `sk-...`, 토큰), 이메일, 계정 ID 등 민감 정보가 노출된 경우 저장 전 반드시 **모자이크/블러/블랙박스 마스킹** 처리(Pillow 등 활용)
+     4. `assets/images/YYYY-MM-DD/<descriptive-name>.png`에 저장하고 `/assets/images/...`로 링크(1MB 이하 유지)
 4. **타이트 크롭 & 민감 정보 마스킹**: 불필요한 브라우저 여백을 제거하고, API 키(`AIza...`, `sk-...`, `ghp_...`)·이메일·비밀번호·토큰은 이미지에서 반드시 모자이크/블러 처리하며 코드에도 환경 변수(`${API_KEY}`) 형태로 표기합니다.
 5. **외부 참고 링크**: 단순 URL 나열 대신 `{% linkpreview "URL" %}` 태그를 적극 활용합니다.
 
