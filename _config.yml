@@ -228,6 +228,7 @@ exclude:
   - plan.md
   - docker/plan.md
   - agent.md
+  - AGENTS.md
   - writing-tone.md
   - LICENSE
   - purgecss.js

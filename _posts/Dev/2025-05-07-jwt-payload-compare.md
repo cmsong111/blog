@@ -1,6 +1,6 @@
 ---
 title: 서비스별 JWT Payload 비교
-description:  
+description: JWT의 등록·공개·비공개 클레임 분류와 실제 서비스별 JWT Payload 구조를 비교 정리합니다.
 date: 2025-05-08 12:00:00 +0900
 tags: [jwt, security]
 image:

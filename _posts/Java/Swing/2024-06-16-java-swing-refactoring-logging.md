@@ -3,7 +3,6 @@ title: SLF4J 로깅 라이브러리 추가
 description: SLF4J 로깅 라이브러리 추가
 date: 2024-06-16 12:00:00 +0000
 tags: [Java, Swing, Refactoring, SLF4J, Logback]
-mermaid: true
 image:
   path: https://velog.velcdn.com/images/cmsong111/post/24a8b41a-49a7-4813-87f2-fe4b172fa200/image.png
 ---

@@ -10,6 +10,7 @@ on:
       - LICENSE
       - plan.md
       - agent.md
+      - AGENTS.md
       - writing-tone.md
 
   # Allows you to run this workflow manually from the Actions tab

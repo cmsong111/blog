@@ -3,7 +3,6 @@ title: Swing에 Retrofit2 적용하기
 description: Retrofit2 라이브러리를 사용하여 HTTP API 호출을 쉽게 할 수 있습니다.
 date: 2024-06-17 12:00:00 +0000
 tags: [Java, Swing, Refactoring, Retrofit2]
-mermaid: true
 image:
   path: https://velog.velcdn.com/images/cmsong111/post/24a8b41a-49a7-4813-87f2-fe4b172fa200/image.png
 ---

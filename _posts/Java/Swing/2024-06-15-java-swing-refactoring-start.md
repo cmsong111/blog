@@ -3,7 +3,6 @@ title: Swing 프로젝트 리팩토링 계획
 description: 게시글 프로젝트 요구사항 분석
 date: 2024-06-15 12:00:00 +0000
 tags: [Java, Swing, Refactoring]
-mermaid: true
 image:
   path: https://velog.velcdn.com/images/cmsong111/post/24a8b41a-49a7-4813-87f2-fe4b172fa200/image.png
 ---

@@ -55,13 +55,17 @@ flowchart TD
     - **탐색 화면**: 좌측 사이드바의 **Tags 탭(`/tags/`)**에서 알파벳순/건수별 뱃지 및 데스크톱 우측 사이드바의 **Trending Tags** 위젯에 노출.
     - **원칙**: 여러 기술 키워드를 자유롭게 N개 부여하여 독자의 교차 검색과 필터링을 지원합니다.
 - **표준 카테고리 및 폴더 규격 (폴더명이 곧 카테고리명이 됨)**:
-  - `Spring > Feature`: `_posts/Spring/Feature/` (19편) -> `categories: ["Spring", "Feature"]`
-  - `Spring > AI`: `_posts/Spring/AI/` (4편) -> `categories: ["Spring", "AI"]`
-  - `Spring > Wanted-Challenge`: `_posts/Spring/Wanted-Challenge/` (11편) -> `categories: ["Spring", "Wanted-Challenge"]`
-  - `Dev`: `_posts/Dev/` (3편) -> `categories: ["Dev"]`
-  - `Dev > Book`: `_posts/Dev/Book/` (1편) -> `categories: ["Dev", "Book"]`
-  - `Java > Swing`: `_posts/Java/Swing/` (4편) -> `categories: ["Java", "Swing"]`
-  - `Blog > Jekyll`: `_posts/Blog/Jekyll/` (9편) -> `categories: ["Blog", "Jekyll"]`
+  - `AI > Concept`: `_posts/AI/Concept/` -> `categories: ["AI", "Concept"]`
+  - `Blog > Jekyll`: `_posts/Blog/Jekyll/` -> `categories: ["Blog", "Jekyll"]`
+  - `Book`: `_posts/Book/` -> `categories: ["Book"]`
+  - `Dev`: `_posts/Dev/` -> `categories: ["Dev"]`
+  - `Docker > Compose / Container / Image / Network`: `_posts/Docker/{중분류}/` -> `categories: ["Docker", "{중분류}"]`
+  - `Home Server > Containers`: `_posts/Home Server/Containers/` -> `categories: ["Home Server", "Containers"]`
+  - `Java > Swing`: `_posts/Java/Swing/` -> `categories: ["Java", "Swing"]`
+  - `Spring > Feature`: `_posts/Spring/Feature/` -> `categories: ["Spring", "Feature"]`
+  - `Spring > Spring-AI`: `_posts/Spring/Spring-AI/` -> `categories: ["Spring", "Spring-AI"]`
+  - `Spring > Wanted-Challenge`: `_posts/Spring/Wanted-Challenge/` -> `categories: ["Spring", "Wanted-Challenge"]`
+  - `Vite`: `_posts/Vite/` -> `categories: ["Vite"]`
 - **Front Matter 표준 형식 (categories 완전 생략, tags만 작성)**:
   ```yaml
   ---
@@ -120,8 +124,8 @@ flowchart TD
 3. **서브그래프(subgraph) 연결 및 스타일링 주의사항**:
    - 화살표의 목적지로 서브그래프 ID 자체를 직접 지정하지 말고, **서브그래프 내부의 구체적인 노드 ID로 연결**해야 합니다.
    - `class SubgraphName styleClass;` 형태로 서브그래프에 직접 클래스를 부여하지 않습니다.
-4. **HTML 태그 배제**:
-   - 레이블 내부에 `<br>`, `<font>` 등 원시 HTML 태그를 직접 삽입하지 말고 `\n` 또는 별도의 텍스트 노드로 분리합니다.
+4. **스타일링 HTML 태그 배제**:
+   - 레이블 내부에 `<font>`, `<div>`, `<span>` 등 스타일링용 원시 HTML 태그를 삽입하지 않습니다(줄바꿈이 필요한 경우 `\n` 또는 Mermaid 공식 줄바꿈 `<br/>`만 허용).
 5. **Front Matter 일치 여부 확인**:
    - 본문에 ````mermaid```` 코드 블록이 하나라도 존재하면 Front Matter에 반드시 `mermaid: true`가 선언되어 있어야 합니다.
 

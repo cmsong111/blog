@@ -1,6 +1,6 @@
 ---
 title: 코틀린 스프링부트에서 AuthenticationPrincipal 500 오류 해결하기
-description: 
+description: Kotlin Spring Boot 환경에서 permitAll 설정과 @AuthenticationPrincipal 사용 시 발생하는 500 오류의 원인과 커스텀 HandlerMethodArgumentResolver 해결 방법을 정리합니다.
 date: 2025-05-08 12:00:00 +0900
 tags: [spring-boot, security, kotlin, authentication, spring-security]
 mermaid: true

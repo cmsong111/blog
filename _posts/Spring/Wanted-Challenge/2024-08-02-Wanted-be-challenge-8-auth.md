@@ -3,7 +3,6 @@ title: 프리온보딩 BE 챌린지 8월 사전 과제 - 회원 API
 description: JWT 인증을 이용한 회원 API 제작
 date: 2024-08-02 12:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
-mermaid: true
 image:
   path: https://static.wanted.co.kr/images/events/4818/6f9f8e47.jpg
 ---
