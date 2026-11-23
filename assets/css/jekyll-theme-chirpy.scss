@@ -49,3 +49,66 @@ samp {
     'Malgun Gothic',
     monospace !important;
 }
+
+/* =========================================================
+ * 수동 Google AdSense 레이아웃 (우측 사이드바 / 본문 / 하단)
+ * ========================================================= */
+.ad-slot-wrapper {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.ad-slot-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-muted-color);
+  opacity: 0.65;
+  text-align: left;
+  user-select: none;
+}
+
+/* 우측 사이드바 세로형 광고: 넓은 화면(>= 1200px) 전용 */
+.ad-slot-sidebar {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  /* 긴 포스트에서 목차가 사이드바 광고를 화면 밖으로 밀어내지 않도록 내부 스크롤 제한 */
+  #toc-wrapper #toc {
+    max-height: 42vh;
+    overflow-y: auto;
+  }
+
+  .ad-slot-sidebar {
+    display: block;
+    width: 100%;
+    max-width: 247px;
+    margin-top: 1.5rem;
+    padding-left: 1rem;
+  }
+
+  .ad-slot-sidebar-sticky {
+    position: sticky;
+    top: 2rem;
+    padding-left: 0;
+  }
+}
+
+/* 본문 중간 인아티클 광고 (h2 섹션 경계) */
+.ad-slot-in-article {
+  margin: 2rem 0;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 포스트 본문 하단 수평형 광고 */
+.ad-slot-post-bottom {
+  margin: 2.25rem 0 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
