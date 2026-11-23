@@ -233,10 +233,3 @@ public class NotificationService {
 JSR-330은 단 6개의 구성 요소만으로 자바 생태계 전반의 의존성 주입 표준을 정의합니다. Spring은 `AutowiredAnnotationBeanPostProcessor`를 통해 `@Inject`를 네이티브하게 지원하므로, 이식성이 중요한 공용 모듈에서는 `jakarta.inject`를, Spring 중심 애플리케이션에서는 생성자 주입 생략과 `ObjectProvider<T>`를 선택하는 전략이 실용적입니다.
 
 다음 글에서는 빈의 초기화·소멸 생명주기와 이름 기반 주입을 다루는 **JSR-250(Jakarta Annotations)**의 `@PostConstruct`, `@PreDestroy`, `@Resource`를 살펴보겠습니다.
-
----
-
-### 시리즈 네비게이션
-
-- **이전 글**: [1편: JCP, JSR, JEP, 그리고 Jakarta EE: 자바 표준 스펙 체계와 네임스페이스 전환](/posts/jcp-jsr-jep-jakarta-ee-overview/)
-- **다음 글**: [3편: JSR-250 (Jakarta Annotations): @PostConstruct, @PreDestroy, @Resource 동작 원리](/posts/jsr-250-jakarta-annotations-lifecycle/)

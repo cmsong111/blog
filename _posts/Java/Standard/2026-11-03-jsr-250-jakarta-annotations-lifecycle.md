@@ -261,10 +261,3 @@ public class AlertService {
 JSR-250(Jakarta Annotations)은 Spring 빈 생명주기 관리의 표준 진입점 역할을 합니다. `@PostConstruct` -> `InitializingBean` -> `@Bean(initMethod)`로 이어지는 콜백 실행 순서와, `@PostConstruct`가 AOP 프록시 생성 이전에 실행된다는 점을 정확히 이해해 두면 초기화 관련 장애를 사전에 예방할 수 있습니다.
 
 다음 글에서는 요청 DTO와 도메인 객체의 유효성 검증을 담당하는 **JSR-303/380(Jakarta Validation)** 스펙과 `@Valid`·`@Validated`의 차이를 살펴보겠습니다.
-
----
-
-### 시리즈 네비게이션
-
-- **이전 글**: [2편: JSR-330 (Jakarta Dependency Injection): @Inject와 Spring @Autowired 비교](/posts/jsr-330-jakarta-inject-vs-spring-autowired/)
-- **다음 글**: [4편: JSR-303/380 (Jakarta Validation): Bean Validation 표준과 @Valid·@Validated 활용](/posts/jsr-380-jakarta-bean-validation/)

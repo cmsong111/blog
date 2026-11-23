@@ -158,10 +158,3 @@ public class LazySingleton {
 ## 정리
 
 JSR-133(Java Memory Model)은 멀티코어 CPU와 컴파일러 최적화 사이에서 멀티스레드 프로그램이 예측 가능하게 동작하도록 정의한 표준 계약입니다. 실무에서 동시성 코드를 작성할 때는 "단순히 락을 걸었는가"보다 **두 스레드 사이에 명확한 `happens-before` 경로가 존재하는지**, 그리고 상태 공유가 불가피하다면 `final` 불변 객체나 `Atomic*`·`volatile` 중 어떤 도구가 알맞은지 구분하는 것이 중요합니다.
-
----
-
-### 자바 표준 스펙 시리즈
-
-- 이전 글: [8편: JSR-310 (java.time): 불변 날짜·시간 API 설계와 Clock 기반 테스트 전략](/posts/jsr-310-java-time-api-and-clock-testing/)
-- 다음 글: [10편: JSR-166 (java.util.concurrent): 동시성 표준 유틸리티와 Reactive Streams Flow API](/posts/jsr-166-java-util-concurrent-and-flow/)

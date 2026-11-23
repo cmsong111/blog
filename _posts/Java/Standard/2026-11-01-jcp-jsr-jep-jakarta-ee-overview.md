@@ -180,9 +180,3 @@ rewrite {
 자바 생태계가 30년 가까이 엔터프라이즈 백엔드의 표준으로 자리 잡을 수 있었던 핵심 동력은 **표준 API(JSR/Jakarta EE)와 벤더 구현체의 분리**에 있습니다. JCP와 OpenJDK JEP의 역할, 그리고 `javax.*`에서 `jakarta.*`로의 전환 배경을 이해해 두면 앞으로 다룰 개별 스펙들의 구조가 훨씬 입체적으로 보입니다.
 
 다음 글에서는 의존성 주입(DI)의 표준 스펙인 **JSR-330(Jakarta Dependency Injection)**을 살펴보고, Spring의 `@Autowired`와 어떤 차이가 있는지 실제 코드로 비교해 보겠습니다.
-
----
-
-### 시리즈 네비게이션
-
-- **다음 글**: [2편: JSR-330 (Jakarta Dependency Injection): @Inject와 Spring @Autowired 비교](/posts/jsr-330-jakarta-inject-vs-spring-autowired/)

@@ -175,10 +175,3 @@ class CouponServiceTest {
 ## 정리
 
 JSR-310(`java.time`)은 단순히 편리한 날짜 유틸리티가 아니라, **불변성**, **타입 시스템을 통한 타임존 의도 표현**, 그리고 **`Clock`을 통한 테스트 가능성**을 모두 갖춘 표준 설계입니다. 실무에서 `LocalDateTime.now()` 호출을 습관적으로 작성하기 전에, 이 값이 타임존이 필요한지(`Instant`/`OffsetDateTime`/`ZonedDateTime`)와 `Clock` 주입으로 테스트 가능하게 분리할 수 있는지 한 번 더 점검하는 습관이 버그를 크게 줄여 줍니다.
-
----
-
-### 자바 표준 스펙 시리즈
-
-- 이전 글: [7편: JSR-107 (JCache): 자바 표준 캐시 API와 Spring Cache 추상화 연동](/posts/jsr-107-jcache-spring-cache-abstraction/)
-- 다음 글: [9편: JSR-133 (Java Memory Model): volatile, happens-before와 멀티스레드 가시성](/posts/jsr-133-java-memory-model-happens-before/)

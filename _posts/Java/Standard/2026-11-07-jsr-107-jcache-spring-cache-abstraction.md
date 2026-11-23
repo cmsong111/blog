@@ -213,10 +213,3 @@ public class ProductService {
 ## 정리
 
 JSR-107(JCache)은 벤더마다 달랐던 캐시 API를 `CachingProvider` → `CacheManager` → `Cache` 계층으로 표준화한 스펙입니다. Spring 환경에서는 자체 캐시 추상화가 워낙 강력하기 때문에 어노테이션까지 JSR-107로 통일할 필요는 없지만, Hibernate 2차 캐시 연동이나 캐시 벤더 교체 가능성을 열어두고 싶을 때 JCache의 구조와 `ExpiryPolicy`, `StoreByValue` 옵션을 정확히 이해해 두면 큰 도움이 됩니다.
-
----
-
-### 자바 표준 스펙 시리즈
-
-- 이전 글: [6편: JSR-340/369 (Jakarta Servlet): 서블릿 컨테이너 표준과 Filter·Interceptor 비교](/posts/jsr-340-jakarta-servlet-filter-vs-interceptor/)
-- 다음 글: [8편: JSR-310 (java.time): 불변 날짜·시간 API 설계와 Clock 기반 테스트 전략](/posts/jsr-310-java-time-api-and-clock-testing/)

@@ -146,10 +146,3 @@ class MemberService(
 - **언어·동시성·컴파일러·타입 안전성(9~12편)**: JMM(JSR-133), `java.util.concurrent` & Flow(JSR-166), Annotation Processing(JSR-269), 그리고 JSR-305에서 JSpecify로 이어지는 Nullability 표준화
 
 프레임워크는 시대에 따라 바뀌지만, 그 바닥에 깔린 **표준 스펙의 설계 의도와 제약 조건**을 이해하고 있으면 새로운 기술이나 메이저 버전 업그레이드를 마주했을 때 훨씬 단단하게 대응할 수 있습니다. 이 시리즈가 실무에서 마주하는 자바와 스프링의 동작 원리를 깊이 이해하는 데 작은 이정표가 되기를 바랍니다.
-
----
-
-### 시리즈 네비게이션
-
-- **이전 글**: [11편. JSR-269 (Annotation Processing): 컴파일 타임 코드 생성 표준과 Lombok·MapStruct 원리](/posts/jsr-269-pluggable-annotation-processing/)
-- **처음으로**: [1편. JCP, JSR, JEP, 그리고 Jakarta EE: 자바 표준 스펙 생태계 한눈에 이해하기](/posts/jcp-jsr-jep-jakarta-ee-overview/)
