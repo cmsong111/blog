@@ -3,18 +3,27 @@
     <div class="jekyll-linkpreview-content">
       <div class="jekyll-linkpreview-body">
         <div class="jekyll-linkpreview-title">
-          <a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ title }}</a>
+          <a
+            class="jekyll-linkpreview-link"
+            href="{{ url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{{ title }}</a>
         </div>
         {% if description %}
           <div class="jekyll-linkpreview-description">{{ description }}</div>
         {% endif %}
         <div class="jekyll-linkpreview-footer">
-          <a href="{{ url }}" target="_blank" rel="noopener noreferrer">{{ domain }}</a>
+          <span class="jekyll-linkpreview-domain">{{ domain }}</span>
         </div>
       </div>
     </div>
   </div>
   {% if image %}
-    <div class="jekyll-linkpreview-image" style="background-image: url('{{ image }}');"></div>
+    <div
+      class="jekyll-linkpreview-image"
+      style="background-image: url('{{ image }}');"
+      aria-hidden="true"
+    ></div>
   {% endif %}
 </div>

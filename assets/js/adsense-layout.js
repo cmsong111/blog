@@ -16,9 +16,9 @@
   };
 
   function createAdContainer(className, slotId, options) {
-    var wrapper = document.createElement('div');
+    var wrapper = document.createElement('aside');
     wrapper.className = 'ad-slot-wrapper ' + className;
-    wrapper.setAttribute('aria-label', 'Advertisement');
+    wrapper.setAttribute('aria-label', '광고');
 
     var label = document.createElement('span');
     label.className = 'ad-slot-label';

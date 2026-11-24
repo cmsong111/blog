@@ -45,6 +45,13 @@ social:
     # - https://www.facebook.com/username
     - https://www.linkedin.com/in/kimnamju/
 
+# Default author & logo for jekyll-seo-tag JSON-LD (BlogPosting author & publisher)
+author:
+  name: 김남주
+  url: https://namju.kim/about/
+
+logo: /assets/img/favicons/apple-touch-icon.png
+
 # Site Verification Settings
 webmaster_verifications:
   google: pWvXEtxit9b2Jb1BhT5gZwCnk7c4LKniU5aq1ftSCqM
@@ -103,7 +110,7 @@ avatar: https://avatars.githubusercontent.com/cmsong111
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
-social_preview_image: https://avatars.githubusercontent.com/cmsong111
+social_preview_image: /assets/img/og-default.png
 
 # boolean type, the global switch for TOC in posts.
 toc: true

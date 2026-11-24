@@ -2,7 +2,7 @@
 title: Chirpy 목차(TOC) 항상 펼침 상태로 고정하기
 description: 긴 기술 블로그 글에서 우측 목차(TOC)가 자동으로 접히는 현상을 해결하기 위해 Chirpy SCSS 아키텍처를 분석하고 스타일을 오버라이드한 트러블슈팅 과정을 공유합니다.
 date: 2025-03-03 12:00:00 +0900
-tags: [Chirpy, Jekyll, GitHub-Pages, TOC, SCSS, Troubleshooting]
+tags: [chirpy, jekyll, github-pages, TOC, scss, Troubleshooting]
 mermaid: true
 image:
   path: /assets/images/2025-03-02/after.png

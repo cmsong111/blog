@@ -2,7 +2,7 @@
 title: Dokka를 활용한 코드 문서화 (with 배포)
 description: Dokka를 활용한 코드 문서화 (with 배포)
 date: 2024-06-18 12:00:00 +0000
-tags: [Java, Swing, Refactoring, Dokka]
+tags: [java, swing, refactoring, Dokka]
 image:
   path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---

@@ -2,7 +2,7 @@
 title: Chirpy 카테고리 페이지에 시리즈 배너와 설명 박스 추가하기
 description: Jekyll Chirpy 테마의 카테고리 페이지를 단순한 글 목록에서 주제별 시리즈 배너와 설명이 담긴 풍성한 허브 페이지로 커스터마이징하는 방법을 다룹니다.
 date: 2025-03-11 12:00:00 +0900
-tags: [Chirpy, Jekyll, GitHub-Pages, Customization, Layout]
+tags: [chirpy, jekyll, github-pages, Customization, Layout]
 mermaid: true
 image:
   path: /assets/images/2025-03-11/category-wanted-challenge.png

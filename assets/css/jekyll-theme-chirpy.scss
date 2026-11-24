@@ -51,6 +51,43 @@ samp {
 }
 
 /* =========================================================
+ * 웹 접근성: 본문 바로가기 (Skip to Content) 링크
+ * ========================================================= */
+.skip-to-content {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 2000;
+  padding: 0.65rem 1.1rem;
+  border-radius: 0.5rem;
+  background-color: var(--link-color, #0056b2);
+  color: #ffffff !important;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 25%);
+  transition: top 0.15s ease;
+}
+
+.skip-to-content:focus,
+.skip-to-content:focus-visible {
+  top: 1rem;
+  outline: 3px solid var(--heading-color, #2a2a2a);
+  outline-offset: 2px;
+}
+
+/* 다크 모드에서 밝은 --link-color 배경 위 텍스트 대비 확보 */
+html[data-mode='dark'] .skip-to-content {
+  color: #111111 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode='light']) .skip-to-content {
+    color: #111111 !important;
+  }
+}
+
+/* =========================================================
  * 수동 Google AdSense 레이아웃 (우측 사이드바 / 본문 / 하단)
  * ========================================================= */
 .ad-slot-wrapper {
@@ -62,11 +99,10 @@ samp {
 .ad-slot-label {
   display: block;
   margin-bottom: 0.35rem;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--text-muted-color);
-  opacity: 0.65;
   text-align: left;
   user-select: none;
 }

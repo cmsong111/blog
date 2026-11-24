@@ -2,7 +2,7 @@
 title: Swing 프로젝트 리팩토링 계획 
 description: 게시글 프로젝트 요구사항 분석
 date: 2024-06-15 12:00:00 +0000
-tags: [Java, Swing, Refactoring]
+tags: [java, swing, refactoring]
 image:
   path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---

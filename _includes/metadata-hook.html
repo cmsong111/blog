@@ -3,8 +3,61 @@
 <!-- Naver Search Advisor site verification -->
 <meta name="naver-site-verification" content="858f23c87778195f1b40e45846a75a7f99cb6371">
 
+{% if page.noindex %}
+  <!-- Prevent thin tag archive and paginated index pages from diluting search indexing -->
+  <meta name="robots" content="noindex, follow">
+{% endif %}
+
+{% unless page.image %}
+  {% if site.social_preview_image %}
+    <!-- Explicit dimensions and alt text for the default 1200x630 Open Graph card -->
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ site.title | escape }} — {{ site.tagline | escape }}">
+  {% endif %}
+{% endunless %}
+
+{% if page.layout == 'post' %}
+  <!-- BreadcrumbList structured data for post hierarchy -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ site.title | jsonify }},
+          "item": {{ '/' | absolute_url | jsonify }}
+        }
+        {%- assign bc_pos = 1 -%}
+        {%- for cat in page.categories -%}
+          {%- assign bc_pos = bc_pos | plus: 1 -%}
+          {%- capture cat_path -%}/categories/{{ cat | slugify | url_encode }}/{%- endcapture -%}
+          ,{
+            "@type": "ListItem",
+            "position": {{ bc_pos }},
+            "name": {{ cat | jsonify }},
+            "item": {{ cat_path | absolute_url | jsonify }}
+          }
+        {%- endfor -%}
+        {%- assign bc_pos = bc_pos | plus: 1 -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ bc_pos }},
+          "name": {{ page.title | jsonify }},
+          "item": {{ page.url | absolute_url | jsonify }}
+        }
+      ]
+    }
+  </script>
+{% endif %}
+
 <!-- jekyll-linkpreview styles -->
 <link rel="stylesheet" href="{{ '/assets/css/linkpreview.css' | relative_url }}">
+
+<!-- Accessibility enhancements (Skip-to-Content link) -->
+<script defer src="{{ '/assets/js/a11y-enhancements.js' | relative_url }}"></script>
 
 <!-- Google AdSense -->
 <script
