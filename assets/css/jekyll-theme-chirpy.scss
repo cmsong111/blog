@@ -219,3 +219,23 @@ html[data-mode='dark'] .skip-to-content {
     line-height: 1.4;
   }
 }
+
+/* =========================================================
+ * 상단 탑바 브레드크럼(카테고리 포함) 및 모바일 타이틀 말줄임 처리
+ * ========================================================= */
+@media (min-width: 1200px) {
+  #topbar #breadcrumb {
+    min-width: 0;
+    flex: 1;
+    margin-right: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+#topbar-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
