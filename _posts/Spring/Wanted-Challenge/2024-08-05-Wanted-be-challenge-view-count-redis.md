@@ -1,65 +1,44 @@
 ---
-title: 프리온보딩 BE 챌린지 8월 사전 과제 - 게시글 조회수 기능
-description: "클라이언트 IP와 User-Agent 조합에 Redis TTL을 적용해 동일 사용자의 게시글 조회수 중복 증가를 방지하는 구현 방법을 정리합니다."
+title: "Redis SETNX와 JPA Modifying 쿼리로 구현한 게시글 조회수 중복 방지"
+description: "IP와 SHA-256 해시 User-Agent 조합 키에 Redis SETNX 원자 연산과 JPA @Modifying 쿼리를 적용해 조회수 중복 증가와 동시성 문제를 해결하는 방법을 정리합니다."
 date: 2024-08-05 12:00:00 +0000
-tags: [원티드, 백엔드, 챌린지, spring-boot]
+tags: [spring-boot, redis, jpa, kotlin, 원티드]
+mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg
+  alt: 프리온보딩 백엔드 챌린지 게시글 조회수 중복 방지
 ---
 
-## 조회수 기능 구현
+> 동일 사용자의 새로고침으로 인한 게시글 조회수 중복 증가를 막기 위해 IP와 User-Agent 해시 조합 키에 Redis `SETNX` 원자 연산과 JPA `@Modifying` 쿼리를 적용했습니다. TOCTOU 동시성 제어, 영속성 컨텍스트 정합성, Redis 장애 격리, 프록시 환경 IP 처리까지 정리합니다.
 
-## 중복 조회수 증가 방지
+> 이 글은 Kotlin 1.9, Java 21, Spring Boot 3.5, Spring Data Redis, Spring Data JPA 환경을 기준으로 작성되었습니다.
+{: .prompt-info }
 
-게시글 조회수 기능을 구현할 때에는 다양한 방법을 고려할 수 있습니다.
+## 조회수 중복 방지 전략과 식별 키 설계
 
-아래 포스팅은 다음 과정을 통해 구현하였습니다
+게시글 조회수 중복 방지 방식은 구현 복잡도와 인프라 비용 면에서 뚜렷한 트레이드오프가 있습니다.
 
-1. IP에 기반하여 조회수를 증가시키는 방법
-    - IP + User Agent를 활용하면 동일한 WIFI를 사용하더라도 다른기기로 접속 시 조회수를 증가시킬 수 있습니다.
-2. Redis의 TTL을 활용하여 다음날은 조회수를 증가시키는 방법
-    - RDS를 활용한다면, 스케줄러를 활용하여 매일 0시에 조회수를 초기화할 수 있습니다.
+| 방식 | 저장 위치 | 장점 | 한계 |
+| :--- | :--- | :--- | :--- |
+| Cookie / LocalStorage | 클라이언트 | 서버 부담 없음 | 쿠키 삭제·`curl`로 쉽게 우회 |
+| RDBMS 조회 로그 | DB | 영구 보관·집계 가능 | 매 조회 `INSERT` 부하, 배치 삭제 필요 |
+| Redis TTL 키 (`SETNX`) | 인메모리 캐시 | 빠른 응답, TTL 만료, 원자적 체크 | 별도 인프라 및 장애 격리 필요 |
 
-이번 포스팅에서는 IP + User Agent를 활용하여 조회수를 증가시키는 방법을 구현해보겠습니다.
-
-### 조회수 엔티티
-
-게시글 조회수를 저장할 엔티티를 생성합니다.
-
-`@RedisHash` 어노테이션을 활용하여 Redis에 저장할 수 있도록 설정합니다.
-
-개발의 편의(?)를 위해 create 정적메소드와, createKey 정적 메소드를 생성합니다.
-
-User Agent는 해시값으로 저장합니다.
+DB 쓰기 부하를 피하면서 24시간 뒤 자동 만료되는 **Redis TTL 방식**을 선택했습니다. 클라이언트는 공용 Wi-Fi(NAT) 환경의 동일 IP 공유를 고려해 **IP + User-Agent 조합**으로 식별합니다.
 
 ```kotlin
-{% raw %}import org.springframework.data.annotation.Id
-import org.springframework.data.redis.core.RedisHash
-import java.io.Serializable
-import java.time.Instant
+// article/domain/ArticleView.kt
+package org.project.portfolio.article.domain
 
-@RedisHash(value = "article_views", timeToLive = 60 * 60 * 24)
+import java.security.MessageDigest
+
 data class ArticleView(
-    @Id
     val id: String,
     val articleId: Long,
     val ip: String,
     val userAgent: String,
-    val createdAt: Instant,
-) : Serializable {
+) {
     companion object {
-        fun create(
-            articleId: Long, ip: String, userAgent: String,
-        ): ArticleView {
-            return ArticleView(
-                id = createKey(articleId, ip, userAgent),
-                articleId = articleId,
-                ip = ip,
-                userAgent = userAgent,
-                createdAt = Instant.now(),
-            )
-        }
-
         fun createKey(
             articleId: Long,
             ip: String,
@@ -73,106 +52,140 @@ data class ArticleView(
             return "$articleId:${newIp}_$hashUserAgent"
         }
     }
-}{% endraw %}
+}
 ```
 
-### 조회수 레포지토리
+`ArticleView.createKey`는 IPv6 주소의 콜론(`:`)을 점(`.`)으로 치환해 Redis 네임스페이스 구분자와 충돌하지 않게 하고, 긴 `User-Agent` 문자열은 SHA-256 해시 앞 10자리로 압축해 키 메모리를 절약합니다.
 
-`CrudRepository`를 상속받아 Redis에 저장할 수 있는 레포지토리를 생성합니다.
+## 단순 조회 후 저장의 동시성 문제와 Redis SETNX
 
-```kotlin
-{% raw %}package org.project.portfolio.article.domain
+초기에는 `@RedisHash`와 `CrudRepository`로 `findByIdOrNull` 후 `save`하는 방식을 쓰기 쉽지만, 두 가지 한계가 있습니다.
 
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
-import org.springframework.data.repository.CrudRepository
+1. **TOCTOU(Time-of-Check to Time-of-Use) Race Condition**: 동시 요청이 들어오면 두 스레드가 모두 `null`을 확인한 뒤 각각 조회수를 올려 중복 증가가 발생합니다.
+2. **메모리·왕복 오버헤드**: `@RedisHash`는 `HASH` 외에 만료 시간(`TTL`)이 없는 보조 `SET` 인덱스를 함께 생성합니다.
 
-@EnableRedisRepositories
-interface ArticleViewRepository : CrudRepository<ArticleView, String>
-{% endraw %}
+![@RedisHash 사용 시 HASH와 TTL 없는 보조 SET이 함께 생성되는 구조](/assets/images/2024-08-05/screenshot-03.png)
+
+이를 해결하기 위해 일반 캐시는 `RedisConfig`의 JSON 직렬화 `RedisTemplate`에 맡기고, 조회 플래그는 Spring Boot 자동 구성 `StringRedisTemplate`의 `setIfAbsent`로 전환했습니다.
+
+`stringRedisTemplate.opsForValue().setIfAbsent(viewKey, "1", Duration.ofHours(24))`는 Redis 단일 원자 명령어(`SET key "1" NX EX 86400`)로 실행됩니다. Redis의 단일 스레드 이벤트 루프 특성상 동시 요청 중 단 하나만 `true`를 반환받아 TOCTOU 문제를 원천 차단합니다.
+
+```mermaid
+flowchart TD
+    A["GET /api/v1/articles/{id}"] --> B["Redis SET NX EX 86400"]
+    B -->|"true (최초 조회)"| C["JPA @Modifying 조회수 +1"]
+    B -->|"false (24시간 내 중복)"| D["조회수 증가 생략"]
+    B -.->|"예외 발생 (장애 격리)"| E["경고 로그 기록 후 진행"]
+    C --> F["게시글 상세 응답 반환"]
+    D --> F
+    E --> F
 ```
 
-### Post Service
+## JPA Modifying 쿼리와 영속성 컨텍스트 정합성
+
+DB 조회수 반영은 변경 감지(`article.viewCount++`) 대신 JPQL 벌크 업데이트로 구현했습니다.
 
 ```kotlin
-{% raw %}import org.project.portfolio.article.entity.ArticleView
+// article/domain/ArticleRepository.kt
+@Repository
+interface ArticleRepository : JpaRepository<Article, Long> {
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(
+        """
+        update Article a
+        set a.viewCount = a.viewCount + 1
+        where a.id = :id""",
+    )
+    fun increaseViewCount(id: Long): Int
+}
+```
 
+변경 감지는 동시 요청 시 갱신 손실(Lost Update)을 일으키고, `BaseTimeEntity`의 `@LastModifiedDate`가 동작해 단순 조회만으로 `updatedAt`이 오염됩니다. 반면 JPQL `UPDATE`는 DB 레코드 락으로 원자적 가산을 수행하며 JPA Auditing을 우회합니다.
+
+`@Modifying`의 `flushAutomatically = true`는 벌크 쿼리 실행 전 쓰기 지연 SQL을 반영하고, `clearAutomatically = true`는 쿼리 직후 1차 캐시(L1)를 비워 이후 조회 시 이전 `viewCount`가 캐시에서 반환되는 정합성 문제를 방지합니다.
+
+## Redis 장애 격리와 트랜잭션 경계 설계
+
+조회수 증가는 상세 조회에 딸린 부가 기능입니다. Redis 장애로 게시글 본문 조회까지 `500` 에러로 실패하지 않도록 `ArticleQueryService`에서 `try-catch`로 장애를 격리했습니다.
+
+```kotlin
+// article/application/ArticleQueryService.kt
 @Service
-class ArticleService(
-    private val articleRepository: ArticleJpaRepository,
-    private val articleRedisRepository: ArticleRedisRepository,
+@Transactional(readOnly = true)
+class ArticleQueryService(
+    private val articleRepository: ArticleRepository,
+    private val stringRedisTemplate: StringRedisTemplate,
 ) {
     @Transactional
     fun increaseArticleViewCount(
-        articleId: Long, ip: String, userAgent: String,
-    ): Long {
-        // 게시글 조회
-        val article: Article = articleRepository.findByIdOrNull(articleId)
-            ?: throw BusinessException(ErrorCode.ARTICLE_NOT_FOUND)
-
-        // 중복 조회수 증가 방지
-        if (articleRedisRepository.findByIdOrNull(ArticleView.createKey(articleId, ip, userAgent)) == null) {
-            articleRedisRepository.save(ArticleView.create(articleId, ip, userAgent))
-            article.apply { viewCount++ }
+        articleId: Long,
+        ip: String,
+        userAgent: String,
+    ) {
+        if (!articleRepository.existsById(articleId)) {
+            throw NotFoundException(Article::class.java, mapOf("articleId" to articleId))
         }
 
-        return article.viewCount
+        try {
+            val viewKey = "$ARTICLE_VIEW_KEY_PREFIX${ArticleView.createKey(articleId, ip, userAgent)}"
+            val isFirstView = stringRedisTemplate.opsForValue()
+                .setIfAbsent(viewKey, "1", VIEW_TTL) == true
+
+            if (isFirstView) {
+                articleRepository.increaseViewCount(articleId)
+                logger.info {
+                    mapOf("articleId" to articleId, "ip" to ip, "userAgent" to userAgent)
+                }
+            }
+        } catch (e: Exception) {
+            logger.warn(e) { "조회수 증가 처리 실패 (Redis 장애 격리): articleId=$articleId" }
+        }
     }
-}{% endraw %}
-```
-### Post Controller
 
-보통(?) `Controller`에서 하나의 서비스를 호출하다보니 깜박했을수도 있지만, 2개 이상의 메소드를 호출할 수 있습니다.
-
-따라서 게시글 정보를 가져올 떄 조회수를 증가시키는 메소드를 같이 호출합니다.
-
-```kotlin
-@RestController
-@RequestMapping("/api/v1/articles")
-@Tag(name = "Article", description = "The article API")
-class ArticleController(
-    private val articleService: ArticleService,
-) {
-    @GetMapping("/{id}")
-    @Operation(summary = "게시글 상세 조회 API")
-    fun getArticle(
-        @PathVariable @Parameter(description = "게시글 ID") id: Long,
-        request: HttpServletRequest,
-    ): ResponseEntity<ArticleResponse> {
-        articleService.increaseArticleViewCount(
-            articleId = id,
-            ip = request.remoteAddr,
-            userAgent = request.getHeader("User-Agent") ?: "Unknown User-Agent",
-        )
-        return ResponseEntity.ok(
-            articleService.getArticle(id),
-        )
+    companion object {
+        private const val ARTICLE_VIEW_KEY_PREFIX = "article_views:"
+        private val VIEW_TTL: Duration = Duration.ofHours(24)
+        private val logger: KLogger = KotlinLogging.logger {}
     }
 }
 ```
 
-> 스프링 앞에 ELB나 Nginx가 있다면, 아래 포스티을 참고해서 실제 IP를 가져오는 방법을 확인하세요.
-{: .prompt-info }
+`existsById` 검증은 `try` 바깥에 두어 존재하지 않는 게시글에 대한 `404` 응답을 유지하고, Redis 예외만 경고 로그로 기록합니다.
 
-{% linkpreview "https://codingwithyou.tistory.com/130" %}
+```kotlin
+// article/presentation/ArticleController.kt
+@GetMapping("/{articleId}")
+@Operation(summary = "게시글 상세 조회 API")
+fun getArticle(
+    @PathVariable @Parameter(description = "게시글 ID") articleId: Long,
+    request: HttpServletRequest,
+): ResponseEntity<ArticleResponse> {
+    articleQueryService.increaseArticleViewCount(
+        articleId = articleId,
+        ip = request.remoteAddr,
+        userAgent = request.getHeader("User-Agent") ?: "Unknown User-Agent",
+    )
+    return ResponseEntity.ok(
+        articleQueryService.getArticle(articleId),
+    )
+}
+```
 
-## 적용 결과
+컨트롤러에서 두 메서드를 별도로 호출하면 AOP 프록시 자기 호출 문제를 피하면서 쓰기(`@Transactional`)와 읽기(`readOnly = true`) 트랜잭션 경계를 깔끔하게 분리할 수 있습니다.
 
-### Redis에 저장된 데이터
+## 프록시 환경 운영 주의사항 및 정리
 
-Redis에 저장된 데이터를 확인해보면, `article_views`라는 키로 저장되어 있습니다.
+Nginx나 AWS ALB 같은 리버스 프록시 환경에서는 별도 설정이 없으면 `request.remoteAddr`가 프록시 내부 IP를 반환해 모든 사용자가 동일 IP로 묶입니다. 운영 설정(`application-prod.yml`)에 아래 옵션을 추가하면 Spring의 `ForwardedHeaderFilter`가 `X-Forwarded-For` 헤더를 해석해 실제 클라이언트 IP를 복원합니다.
 
-`article_views:게시글ID:IP:UserAgent` 형식으로 저장되어 있습니다.
+```yaml
+# src/main/resources/application-prod.yml
+server:
+  forward-headers-strategy: framework
+```
 
-![Redis 캡쳐](/assets/images/2024-08-05/screenshot-03.png)
+> **보안 주의사항**: `forward-headers-strategy: framework`는 외부에서 조작한 `X-Forwarded-For` 헤더를 덮어쓰는 신뢰된 프록시 뒤에서만 사용해야 합니다. 또한 정산처럼 엄격한 무결성이 필요한 도메인이라면 IP + User-Agent 방식 외에 로그인 계정 기반 집계를 함께 검토해야 합니다.
+{: .prompt-warning }
 
-TTL도 86400초(24시간)로 잘 설정되어 있습니다.
-
-## 정리
-
-게시글 조회수 중복 증가 방지 기능을 구현해보았습니다.
-
-Redis를 활용하여 TTL을 설정하고, IP + User Agent를 활용하여 중복 조회수를 방지할 수 있었습니다.
-
-이 외에도 다양한 방법으로 구현할 수 있으니, 본인에게 맞는 방법을 찾아보세요.
+조회수 중복 방지는 Redis 원자 연산(`SET NX EX`), JPA `@Modifying` 정합성 관리, 장애 격리, 프록시 IP 복원을 함께 챙겨야 운영 환경에서 안정적으로 동작합니다. 전체 코드는 아래 저장소에서 확인할 수 있습니다.
 
 {% linkpreview "https://github.com/cmsong111/Wanted-PreOnBoarding-Backend-Challenge" %}
