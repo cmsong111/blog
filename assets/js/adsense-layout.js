@@ -151,42 +151,47 @@
 
     var isDesktop = window.matchMedia('(min-width: 768px)').matches;
 
-    // 1. 본문 중간 인아티클 광고: 데스크톱(>= 768px)에서만 h2 섹션 경계에 자동 삽입
-    //    (모바일에서는 본문 읽기 몰입을 위해 중간 광고 생략)
-    if (isDesktop) {
-      var headings = Array.prototype.slice.call(
-        content.querySelectorAll(':scope > h2')
-      );
-      var insertIndices = [];
+    // 1. 본문 중간 광고: h2 섹션 경계에 자동 삽입
+    //    - 데스크톱(>= 768px): 인아티클 광고 (in-article / fluid)
+    //    - 모바일(< 768px): 좌우로 길고 상하로 짧은 공식 슬림 배너(320x100) 고정
+    var headings = Array.prototype.slice.call(
+      content.querySelectorAll(':scope > h2')
+    );
+    var insertIndices = [];
 
-      if (headings.length >= 4) {
-        insertIndices.push(Math.floor(headings.length * 0.45));
+    if (headings.length >= 4) {
+      insertIndices.push(Math.floor(headings.length * 0.45));
+    }
+    if (headings.length >= 8) {
+      var secondIdx = Math.floor(headings.length * 0.78);
+      if (secondIdx > insertIndices[0] + 1) {
+        insertIndices.push(secondIdx);
       }
-      if (headings.length >= 8) {
-        var secondIdx = Math.floor(headings.length * 0.78);
-        if (secondIdx > insertIndices[0] + 1) {
-          insertIndices.push(secondIdx);
-        }
-      }
+    }
 
-      insertIndices.forEach(function (idx) {
-        var targetH2 = headings[idx];
-        if (!targetH2 || !targetH2.parentNode) {
-          return;
-        }
-        var inArticleAd = createAdContainer(
-          'ad-slot-in-article',
-          SLOTS.inArticle,
-          {
+    insertIndices.forEach(function (idx) {
+      var targetH2 = headings[idx];
+      if (!targetH2 || !targetH2.parentNode) {
+        return;
+      }
+      var inArticleAd = isDesktop
+        ? createAdContainer('ad-slot-in-article', SLOTS.inArticle, {
             layout: 'in-article',
             format: 'fluid',
             textAlign: 'center'
-          }
-        );
-        targetH2.parentNode.insertBefore(inArticleAd, targetH2);
-        pushAd();
-      });
-    }
+          })
+        : createAdContainer(
+            'ad-slot-in-article ad-slot-in-article-mobile',
+            SLOTS.postBottom,
+            {
+              display: 'inline-block',
+              width: '320px',
+              height: '100px'
+            }
+          );
+      targetH2.parentNode.insertBefore(inArticleAd, targetH2);
+      pushAd();
+    });
 
     // 2. 포스트 본문 하단(카테고리/태그·댓글 직전) 수평형 광고
     //    - 데스크톱(>= 768px): 본문 폭 내 수평형 (full-width-responsive 비활성화)

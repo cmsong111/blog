@@ -142,6 +142,18 @@ html[data-mode='dark'] .skip-to-content {
   border-bottom: 1px solid var(--border-color);
 }
 
+.ad-slot-in-article-mobile {
+  margin: 1.5rem 0;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+.ad-slot-in-article-mobile .ad-slot-label {
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* 포스트 본문 하단 수평형 광고 */
 .ad-slot-post-bottom {
   margin: 2.25rem 0 1.25rem;
