@@ -1,6 +1,6 @@
 ---
 title: 프리온보딩 BE 챌린지 8월 사전 과제 - API 통합 테스트
-description: JUnit5와 WebTestClient을 활용한 API 통합 테스트
+description: "JUnit5와 WebTestClient를 활용해 회원가입·로그인·게시글 API의 성공 및 예외 시나리오를 검증하는 통합 테스트 작성 과정을 정리합니다."
 date: 2024-08-08 12:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 image:

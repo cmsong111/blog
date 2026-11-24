@@ -160,7 +160,7 @@ Ollama Vision 모델을 활용하여 이미지를 입력으로 받아 응답을 
 
 예를 들어, 특정 이미지를 기반으로 설명을 요청할 수 있습니다.
 
-![image](https://picsum.photos/id/11/1600/900)
+![Ollama 비전 모델 이미지 분석 테스트용 풍경 예시 사진](https://picsum.photos/id/11/1600/900)
 
 ### 코드 예제
 

@@ -1,6 +1,6 @@
 ---
 title: "AI 도구 연동의 새로운 표준: Model Context Protocol(MCP) 아키텍처 분석"
-description: LLM과 외부 시스템 간의 결합도를 N*M에서 N+M으로 선형화하는 Anthropic의 개방형 표준 Model Context Protocol(MCP)의 탄생 배경, Host-Client-Server 3계층 아키텍처, stdio 및 SSE 전송 계층, JSON-RPC 2.0 핸드셰이크 라이프사이클을 상세 분석합니다.
+description: "LLM과 외부 시스템 결합도를 N×M에서 N+M으로 낮추는 MCP의 배경, Host-Client-Server 구조, stdio·SSE 전송 계층, JSON-RPC 2.0 라이프사이클을 분석합니다."
 date: 2025-11-24 12:00:00 +0900
 tags: [ai, mcp, model-context-protocol, anthropic, protocol-standard]
 mermaid: true

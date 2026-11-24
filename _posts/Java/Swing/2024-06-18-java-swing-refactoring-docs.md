@@ -1,13 +1,11 @@
 ---
 title: Dokka를 활용한 코드 문서화 (with 배포)
-description: Dokka를 활용한 코드 문서화 (with 배포)
+description: Kotlin 프로젝트에 Gradle Dokka 플러그인을 적용해 HTML·Markdown API 문서를 생성하고, GitHub Actions와 GitHub Pages로 자동 배포하는 방법을 정리합니다.
 date: 2024-06-18 12:00:00 +0000
 tags: [java, swing, refactoring, Dokka]
 image:
   path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---
-
-# Dokka를 활용한 코드 문서화 (with 배포)
 
 프로젝트를 진행하다 보면 팀원 간의 코드 공유나 코드를 이해하기 위해 문서화가 필요할 때가 있습니다. 주석을 통해 문서화하는 것도 좋지만, 문서화 도구를 사용하면 더욱 효율적으로 작업할 수 있습니다. 일반적으로 Java에서는 Javadoc을, Kotlin에서는 KDoc을 사용합니다. 이번에는 Kotlin에서 사용할 수 있는 Dokka를 살펴보겠습니다.
 
@@ -90,7 +88,7 @@ class Person(
 패키지에 대한 설명을 작성합니다.
 ```
 
-#### 예시
+### 예시
 
 ```markdown
 # Module TODO Swing Application
@@ -156,12 +154,12 @@ jobs:
 3. /(root)로 설정합니다.
 4. Save를 클릭합니다.
 
-![](/assets/images/2024-06-18/screenshot-2.png)
+![GitHub 저장소 Settings의 Pages 배포 브랜치(docs) 설정 화면](/assets/images/2024-06-18/screenshot-2.png)
 
 ### 3. 확인
 
 GitHub Action 탭에서 배포 과정을 확인할 수 있습니다.
-![](/assets/images/2024-06-18/screenshot-3.png)
+![GitHub Actions 탭에서 Dokka 문서 배포 워크플로우 실행 결과](/assets/images/2024-06-18/screenshot-3.png)
 
 배포가 완료되면 docs 브랜치에 문서가 push된 것을 확인할 수 있습니다. 또한, docs에 배포된 링크를 통해 문서를 확인할 수 있습니다.
 
@@ -171,7 +169,7 @@ GitHub Action 탭에서 배포 과정을 확인할 수 있습니다.
 
 [https://cmsong111.github.io/Restaurant-information-system/](https://cmsong111.github.io/Restaurant-information-system/)
 
-![](/assets/images/2024-06-18/screenshot-4.png)
+![GitHub Pages에 배포된 Dokka API 문서 화면과 좌측 목차](/assets/images/2024-06-18/screenshot-4.png)
 
 위에서 사이드바에 나타나지 않던 목차가 정상적으로 표시되는 것을 확인할 수 있습니다.
 

@@ -1,6 +1,6 @@
 ---
 title: "Spring AI BeanOutputConverter와 Gemini Provider-Native JSON Schema를 활용한 구조화된 출력"
-description: Spring AI 2.0.1의 BeanOutputConverter와 Google Gemini의 Provider-Native JSON Schema(response_schema)를 결합하여, 중첩 DTO와 Enum을 재시도 없이 100% 안전하게 Kotlin 객체로 역직렬화하는 노하우를 정리합니다.
+description: "Spring AI 2.0.1 BeanOutputConverter와 Gemini Native JSON Schema를 결합해 중첩 DTO와 Enum을 재시도 없이 Kotlin 객체로 안전하게 역직렬화하는 방법을 정리합니다."
 date: 2026-04-02 12:00:00 +0900
 tags: [spring-ai, structured-output, json-schema, gemini, bean-output-converter, dto]
 mermaid: true

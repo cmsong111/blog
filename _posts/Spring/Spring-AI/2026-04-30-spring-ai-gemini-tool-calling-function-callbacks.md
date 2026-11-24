@@ -1,6 +1,6 @@
 ---
 title: "@Tool 어노테이션 기반 Function Calling과 외부 API 연동"
-description: Spring AI 2.0.1의 @Tool 어노테이션으로 스프링 빈을 Gemini 도구(Function Calling)로 노출하고, Spring AI 2.0.1의 도구 예외 JSON 파싱 버그를 커스텀 ToolExecutionExceptionProcessor로 해결하여 실시간 외부 데이터를 조회하는 파이프라인을 구축합니다.
+description: "Spring AI 2.0.1 @Tool 어노테이션으로 스프링 빈을 Gemini Function Calling에 연동하고, 커스텀 ToolExecutionExceptionProcessor로 예외 파싱 버그를 해결합니다."
 date: 2026-04-30 12:00:00 +0900
 tags: [spring-ai, gemini, tool-calling, function-calling, json-schema, external-api]
 mermaid: true

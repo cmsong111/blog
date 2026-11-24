@@ -1,6 +1,6 @@
 ---
 title: "MCP의 3대 핵심 프리미티브: Tools, Resources, Prompts의 역할과 차이"
-description: Model Context Protocol(MCP) 서버가 외부에 노출하는 3대 핵심 요소인 Tools(동적 실행 및 부수 효과), Resources(URI 기반 읽기 전용 데이터 및 구독), Prompts(재사용 가능한 대화 템플릿)의 개념적 차이와 실제 JSON-RPC 페이로드 스펙을 비교 분석합니다.
+description: "MCP 서버의 3대 핵심 요소인 Tools(동적 실행), Resources(URI 읽기 전용 데이터·구독), Prompts(재사용 템플릿)의 역할 차이와 JSON-RPC 페이로드를 비교합니다."
 date: 2025-12-01 12:00:00 +0900
 tags: [ai, mcp, mcp-primitives, resources, prompts, tools]
 mermaid: true

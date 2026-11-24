@@ -1,6 +1,6 @@
 ---
 title: Swing 프로젝트 리팩토링 계획 
-description: 게시글 프로젝트 요구사항 분석
+description: "대학교 Java Swing 음식점 정보 조회 프로젝트의 패키지 구조, Apache HttpClient 보일러플레이트, 전역 상태 문제를 진단하고 리팩토링 계획을 정리합니다."
 date: 2024-06-15 12:00:00 +0000
 tags: [java, swing, refactoring]
 image:

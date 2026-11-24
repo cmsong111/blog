@@ -1,6 +1,6 @@
 ---
 title: 프리온보딩 BE 챌린지 8월 사전 과제 - 게시글 조회수 기능
-description: 동일IP에 대한 조회수 중복 증가 방지 
+description: "클라이언트 IP와 User-Agent 조합에 Redis TTL을 적용해 동일 사용자의 게시글 조회수 중복 증가를 방지하는 구현 방법을 정리합니다."
 date: 2024-08-05 12:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 image:

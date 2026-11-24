@@ -1,6 +1,6 @@
 ---
 title: Swing에 Retrofit2 적용하기
-description: Retrofit2 라이브러리를 사용하여 HTTP API 호출을 쉽게 할 수 있습니다.
+description: Java Swing 프로젝트의 Apache HttpClient 보일러플레이트 코드를 Retrofit2 인터페이스와 Kotlin object 싱글턴으로 리팩토링한 과정을 정리합니다.
 date: 2024-06-17 12:00:00 +0000
 tags: [java, swing, refactoring, Retrofit2]
 image:
@@ -277,7 +277,7 @@ https://gdsc-deu.github.io/blog/2024/05/27/Retrofit2.html) 에 작성해두었�
 
 ## 정리
 
-![](/assets/images/2024-06-17/screenshot-2.png)
+![Retrofit2(StoreRepository.kt)와 기존 Apache HttpClient(StoreHTTP.java) 코드 비교 화면](/assets/images/2024-06-17/screenshot-2.png)
 
 레트로핏2 라이브러리를 사용하여 HTTP API 호출을 쉽게 할 수 있었습니다.
 

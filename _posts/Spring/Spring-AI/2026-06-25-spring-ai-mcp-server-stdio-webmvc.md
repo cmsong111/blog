@@ -1,6 +1,6 @@
 ---
 title: "Spring Boot 애플리케이션의 MCP Server(STDIO / Streamable HTTP) 구축"
-description: Spring AI 2.0.1로 Spring Boot 애플리케이션을 Model Context Protocol(MCP) 서버로 구축하여, @McpTool과 @McpResource 기반의 사내 비즈니스 기능을 Cursor, Claude Desktop, AI 에이전트에 노출하는 실무 아키텍처를 구현합니다.
+description: "Spring AI 2.0.1로 Spring Boot 앱을 MCP 서버(STDIO·Streamable HTTP)로 구축해 @McpTool·@McpResource 비즈니스 기능을 외부 에이전트에 노출합니다."
 date: 2026-06-25 12:00:00 +0900
 tags: [spring-ai, mcp, model-context-protocol, mcp-server, streamable-http, stdio, spring-boot]
 mermaid: true

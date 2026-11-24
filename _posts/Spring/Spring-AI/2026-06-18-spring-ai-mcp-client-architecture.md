@@ -1,6 +1,6 @@
 ---
 title: "Spring AI MCP Client를 활용한 Model Context Protocol 도구 연동"
-description: Spring AI 2.0.1의 spring-ai-starter-mcp-client를 활용하여 Streamable HTTP 및 STDIO 전송 기반의 외부 MCP 서버 도구를 탐색하고, McpToolFilter 보안 허용 목록으로 파괴적 도구를 차단하며 Google Gemini에 주입하는 엔터프라이즈 아키텍처를 구축합니다.
+description: "Spring AI 2.0.1 MCP Client로 Streamable HTTP·STDIO 외부 도구를 탐색하고, McpToolFilter 허용 목록으로 파괴적 도구를 차단하며 Gemini에 연동하는 구조를 구현합니다."
 date: 2026-06-18 12:00:00 +0900
 tags: [spring-ai, gemini, mcp, model-context-protocol, mcp-client, streamable-http, stdio]
 mermaid: true

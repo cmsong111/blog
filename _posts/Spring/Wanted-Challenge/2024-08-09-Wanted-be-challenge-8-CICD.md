@@ -1,6 +1,6 @@
 ---
 title: 프리온보딩 BE 챌린지 8월 사전 과제 - CICD 파이프라인 구축
-description: GitHub Actions를 활용한 손쉬운 CICD 파이프라인 구축
+description: "GitHub Actions로 Docker 이미지를 빌드해 Docker Hub에 푸시하고, Watchtower로 개발 서버 컨테이너를 자동 배포하는 CI/CD 파이프라인을 정리합니다."
 date: 2024-08-09 12:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 mermaid: true
@@ -86,13 +86,13 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 ```
 
-#### 새로운 이미지가 없을 떄
+### 새로운 이미지가 없을 때
 새로운 이미지가 없을 경우, 기존 컨테이너를 유지한다.
 ```zsh
 time="2025-03-25T11:40:35+09:00" level=info msg="Session done" Failed=0 Scanned=11 Updated=1 notify=no
 ```
 
-#### 새로운 이미지가 있을 때
+### 새로운 이미지가 있을 때
 
 새로운 이미지를 내려받은후, 해당 컨테이너를 삭제하고 새로운 컨테이너를 생성한다.
 

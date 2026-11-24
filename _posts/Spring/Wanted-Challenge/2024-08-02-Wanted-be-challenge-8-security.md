@@ -1,6 +1,6 @@
 ---
 title: 프리온보딩 BE 챌린지 8월 사전 과제 - 스프링 시큐리티 설정 
-description: JWT 인증을 이용한 스프링 시큐리티 설정
+description: "Spring Security에서 UserDetailsService, JWT 인증 필터, 예외 처리 핸들러를 구성해 Stateless 인증 아키텍처를 구축하는 방법을 정리합니다."
 date: 2024-08-02 15:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 image:

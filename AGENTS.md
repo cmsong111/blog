@@ -27,6 +27,7 @@
 | `_plugins/category-folder-hook.rb` | `_posts/{대분류}/{중분류}/` 폴더 경로 기반 카테고리 자동 주입 훅 (Front Matter에 `categories` 생략) |
 | `_plugins/posts-lastmod-hook.rb` | Git 커밋 히스토리 기반 `last_modified_at` 자동 주입 훅 |
 | `_plugins/seo-sitemap-hook.rb` | 얇은 태그 아카이브(`/tags/*/`)·페이지네이션(`/page2+/`) `sitemap.xml` 제외 및 `noindex` 자동 주입 훅 |
+| `_plugins/image-dimensions-hook.rb` | 로컬 이미지의 고유 `width`/`height` 자동 주입 훅 (CLS 방지, `fastimage` 활용) |
 
 ---
 

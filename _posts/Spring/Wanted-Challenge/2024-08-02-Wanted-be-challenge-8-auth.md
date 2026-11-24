@@ -1,6 +1,6 @@
 ---
 title: 프리온보딩 BE 챌린지 8월 사전 과제 - 회원 API
-description: JWT 인증을 이용한 회원 API 제작
+description: "Spring Boot와 Kotlin으로 이메일·휴대폰·비밀번호 유효성 검증과 JWT 기반 로그인·회원가입 API를 설계하고 구현한 과정을 정리합니다."
 date: 2024-08-02 12:00:00 +0000
 tags: [원티드, 백엔드, 챌린지, spring-boot]
 image:
