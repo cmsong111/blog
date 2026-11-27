@@ -56,14 +56,17 @@ description: >-
   - `AI > Concept`: `_posts/AI/Concept/`
   - `Blog > Jekyll`: `_posts/Blog/Jekyll/`
   - `Book > DDD`: `_posts/Book/DDD/`
-  - `CS > JVM / Web-Network`: `_posts/CS/{중분류}/`
+  - `CS > Database / JVM / Web-Network`: `_posts/CS/{중분류}/`
   - `Dev`: `_posts/Dev/`
   - `Docker > Compose / Container / Image / Network`: `_posts/Docker/{중분류}/`
   - `Home Server > Containers`: `_posts/Home Server/Containers/`
   - `Java > Standard`: `_posts/Java/Standard/`
   - `Java > Swing`: `_posts/Java/Swing/`
+  - `Kotlin > Practice`: `_posts/Kotlin/Practice/`
   - `Spring > Feature`: `_posts/Spring/Feature/`
+  - `Spring > Observability`: `_posts/Spring/Observability/`
   - `Spring > Spring-AI`: `_posts/Spring/Spring-AI/`
+  - `Spring > Testing`: `_posts/Spring/Testing/`
   - `Spring > Wanted-Challenge`: `_posts/Spring/Wanted-Challenge/`
   - `Vite`: `_posts/Vite/`
 
