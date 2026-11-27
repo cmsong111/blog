@@ -2,7 +2,7 @@
 title: "Vite 네이티브 테스트 러너 Vitest 도입과 Mocking·Coverage 설정 가이드"
 description: "Vite 생태계에 최적화된 초고속 테스트 러너 Vitest의 아키텍처와 설정 방법을 살펴보고, Jest 대비 장점, vi API를 활용한 모킹, JSDOM 컴포넌트 테스트 및 v8 커버리지 리포트 수집 기법을 정리합니다."
 date: 2026-10-09 12:00:00 +0900
-tags: [vite, vitest, unit-testing, test-runner, coverage]
+tags: [vite, testing, frontend]
 mermaid: true
 ---
 

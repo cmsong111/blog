@@ -2,7 +2,7 @@
 title: "Docker Compose depends_on과 healthcheck를 활용한 서비스 기동 순서 제어"
 description: "Docker Compose의 기본 depends_on이 가진 한계를 파헤치고, healthcheck와 condition: service_healthy, 그리고 Flyway 마이그레이션 체이닝을 활용해 무결점 컨테이너 기동 순서를 제어하는 실무 전략을 정리합니다."
 date: 2026-06-08 12:00:00 +0900
-tags: [docker-compose, depends-on, healthcheck, postgresql, spring-boot]
+tags: [docker-compose, healthcheck, postgresql, spring-boot]
 mermaid: true
 ---
 

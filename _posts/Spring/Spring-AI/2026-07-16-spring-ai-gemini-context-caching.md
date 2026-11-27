@@ -2,7 +2,7 @@
 title: "Gemini Context Caching을 활용한 대용량 문서 질의응답 비용 최적화"
 description: Spring AI 2.0.1의 GoogleGenAiCachedContentService와 GoogleGenAiChatOptions를 활용하여, 대용량 사내 문서를 Gemini 서버 측 캐시에 등록하고 입력 토큰 비용과 지연 시간을 70% 이상 절감하는 엔지니어링 패턴을 구축합니다.
 date: 2026-07-16 12:00:00 +0900
-tags: [spring-ai, gemini, context-caching, cost-optimization, token-discount, large-context]
+tags: [spring-ai, gemini, caching, performance]
 mermaid: true
 image:
   path: /assets/images/2026-07-16/context-caching-test-pass.png

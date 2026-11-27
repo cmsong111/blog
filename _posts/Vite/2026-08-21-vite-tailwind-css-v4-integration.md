@@ -2,7 +2,7 @@
 title: "Vite 환경에서 Tailwind CSS v4 아키텍처 도입 및 컴파일 성능 최적화"
 description: "새로운 Oxide/Rust 엔진과 제로 설정(Zero-config) 아키텍처로 개편된 Tailwind CSS v4를 Vite 프로젝트에 통합하고, Lightning CSS 기반의 극적인 빌드 속도 향상과 스타일링 파이프라인 최적화 기법을 다룹니다."
 date: 2026-08-21 12:00:00 +0900
-tags: [vite, tailwindcss-v4, css-compiler, jit, styling]
+tags: [vite, css, frontend, performance]
 mermaid: true
 ---
 

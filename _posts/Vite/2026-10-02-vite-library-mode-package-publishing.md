@@ -2,7 +2,7 @@
 title: "Vite 라이브러리 모드(build.lib)를 활용한 npm 공통 컴포넌트 패키지 번들링"
 description: "Vite 라이브러리 모드(build.lib)와 Rollup external로 React/TS 공통 컴포넌트를 ESM·CJS 듀얼 번들링하고, vite-plugin-dts와 exports 최적화 방법을 정리합니다."
 date: 2026-10-02 12:00:00 +0900
-tags: [vite, library-mode, build-lib, npm-publish, dts]
+tags: [vite, typescript, build-tools]
 mermaid: true
 ---
 

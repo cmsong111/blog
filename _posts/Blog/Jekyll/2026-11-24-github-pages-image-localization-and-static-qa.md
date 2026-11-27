@@ -2,7 +2,7 @@
 title: "GitHub Pages 블로그 외부 이미지 내재화와 정적 QA 자동화"
 description: "외부 CDN 핫링크 이미지를 로컬 assets/images와 jsDelivr CDN으로 이관하고, htmlproofer 이중 슬래시 오류·AGENTS.md 배포 노출·Dev Container Bookworm 전환까지 블로그 유지보수 과정을 정리합니다."
 date: 2026-11-24 09:00:00 +0900
-tags: [github-pages, jekyll, cdn, htmlproofer, qa, devcontainer]
+tags: [jekyll, github-pages, cdn, testing, dx]
 mermaid: true
 ---
 

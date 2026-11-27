@@ -2,7 +2,7 @@
 title: "MinIO를 활용한 홈서버 S3 호환 객체 스토리지 구축"
 description: "AWS S3 API와 완벽히 호환되는 MinIO 객체 스토리지를 Docker Compose로 구축하고, API(9000)/콘솔(9001) 분리, Nginx Proxy Manager 연동 및 웹소켓 설정, 버킷 관리와 영속화·백업 전략을 다룹니다."
 date: 2025-03-30 10:00:00 +0900
-tags: [docker, homelab, minio, s3, object-storage, backup]
+tags: [docker, homelab, storage]
 mermaid: true
 ---
 

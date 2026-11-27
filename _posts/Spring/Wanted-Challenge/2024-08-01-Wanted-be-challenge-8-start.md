@@ -2,7 +2,7 @@
 title: "프리온보딩 BE 챌린지 요구사항 분석과 Spring Boot 3.5 CQRS 3계층 아키텍처 설계"
 description: "원티드 프리온보딩 백엔드 챌린지 요구사항을 분석하고 Spring Boot 3.5 기반 3계층 CQRS 패키지 구조, BaseTimeEntity Auditing, 프로필 및 런타임 기본 설정을 정리합니다."
 date: 2024-08-01 12:00:00 +0000
-tags: [원티드, 백엔드, 챌린지, spring-boot, cqrs, kotlin]
+tags: [spring-boot, kotlin, architecture, backend]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

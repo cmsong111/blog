@@ -2,7 +2,7 @@
 title: "홈랩 v2를 위한 PostgreSQL·Redis 통합 인프라와 멱등 DB 프로비저닝"
 description: "홈랩 인프라 v2 리빌딩의 기초 단계로, 기존 MariaDB에서 PostgreSQL 17(SCRAM-SHA-256)과 Redis 8로 통합 데이터베이스 스택을 전환하고 멱등성을 보장하는 Bash 프로비저닝 스크립트로 개별 서비스 DB를 자동 초기화하는 방법을 다룹니다."
 date: 2026-10-14 10:00:00 +0900
-tags: [docker, docker-compose, homelab, postgresql, redis, database, bash]
+tags: [docker-compose, homelab, postgresql, redis, database]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "JSR-367 (JSON-B) · JSR-374 (JSON-P): 자바 공식 JSON 표준과 Jackson 트레이드오프"
 description: "자바 공식 JSON 바인딩·파싱 표준인 JSR-367(JSON-B)과 JSR-374(JSON-P)의 구조를 살펴보고, 실무에서 Jackson이 사실상 표준으로 자리 잡은 이유와 트레이드오프를 비교합니다."
 date: 2026-11-18 09:00:00 +0900
-tags: [java, jsr-367, jsr-374, json-b, json-p, jackson]
+tags: [java, jsr, jakarta-ee, json]
 mermaid: true
 ---
 

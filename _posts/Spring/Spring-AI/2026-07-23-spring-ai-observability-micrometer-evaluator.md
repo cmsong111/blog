@@ -2,7 +2,7 @@
 title: "Spring AI Micrometer 메트릭 연동과 RelevancyEvaluator 기반 응답 품질 검증"
 description: Spring AI 2.0.1의 Micrometer Observation 자동 계측을 프로메테우스와 그라파나에 연동하여 실시간 토큰 비용과 지연 시간을 추적하고, RelevancyEvaluator를 활용한 LLM-as-a-Judge 품질 회귀 테스트 자동화 파이프라인을 구축합니다.
 date: 2026-07-23 12:00:00 +0900
-tags: [spring-ai, gemini, micrometer, prometheus, observability, llm-evaluation, relevancy-evaluator]
+tags: [spring-ai, gemini, prometheus, observability, testing]
 mermaid: true
 image:
   path: /assets/images/2026-07-23/observability-evaluation-test-pass.png

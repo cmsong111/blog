@@ -2,7 +2,7 @@
 title: "netshoot 컨테이너를 활용한 Docker 네트워크 패킷 분석 및 디버깅"
 description: "경량 컨테이너 환경에서 curl과 ping 없이도 netshoot 컨테이너로 타깃 네트워크 네임스페이스에 붙어 tcpdump로 패킷을 뜯어보고, Docker의 UFW 방화벽 우회 이슈까지 해결하는 실전 디버깅 가이드입니다."
 date: 2026-06-11 12:00:00 +0900
-tags: [docker, netshoot, network-debugging, tcpdump, iptables]
+tags: [docker, networking, troubleshooting]
 mermaid: true
 ---
 

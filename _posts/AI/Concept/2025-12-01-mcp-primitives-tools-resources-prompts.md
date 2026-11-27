@@ -2,7 +2,7 @@
 title: "MCP의 3대 핵심 프리미티브: Tools, Resources, Prompts의 역할과 차이"
 description: "MCP 서버의 3대 핵심 요소인 Tools(동적 실행), Resources(URI 읽기 전용 데이터·구독), Prompts(재사용 템플릿)의 역할 차이와 JSON-RPC 페이로드를 비교합니다."
 date: 2025-12-01 12:00:00 +0900
-tags: [ai, mcp, mcp-primitives, resources, prompts, tools]
+tags: [ai, mcp, tool-calling, prompt-engineering]
 mermaid: true
 ---
 

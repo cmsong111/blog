@@ -2,7 +2,7 @@
 title: "JSR-250 (Jakarta Annotations): @PostConstruct, @PreDestroy, @Resource 동작 원리"
 description: "JSR-250 표준 어노테이션인 @PostConstruct, @PreDestroy, @Resource의 동작 방식과 Spring 빈 생명주기 콜백 실행 순서 및 @Autowired와의 주입 전략 차이를 정리합니다."
 date: 2026-11-03 09:00:00 +0900
-tags: [java, jsr-250, jakarta-annotations, spring, bean-lifecycle]
+tags: [java, jsr, jakarta-ee, spring]
 mermaid: true
 ---
 

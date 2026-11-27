@@ -2,7 +2,7 @@
 title: "Java Swing 프로젝트에 SLF4J와 Logback 도입하기"
 description: "System.out.println의 synchronized 락 경합과 운영 한계를 살펴보고, SLF4J 2.x 파사드와 Logback 바인딩 구조, logback.xml 색상·롤링 설정, 그리고 실무 로깅 주의사항을 정리합니다."
 date: 2024-06-16 12:00:00 +0000
-tags: [java, swing, refactoring, slf4j, logback, logging]
+tags: [java, swing, refactoring, logging]
 mermaid: true
 image:
   path: /assets/images/2024-06-15/java-swing-thumbnail.png

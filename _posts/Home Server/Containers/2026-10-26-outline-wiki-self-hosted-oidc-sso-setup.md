@@ -2,7 +2,7 @@
 title: "Authelia OIDC와 연동하는 프라이빗 지식 베이스 Outline Wiki 자체 호스팅"
 description: "노션 스타일의 고성능 오픈소스 위키 Outline을 Docker Compose로 배포하고, 별도의 AWS S3 없이 로컬 스토리지로 파일을 저장하며 Authelia OIDC와 Gmail SMTP를 결합한 완전한 프라이빗 지식 관리 시스템을 완성합니다."
 date: 2026-10-26 10:00:00 +0900
-tags: [docker, docker-compose, homelab, outline, wiki, oidc, sso, postgresql, redis]
+tags: [docker-compose, homelab, sso, oidc, postgresql]
 mermaid: true
 ---
 

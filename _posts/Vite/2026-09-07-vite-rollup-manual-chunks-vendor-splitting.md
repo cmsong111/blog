@@ -2,7 +2,7 @@
 title: "Rollup manualChunks 설정을 활용한 벤더 라이브러리 청크 분리 전략"
 description: "Vite 프로덕션 빌드에서 발생하는 대형 번들 경고를 해결하고, Rollup manualChunks 설정을 활용하여 React 코어, UI 컴포넌트, 대용량 차트 라이브러리를 효율적으로 분리해 브라우저 캐싱 효율을 극대화하는 방법을 다룹니다."
 date: 2026-09-07 12:00:00 +0900
-tags: [vite, rollup, manual-chunks, vendor-splitting, optimization]
+tags: [vite, rollup, code-splitting, performance]
 mermaid: true
 ---
 

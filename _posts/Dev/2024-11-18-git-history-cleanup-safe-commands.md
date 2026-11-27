@@ -2,7 +2,7 @@
 title: "Git 커밋 히스토리를 안전하게 정리하는 실무 명령어 모음"
 description: "WIP 커밋을 기능 단위로 정리하는 git reset --soft, commit --amend, rebase -i 사용법과 --force-with-lease 원리, reflog 복구 절차를 정리합니다."
 date: 2024-11-18 12:00:00 +0900
-tags: [git, version-control, workflow, cli, productivity]
+tags: [git, automation, dx]
 mermaid: true
 ---
 

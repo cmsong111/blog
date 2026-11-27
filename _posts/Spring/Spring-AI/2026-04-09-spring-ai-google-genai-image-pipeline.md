@@ -2,7 +2,7 @@
 title: "Google GenAI ImageModel을 활용한 이미지 생성 및 스토리지 저장 파이프라인"
 description: Spring AI 2.0.1의 Google GenAI ImageModel을 연동하여 텍스트 프롬프트로부터 이미지를 생성하고, @Async 비동기 큐와 로컬/S3 파일 스토리지에 영구 저장하는 엔터프라이즈 파이프라인을 구축합니다.
 date: 2026-04-09 12:00:00 +0900
-tags: [spring-ai, google-genai, imagemodel, imagen, image-generation, storage]
+tags: [spring-ai, gemini, multimodal, storage]
 mermaid: true
 image:
   path: /assets/images/2026-04-09/image-job-async-worker-test-pass.png

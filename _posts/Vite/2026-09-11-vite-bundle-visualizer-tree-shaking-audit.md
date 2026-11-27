@@ -2,7 +2,7 @@
 title: "rollup-plugin-visualizer를 활용한 번들 사이즈 분석과 트리 쉐이킹 점검"
 description: "rollup-plugin-visualizer를 도입하여 Vite 프로덕션 번들의 구성 요소를 시각적으로 분석하고, CommonJS 모듈이나 사이드 이펙트로 인해 깨진 트리 쉐이킹(Tree-shaking)을 찾아내 수백 킬로바이트의 데드 코드를 제거하는 실무 감사 기법을 다룹니다."
 date: 2026-09-11 12:00:00 +0900
-tags: [vite, rollup-plugin-visualizer, tree-shaking, bundle-audit, optimization]
+tags: [vite, rollup, performance]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "Vite 플러그인 생명주기 훅 구조와 Rollup 공용 인터페이스 분석"
 description: "Vite 플러그인 시스템의 기반이 되는 Rollup 공용 훅과 Vite 전용 생명주기 훅의 실행 순서를 분석하고, 개발 서버와 프로덕션 빌드 환경에서 동작 차이를 검증하는 커스텀 추적 플러그인을 구현합니다."
 date: 2026-09-21 12:00:00 +0900
-tags: [vite, vite-plugin, rollup, lifecycle-hooks, build-tools]
+tags: [vite, vite-plugin, rollup, build-tools]
 mermaid: true
 ---
 

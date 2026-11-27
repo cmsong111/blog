@@ -2,7 +2,7 @@
 title: "Docker ELK 스택을 활용한 홈서버 컨테이너 로그 중앙 집중 분석"
 description: "홈서버에서 동작하는 다양한 컨테이너 로그를 중앙 집중 수집하고 실시간 검색하기 위한 경량 ELK 스택 구축 가이드입니다. Elasticsearch 단일 노드 JVM 힙 최적화, Logstash 파이프라인 구성, Kibana 대시보드 및 NPM 리버스 프록시 연동까지 상세히 정리합니다."
 date: 2025-05-02 10:00:00 +0900
-tags: [docker, homelab, elk-stack, elasticsearch, logstash, kibana, logging]
+tags: [docker, homelab, logging, observability]
 mermaid: true
 ---
 

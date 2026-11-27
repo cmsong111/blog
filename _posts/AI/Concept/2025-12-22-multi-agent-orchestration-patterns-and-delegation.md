@@ -2,7 +2,7 @@
 title: "복합 에이전트 시스템: Multi-Agent 오케스트레이션과 역할 분담 패턴"
 description: 단일 만능 에이전트의 컨텍스트 오염과 도구 선택 오류를 극복하기 위한 Supervisor-Worker, Router, Handoff 3대 오케스트레이션 패턴과 작업 공간 격리 아키텍처를 살펴봅니다.
 date: 2025-12-22 12:00:00 +0900
-tags: [ai, multi-agent, orchestration, subagents, swarm]
+tags: [ai, ai-agent, architecture]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "Vite 정적 에셋 로딩 전략과 ?raw·?url·?inline 쿼리 파라미터 활용"
 description: "Vite의 정적 에셋 로딩 메커니즘과 ?raw, ?url, ?inline, ?worker 등 특수 쿼리 파라미터를 활용해 에셋을 효율적으로 번들링하고 런타임 오버헤드를 줄이는 실무 최적화 기법을 정리합니다."
 date: 2026-08-14 12:00:00 +0900
-tags: [vite, static-assets, query-parameters, assets, build-tools]
+tags: [vite, assets, build-tools]
 mermaid: true
 ---
 

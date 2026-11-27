@@ -2,7 +2,7 @@
 title: "Vite SSR(서버 사이드 렌더링) 아키텍처와 client·server 엔트리 분리"
 description: "Vite의 저수준 SSR API와 듀얼 번들링 파이프라인을 분석하고, 브라우저 하이드레이션과 Node.js 렌더링 엔트리 분리, Express 프로덕션 서버 구현 및 완성형 HTML 응답 검증 과정을 실무 관점에서 다룹니다."
 date: 2026-10-05 12:00:00 +0900
-tags: [vite, ssr, server-side-rendering, hydration, entry-server]
+tags: [vite, ssr, frontend]
 mermaid: true
 ---
 

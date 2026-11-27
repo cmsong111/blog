@@ -2,7 +2,7 @@
 title: "Webpack 번들 기반 개발 서버의 한계와 Vite Native ESM 아키텍처 분석"
 description: "전통적인 Webpack 번들 기반 개발 서버가 대규모 프로젝트에서 겪는 기동 지연 한계를 분석하고, 브라우저 Native ESM과 온디맨드 변환을 결합한 Vite 코어 아키텍처의 동작 원리를 살펴봅니다."
 date: 2026-08-03 12:00:00 +0900
-tags: [vite, native-esm, webpack, dev-server, build-tools]
+tags: [vite, frontend, dev-server, build-tools]
 mermaid: true
 ---
 

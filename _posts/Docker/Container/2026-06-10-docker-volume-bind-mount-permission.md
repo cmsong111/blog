@@ -2,7 +2,7 @@
 title: "Docker 볼륨과 바인드 마운트 차이점 및 권한(Permission) 문제 해결"
 description: "도커 컨테이너 환경에서 로컬 파일 마운트 시 마주치는 Permission Denied의 리눅스 권한 불일치 원인을 분석하고, gosu와 UID 매핑을 통한 실무 해결 전략과 Named Volume의 올바른 활용법을 다룹니다."
 date: 2026-06-10 12:00:00 +0900
-tags: [docker, volume, bind-mount, permissions, storage]
+tags: [docker, storage, security]
 mermaid: true
 ---
 

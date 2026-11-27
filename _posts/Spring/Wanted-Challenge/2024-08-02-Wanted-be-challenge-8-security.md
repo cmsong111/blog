@@ -2,7 +2,7 @@
 title: "Spring Security OAuth2 Resource Server 기반 JWT 인증 구성"
 description: "수동 JWT 필터 대신 Spring Security OAuth2 Resource Server를 도입해 Fail-Fast 설정 검증, Access/Refresh 토큰 분리, JSON 에러 응답을 구성한 과정을 정리합니다."
 date: 2024-08-02 15:00:00 +0000
-tags: [spring-security, oauth2-resource-server, jwt, spring-boot, kotlin]
+tags: [spring-security, oauth2, jwt, spring-boot, kotlin]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

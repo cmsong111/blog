@@ -2,7 +2,7 @@
 title: "Redis SETNX와 JPA Modifying 쿼리로 구현한 게시글 조회수 중복 방지"
 description: "IP와 SHA-256 해시 User-Agent 조합 키에 Redis SETNX 원자 연산과 JPA @Modifying 쿼리를 적용해 조회수 중복 증가와 동시성 문제를 해결하는 방법을 정리합니다."
 date: 2024-08-05 12:00:00 +0000
-tags: [spring-boot, redis, jpa, kotlin, 원티드]
+tags: [spring-boot, kotlin, redis, jpa]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

@@ -2,7 +2,7 @@
 title: "JSR-354 (Java Money): 결제·정산 도메인을 위한 표준 화폐 API와 Moneta 활용"
 description: "결제 및 정산 시스템에서 double과 BigDecimal만 사용할 때 발생하는 통화 혼용과 반올림 오류를 해결하는 JSR-354(Java Money) 표준 API와 Moneta 구현체 실무 활용법을 정리합니다."
 date: 2026-11-14 09:00:00 +0900
-tags: [java, jsr-354, java-money, moneta, fintech, domain-modeling]
+tags: [java, jsr, architecture]
 mermaid: true
 ---
 

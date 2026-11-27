@@ -2,7 +2,7 @@
 title: "ToolSearchToolCallingAdvisor와 동적 도구 검색 최적화"
 description: Spring AI 2.0의 ToolSearchToolCallingAdvisor와 LuceneToolIndex를 연동하여, 수십 개의 도구 중 사용자의 질문과 관련된 도구만 동적으로 모델에 주입함으로써 프롬프트 토큰 비용을 60% 이상 절감하는 엔지니어링 패턴을 구축합니다.
 date: 2026-05-28 12:00:00 +0900
-tags: [spring-ai, gemini, tool-search, dynamic-tool-discovery, lucene, token-optimization]
+tags: [spring-ai, gemini, tool-calling, performance]
 mermaid: true
 image:
   path: /assets/images/2026-05-28/tool-search-test-pass.png

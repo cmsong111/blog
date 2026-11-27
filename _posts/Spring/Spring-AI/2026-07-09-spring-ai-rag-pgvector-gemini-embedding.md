@@ -2,7 +2,7 @@
 title: "PostgreSQL PGvector와 Google GenAI Embeddings 기반 RAG 질의응답"
 description: Spring AI 2.0.1에서 PostgreSQL pgvector 확장과 Google GenAI gemini-embedding-001 모델을 연동하고, HNSW 인덱스 차원 한계 극복 및 QuestionAnswerAdvisor 기반 사내 문서 RAG 질의응답 파이프라인을 구축합니다.
 date: 2026-07-09 12:00:00 +0900
-tags: [spring-ai, gemini, pgvector, postgresql, embeddings, rag, vector-store]
+tags: [spring-ai, gemini, rag, postgresql]
 mermaid: true
 image:
   path: /assets/images/2026-07-09/rag-pgvector-test-pass.png

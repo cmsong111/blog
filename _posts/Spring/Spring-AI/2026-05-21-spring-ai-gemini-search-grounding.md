@@ -2,7 +2,7 @@
 title: "Google Search Grounding을 활용한 Gemini 실시간 웹 검색 및 출처 메타데이터 연동"
 description: Spring AI 2.0.1에서 Gemini의 Google Search Grounding을 활성화하여 실시간 웹 검색 기반의 최신 정보를 답변에 반영하고, 출처 URL·검색 쿼리·인용 메타데이터를 정밀하게 추출하는 아키텍처를 구현합니다.
 date: 2026-05-21 12:00:00 +0900
-tags: [spring-ai, gemini, search-grounding, google-search, citations, web-retrieval]
+tags: [spring-ai, gemini, search-grounding]
 mermaid: true
 image:
   path: /assets/images/2026-05-21/search-grounding-test-pass.png

@@ -2,7 +2,7 @@
 title: "Gitea와 Rootless Docker Runner를 활용한 안전한 자체 호스팅 CI/CD 환경 구축"
 description: "GitHub Actions와 호환되는 경량 Git 플랫폼 Gitea를 배포하고, Authelia OIDC 단일 로그인 강제 및 루트리스(Rootless) Docker-in-Docker 러너를 결합하여 호스트 탈출 위협을 차단한 안전한 프라이빗 CI/CD 파이프라인을 구축합니다."
 date: 2026-10-23 10:00:00 +0900
-tags: [docker, docker-compose, homelab, gitea, gitea-actions, cicd, rootless-docker, security]
+tags: [docker-compose, homelab, git, ci-cd, security]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "GitHub README 가독성을 높이는 배지, Alert, Mermaid 활용법"
 description: "Shields.io 정적·동적 배지, GitHub Markdown Alert 5종, Mermaid 다이어그램을 조합해 유지보수하기 쉬운 GitHub README를 작성하는 실무 가이드입니다."
 date: 2024-12-16 12:00:00 +0900
-tags: [github, readme, markdown, shields-io, mermaid]
+tags: [github, documentation, dx]
 mermaid: true
 ---
 

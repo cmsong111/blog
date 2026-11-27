@@ -2,7 +2,7 @@
 title: "Kotest와 ArchUnit으로 구축한 Spring Boot API 통합 및 아키텍처 테스트"
 description: "Kotest, Fixture Monkey, ArchUnit으로 API 통합 테스트와 토큰 단위 테스트, 3계층 의존성 검증을 구축하고 Kotlin MockMvc 거짓 양성 문제를 해결한 과정을 정리합니다."
 date: 2024-08-08 12:00:00 +0000
-tags: [kotlin, spring-boot, kotest, fixture-monkey, archunit, test]
+tags: [spring-boot, kotlin, testing, fixture-monkey, architecture]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

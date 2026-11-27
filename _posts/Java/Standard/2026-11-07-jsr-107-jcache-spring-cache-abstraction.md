@@ -2,7 +2,7 @@
 title: "JSR-107 (JCache): 자바 표준 캐시 API와 Spring Cache 추상화 연동"
 description: "자바 표준 캐시 API인 JSR-107(JCache)의 핵심 인터페이스와 어노테이션을 살펴보고, Spring Cache 추상화 및 Ehcache·Caffeine·Redis 구현체와의 연동 구조를 정리합니다."
 date: 2026-11-07 09:00:00 +0900
-tags: [java, jsr-107, jcache, cache, spring-cache]
+tags: [java, jsr, caching, spring]
 mermaid: true
 ---
 

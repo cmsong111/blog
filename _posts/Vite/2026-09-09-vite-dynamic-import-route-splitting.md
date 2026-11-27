@@ -2,7 +2,7 @@
 title: "라우트 기반 동적 임포트(Dynamic Import)와 프리페칭(Prefetch) 성능 최적화"
 description: "Vite 환경에서 라우트별 동적 임포트(import())를 활용한 코드 분할 원리와 Vite의 modulepreload 힌트 자동 주입 메커니즘을 살펴보고, 마우스 호버 및 뷰포트 기반 사전 프리페칭을 구현하는 방법을 다룹니다."
 date: 2026-09-09 12:00:00 +0900
-tags: [vite, dynamic-import, code-splitting, prefetch, routing]
+tags: [vite, code-splitting, frontend, performance]
 mermaid: true
 ---
 

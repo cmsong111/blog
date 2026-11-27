@@ -2,7 +2,7 @@
 title: 스프링 부트에서 Ollama 모델 사용하기
 description: 스프링 부트와 Spring AI를 활용하여 Ollama 모델을 통합하고 사용하는 방법을 알아봅니다.
 date: 2025-04-29 12:00:00 +0000
-tags: [spring-boot, ai, ollama, spring-ai, kotlin]
+tags: [spring-boot, spring-ai, ollama, llm, kotlin]
 image:
   path: /assets/images/2025-04-29/spring-ai-integration-diagram-3.svg
 ---

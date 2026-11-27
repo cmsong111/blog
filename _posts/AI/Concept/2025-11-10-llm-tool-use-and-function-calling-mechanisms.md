@@ -2,7 +2,7 @@
 title: "LLM 도구 사용의 기초: Function Calling과 Tool Use의 내부 동작 원리"
 description: LLM이 외부 API나 연산 로직을 직접 실행하지 못함에도 도구를 호출할 수 있는 원리를 살펴보고, JSON Schema 주입부터 모델의 토큰 생성, 호스트의 Tool Result 피드백 루프까지의 전 과정을 분석합니다.
 date: 2025-11-10 12:00:00 +0900
-tags: [ai, llm, function-calling, tool-use, json-schema]
+tags: [ai, llm, tool-calling, json-schema]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "마크다운(Markdown) 문서를 런타임 컴포넌트로 변환하는 커스텀 Vite 플러그인 제작"
 description: "Vite의 transform 훅을 활용하여 .md 마크다운 파일을 파싱하고, Front Matter 메타데이터와 HTML을 런타임 ES 모듈 및 컴포넌트로 변환하는 커스텀 컴파일러 플러그인을 직접 구현합니다."
 date: 2026-09-30 12:00:00 +0900
-tags: [vite, markdown-compiler, ast-transform, custom-loader, plugin]
+tags: [vite, vite-plugin, build-tools]
 mermaid: true
 ---
 

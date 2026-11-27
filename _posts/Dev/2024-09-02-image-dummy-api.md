@@ -2,7 +2,7 @@
 title: 무료 더미 이미지 및 프로필 아바타 생성 API 모음
 description: 백엔드 및 프론트엔드 목(Mock) 데이터 구축에 유용한 무료 더미 이미지, 프로필 아바타(DiceBear, UI Avatars, Pravatar), 플레이스홀더, 도메인 파비콘 API 엔드포인트와 실무 활용법을 정리합니다.
 date: 2024-09-02 12:00:00 +0000
-tags: [Dummy, API, Image, Mock-Data, Avatar]
+tags: [rest-api, mock-data, assets]
 image:
   path: https://picsum.photos/536/354
 ---

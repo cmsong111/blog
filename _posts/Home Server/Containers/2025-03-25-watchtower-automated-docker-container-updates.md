@@ -2,7 +2,7 @@
 title: "Watchtower를 활용한 도커 컨테이너 이미지 무중단 자동 갱신"
 description: "홈서버에서 구동 중인 수많은 도커 컨테이너 이미지를 매번 수동으로 업데이트하지 않고, Watchtower를 통해 백그라운드에서 주기적으로 최신 이미지를 감지·갱신하며 메신저 알림까지 자동화하는 실무 구성법을 소개합니다."
 date: 2025-03-25 10:00:00 +0900
-tags: [docker, homelab, watchtower, automation, container-update]
+tags: [docker, homelab, automation]
 mermaid: true
 ---
 

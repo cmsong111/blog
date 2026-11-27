@@ -2,7 +2,7 @@
 title: "JSR-338 (JPA)와 JSR-907 (JTA): 표준 인터페이스와 구현체 분리 및 @Transactional 비교"
 description: "Jakarta Persistence(JPA)와 Jakarta Transactions(JTA) 표준 스펙의 역할을 살펴보고, Hibernate 구현체와의 경계 및 jakarta.transaction.Transactional과 Spring @Transactional 차이를 정리합니다."
 date: 2026-11-05 09:00:00 +0900
-tags: [java, jsr-338, jsr-907, jpa, jta, spring, transaction]
+tags: [java, jsr, jakarta-ee, jpa, transaction]
 mermaid: true
 ---
 

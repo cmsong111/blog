@@ -2,7 +2,7 @@
 title: "vite-plugin-checker를 활용한 빌드 타임 TypeScript·ESLint 백그라운드 검사"
 description: "Vite의 esbuild 트랜스파일러가 생략하는 정적 타입 검사의 한계를 보완하기 위해, vite-plugin-checker로 개발 서버 성능 저하 없이 TypeScript와 ESLint 검사를 백그라운드 병렬 처리하는 기법을 정리합니다."
 date: 2026-09-02 12:00:00 +0900
-tags: [vite, vite-plugin-checker, typescript, eslint, dx]
+tags: [vite, vite-plugin, dx, typescript]
 mermaid: true
 ---
 

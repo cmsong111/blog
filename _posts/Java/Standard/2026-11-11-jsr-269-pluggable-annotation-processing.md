@@ -2,7 +2,7 @@
 title: "JSR-269 (Annotation Processing): 컴파일 타임 코드 생성 표준과 Lombok·MapStruct 원리"
 description: "javac 컴파일 단계에서 표준 Annotation Processor가 동작하는 JSR-269 메커니즘을 살펴보고, MapStruct·QueryDSL의 표준 코드 생성 방식과 Lombok의 비표준 AST 조작 차이를 비교합니다."
 date: 2026-11-11 09:00:00 +0900
-tags: [java, jsr-269, annotation-processing, apt, mapstruct, lombok]
+tags: [java, jsr, build-tools]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: JPA @Version 낙관적 락(Optimistic Lock)을 활용한 갱신 손실(Lost Update) 방지
 description: 다수의 운영자가 동시에 동일한 데이터를 수정할 때 발생하는 갱신 손실(Lost Update)을 JPA @Version 낙관적 락으로 방어하고 사용자 친화적인 충돌 안내 UI를 구현한 경험을 공유합니다.
 date: 2026-05-12 12:00:00 +0900
-tags: [spring-boot, jpa, concurrency, optimistic-lock, thymeleaf]
+tags: [spring-boot, jpa, concurrency, thymeleaf]
 mermaid: true
 image:
   path: /assets/images/2026-05-12/optimistic-lock-conflict-alert-ui.png

@@ -2,7 +2,7 @@
 title: "JSR-340/369 (Jakarta Servlet): 서블릿 컨테이너 표준과 Filter·Interceptor 비교"
 description: "Jakarta Servlet 표준 덕분에 Tomcat·Jetty·Undertow를 교체할 수 있는 아키텍처를 살펴보고, Servlet Filter와 Spring HandlerInterceptor의 실행 위치와 예외 처리 차이를 비교합니다."
 date: 2026-11-06 09:00:00 +0900
-tags: [java, jsr-340, jakarta-servlet, tomcat, spring-mvc, filter]
+tags: [java, jsr, jakarta-ee, spring-mvc]
 mermaid: true
 ---
 

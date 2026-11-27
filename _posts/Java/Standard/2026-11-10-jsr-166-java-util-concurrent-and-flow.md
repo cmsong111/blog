@@ -2,7 +2,7 @@
 title: "JSR-166 (java.util.concurrent): 동시성 표준 유틸리티와 Reactive Streams Flow API"
 description: "자바 동시성 프로그래밍의 기반이 된 JSR-166의 ExecutorService, CompletableFuture, ForkJoinPool 구조와 Java 9 Flow API(Reactive Streams 표준화) 및 Virtual Threads로의 발전 흐름을 정리합니다."
 date: 2026-11-10 09:00:00 +0900
-tags: [java, jsr-166, concurrency, completablefuture, reactive-streams, flow]
+tags: [java, jsr, concurrency, async, reactive]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "MariaDB와 Redis를 활용한 홈서버 공용 데이터베이스 및 캐시 계층 구축"
 description: "홈서버 내 여러 서비스가 공유할 중앙 MariaDB와 Redis 인프라를 Docker Compose로 구축하고, utf8mb4 다국어 인코딩, AOF/RDB 하이브리드 영속화, 내부 브릿지 네트워크 격리 및 성능 최적화 노하우를 다룹니다."
 date: 2025-04-05 10:00:00 +0900
-tags: [docker, homelab, mariadb, redis, database, cache]
+tags: [docker, homelab, database, redis, caching]
 mermaid: true
 ---
 

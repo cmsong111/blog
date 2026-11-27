@@ -2,7 +2,7 @@
 title: Spring Security API(JWT)와 관리자 Web(세션) 멀티 SecurityFilterChain 분리
 description: 하나의 스프링 부트 애플리케이션에서 무상태 REST API(JWT)와 사내 관리자 화면(세션 FormLogin)을 충돌 없이 공존시키는 멀티 SecurityFilterChain 아키텍처를 소개합니다.
 date: 2026-05-01 12:00:00 +0900
-tags: [spring-boot, spring-security, kotlin, jwt, session, security-filter-chain]
+tags: [spring-boot, spring-security, kotlin, jwt, security]
 mermaid: true
 image:
   path: /assets/images/2026-05-01/swagger-api-jwt-bearer-success.png

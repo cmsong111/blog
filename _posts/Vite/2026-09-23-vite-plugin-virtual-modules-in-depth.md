@@ -2,7 +2,7 @@
 title: "가상 모듈(Virtual Module) 패턴을 활용한 빌드 메타데이터 및 설정 주입"
 description: "Vite와 Rollup의 널 바이트(\\0) 규약 기반 가상 모듈 패턴을 이해하고, 파일시스템 생성 없이 Git 커밋 해시, 빌드 시간, 환경 메타데이터를 클라이언트 애플리케이션에 안전하게 주입하는 커스텀 플러그인을 구현합니다."
 date: 2026-09-23 12:00:00 +0900
-tags: [vite, virtual-modules, null-byte, resolve-id, plugin]
+tags: [vite, vite-plugin, build-tools]
 mermaid: true
 ---
 

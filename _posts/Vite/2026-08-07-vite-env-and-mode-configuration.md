@@ -2,7 +2,7 @@
 title: "Vite 환경 변수 주입 방식과 import.meta.env 모드별 분리 전략"
 description: "Vite가 브라우저 환경에서 환경 변수를 정적 치환하는 원리와 .env 파일 로딩 우선순위, vite.config.ts에서의 loadEnv 활용법 및 TypeScript 타입 안전성 확보 전략을 정리합니다."
 date: 2026-08-07 12:00:00 +0900
-tags: [vite, env, modes, import-meta, dotenv]
+tags: [vite, configuration, frontend]
 mermaid: true
 ---
 

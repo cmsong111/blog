@@ -2,7 +2,7 @@
 title: "Docker 컨테이너 Non-root 사용자 격리와 Trivy 보안 스캔 적용"
 description: "컨테이너 내부 root(UID 0)의 위험성을 짚어보고, Non-root 사용자 격리 기법, OverlayFS 용량 뻥튀기 방지 패턴, 그리고 Trivy를 활용한 CI 보안 게이트웨이 구축 방법을 정리합니다."
 date: 2026-06-09 12:00:00 +0900
-tags: [docker, security, non-root, trivy, devsecops]
+tags: [docker, security, ci-cd, github-actions]
 mermaid: true
 ---
 

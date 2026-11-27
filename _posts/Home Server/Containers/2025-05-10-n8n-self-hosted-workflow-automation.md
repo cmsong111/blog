@@ -2,7 +2,7 @@
 title: "n8n을 활용한 셀프호스팅 워크플로우 이벤트 자동화 구축"
 description: "Zapier의 오픈소스 대안인 n8n을 Docker Compose와 PostgreSQL 기반으로 홈서버에 셀프호스팅하고, NPM 리버스 프록시와 웹소켓 연동 및 이벤트 기반 알림 자동화 파이프라인을 구축하는 실무 가이드를 정리합니다."
 date: 2025-05-10 10:00:00 +0900
-tags: [docker, homelab, n8n, automation, workflow, webhook]
+tags: [docker, homelab, automation, rest-api]
 mermaid: true
 ---
 

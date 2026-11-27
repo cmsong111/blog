@@ -2,7 +2,7 @@
 title: "LLDAP을 활용한 홈랩 경량 중앙 디렉터리 서비스 구축"
 description: "OpenLDAP의 복잡한 스키마와 관리 오버헤드를 극복하기 위해 Rust 기반 초경량 디렉터리 도구 LLDAP을 Docker Compose로 배포하고, PostgreSQL 연동 및 내부 격리 네트워크를 적용한 중앙 사용자·그룹 관리 체계를 구축합니다."
 date: 2026-10-17 10:00:00 +0900
-tags: [docker, docker-compose, homelab, lldap, ldap, identity, postgresql]
+tags: [docker-compose, homelab, sso, postgresql]
 mermaid: true
 ---
 

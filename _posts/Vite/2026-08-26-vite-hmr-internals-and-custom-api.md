@@ -2,7 +2,7 @@
 title: "Vite HMR(Hot Module Replacement) 동작 원리와 import.meta.hot API 활용"
 description: "Vite의 ESM 기반 Hot Module Replacement 내부 동작 메커니즘을 분석하고, import.meta.hot API를 활용해 상태 보존, 리소스 정리, 커스텀 웹소켓 이벤트를 다루는 실무 기법을 정리합니다."
 date: 2026-08-26 12:00:00 +0900
-tags: [vite, hmr, hot-module-replacement, websocket, dx]
+tags: [vite, dev-server, websocket, dx]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "JSR-356 (Jakarta WebSocket): 표준 WebSocket API와 Spring STOMP 연동 구조"
 description: "서블릿 컨테이너 위에서 동작하는 JSR-356(Jakarta WebSocket) 표준 @ServerEndpoint 구조와 Spring WebSocket·STOMP 메시징 아키텍처의 차이 및 운영 주의사항을 정리합니다."
 date: 2026-11-17 09:00:00 +0900
-tags: [java, jsr-356, jakarta-websocket, websocket, spring, stomp]
+tags: [java, jsr, jakarta-ee, websocket, spring]
 mermaid: true
 ---
 

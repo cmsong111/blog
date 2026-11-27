@@ -2,7 +2,7 @@
 title: "Spring AI Google GenAI ChatClient Fluent API 기본 구성과 동기 호출"
 description: Spring Boot 4.x 및 Spring AI 2.0.1 환경에서 Google GenAI 스타터(spring-ai-starter-model-google-genai)를 설정하고, ChatClient Fluent API를 통해 동기 텍스트 생성과 구조화된 객체 매핑을 구현합니다.
 date: 2026-03-12 12:00:00 +0900
-tags: [spring-ai, google-genai, gemini, chat-client, spring-boot]
+tags: [spring-ai, gemini, spring-boot, llm]
 mermaid: true
 image:
   path: /assets/images/2026-03-12/spring-ai-text-generation-test-pass.png

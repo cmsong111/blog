@@ -2,7 +2,7 @@
 title: Swing에 Retrofit2 적용하기
 description: Java Swing 프로젝트의 Apache HttpClient 보일러플레이트 코드를 Retrofit2 인터페이스와 Kotlin object 싱글턴으로 리팩토링한 과정을 정리합니다.
 date: 2024-06-17 12:00:00 +0000
-tags: [java, swing, refactoring, Retrofit2]
+tags: [java, swing, refactoring, rest-client]
 image:
   path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---

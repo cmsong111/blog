@@ -2,7 +2,7 @@
 title: "휴먼 인 더 루프(HITL) 기반 AI 데이터 검토 및 승인 파이프라인 설계"
 description: AI가 자동으로 탐색한 미확정 후보 데이터를 운영자가 관리자 화면에서 검토/보정하고, 버튼 클릭 한 번으로 공식 수집 파이프라인에 안전하게 편입시키는 휴먼 인 더 루프(HITL) 아키텍처를 구현합니다.
 date: 2026-05-16 12:00:00 +0900
-tags: [spring-boot, thymeleaf, hitl, ai-pipeline, admin]
+tags: [spring-boot, thymeleaf, hitl, ai]
 mermaid: true
 image:
   path: /assets/images/2026-05-16/admin-discovery-candidates-list-ui.png

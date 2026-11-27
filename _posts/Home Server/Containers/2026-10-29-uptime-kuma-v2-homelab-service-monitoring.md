@@ -2,7 +2,7 @@
 title: "Uptime Kuma v2와 도커 소켓 격리를 활용한 홈랩 통합 서비스 모니터링 구축"
 description: "홈랩 v2 인프라 완성을 위해 Uptime Kuma v2를 배포하고, 읽기 전용 도커 소켓 마운트와 멀티 도커 네트워크 격리를 적용하여 PostgreSQL·Redis·Gitea·Outline 컨테이너의 실시간 가동 상태 감시 및 Authelia 1차 인가 체계를 구축합니다."
 date: 2026-10-29 10:00:00 +0900
-tags: [docker, docker-compose, homelab, uptime-kuma, monitoring, healthcheck, authelia]
+tags: [docker-compose, homelab, monitoring, healthcheck, sso]
 mermaid: true
 ---
 

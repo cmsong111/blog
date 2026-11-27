@@ -2,7 +2,7 @@
 title: "JSR-376 (JPMS): module-info.java 설계, Split Package 원인과 jlink 런타임 경량화"
 description: "Java 9에서 도입된 JSR-376 모듈 시스템(JPMS)의 requires·exports·opens 지시자, Split Package 충돌 원인, 그리고 jlink를 활용해 Docker 자바 런타임 이미지를 경량화하는 실무 기법을 다룹니다."
 date: 2026-11-16 09:00:00 +0900
-tags: [java, jsr-376, jpms, module-system, jlink, docker]
+tags: [java, jsr, architecture, docker, performance]
 mermaid: true
 ---
 

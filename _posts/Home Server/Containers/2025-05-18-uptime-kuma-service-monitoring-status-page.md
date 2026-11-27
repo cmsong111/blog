@@ -2,7 +2,7 @@
 title: "Uptime Kuma를 활용한 홈서버 가동시간 모니터링 및 상태 페이지 구축"
 description: "Prometheus나 Grafana보다 가볍고 직관적인 오픈소스 모니터링 도구 Uptime Kuma를 Docker Compose로 배포하고, 도커 소켓 및 HTTP 헬스체크 등록, 텔레그램 즉시 알림, 커스텀 공개 상태 페이지를 구축하는 방법을 다룹니다."
 date: 2025-05-18 10:00:00 +0900
-tags: [docker, homelab, uptime-kuma, status-page, monitoring, healthcheck]
+tags: [docker, homelab, monitoring, healthcheck]
 mermaid: true
 ---
 

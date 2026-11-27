@@ -2,7 +2,7 @@
 title: "vite-plugin-svg-icons를 활용한 SVG 스프라이트 자동화 및 번들 최적화"
 description: "수십 개의 개별 SVG 아이콘 요청으로 인한 네트워크 병목을 해결하기 위해 vite-plugin-svg-icons를 도입하여 단일 DOM 스프라이트로 결합하고 타입 세이프한 SvgIcon 컴포넌트를 구축하는 최적화 과정을 다룹니다."
 date: 2026-08-17 12:00:00 +0900
-tags: [vite, svg, svg-sprite, icon-optimization, assets]
+tags: [vite, assets, performance]
 mermaid: true
 ---
 

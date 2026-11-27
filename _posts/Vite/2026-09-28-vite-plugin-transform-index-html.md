@@ -2,7 +2,7 @@
 title: "transformIndexHtml 훅을 활용한 환경별 메타 태그 및 CDN 스크립트 동적 주입"
 description: "Vite의 진입점인 index.html을 조작하는 transformIndexHtml 훅의 구조와 HtmlTagDescriptor 규격을 분석하고, 개발·스테이징·프로덕션 환경에 맞춰 SEO 메타 태그와 CDN 스크립트를 동적으로 주입하는 커스텀 플러그인을 제작합니다."
 date: 2026-09-28 12:00:00 +0900
-tags: [vite, transform-index-html, html-tags, seo, script-injection]
+tags: [vite, vite-plugin, seo]
 mermaid: true
 ---
 

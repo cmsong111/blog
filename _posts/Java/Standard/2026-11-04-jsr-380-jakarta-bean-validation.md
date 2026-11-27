@@ -2,7 +2,7 @@
 title: "JSR-303/380 (Jakarta Validation): Bean Validation 표준과 @Valid·@Validated 활용"
 description: "Jakarta Validation(JSR-303/380) 스펙과 Hibernate Validator 구현체 구조를 이해하고, @Valid와 Spring @Validated의 차이, 커스텀 제약 어노테이션 및 그룹 검증 패턴을 다룹니다."
 date: 2026-11-04 09:00:00 +0900
-tags: [java, jsr-380, jakarta-validation, bean-validation, spring]
+tags: [java, jsr, jakarta-ee, spring]
 mermaid: true
 ---
 

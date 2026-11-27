@@ -2,7 +2,7 @@
 title: "Vite DevServer Connect 미들웨어를 활용한 무서버 Mock API 플러그인 구현"
 description: "Vite 개발 서버 내부의 Connect 미들웨어 스택과 configureServer 훅을 활용하여, 외부 Mock 서버 없이 단일 포트에서 지연 시간과 에러 코드를 시뮬레이션하는 경량 Mock API 플러그인을 제작합니다."
 date: 2026-09-25 12:00:00 +0900
-tags: [vite, connect-middleware, mock-api, configure-server, devserver]
+tags: [vite, vite-plugin, dev-server, mock-data]
 mermaid: true
 ---
 

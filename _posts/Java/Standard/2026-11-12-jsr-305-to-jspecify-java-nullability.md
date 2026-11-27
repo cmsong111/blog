@@ -2,7 +2,7 @@
 title: "JSR-305에서 JSpecify로: 자바 Nullability 표준화의 역사와 Spring·Kotlin 연동"
 description: "JSR-305가 휴면 상태가 된 배경과 Java 9+ Split Package 문제를 짚어보고, Spring 7과 Kotlin 생태계가 차세대 Nullability 표준으로 채택한 JSpecify(@NullMarked, @Nullable)의 활용법을 정리합니다."
 date: 2026-11-12 09:00:00 +0900
-tags: [java, jsr-305, jspecify, null-safety, spring, kotlin]
+tags: [java, jsr, spring, kotlin]
 mermaid: true
 ---
 

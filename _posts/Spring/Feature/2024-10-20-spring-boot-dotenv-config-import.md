@@ -2,7 +2,7 @@
 title: "Spring Boot에서 별도 라이브러리 없이 .env 파일 로드하는 방법"
 description: "Spring Boot 내장 spring.config.import로 별도 라이브러리 없이 .env 파일을 로드하는 방법과 프로퍼티 우선순위, 프로덕션 Fail-Fast 구성, 실무 주의사항을 정리합니다."
 date: 2024-10-20 12:00:00 +0900
-tags: [spring-boot, dotenv, configuration, security, properties]
+tags: [spring-boot, configuration, security]
 ---
 
 > Spring Boot 2.4부터 도입된 `spring.config.import`를 활용하면 외부 라이브러리나 IDE 플러그인 없이 `.env` 파일을 불러올 수 있습니다. 내부 로딩 원리와 우선순위, 프로덕션 Fail-Fast 구성, 실무 주의사항을 정리합니다.

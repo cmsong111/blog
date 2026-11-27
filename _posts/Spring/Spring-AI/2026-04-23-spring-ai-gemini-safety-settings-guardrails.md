@@ -2,7 +2,7 @@
 title: "Google Gemini SafetySettings 설정과 유해성 차단 가드레일 구현"
 description: Spring AI 2.0.1에서 Google Gemini의 4대 유해성 안전 카테고리와 차단 임계값을 정책화하고, 모델 차단 시 발생하는 내부 NoSuchElementException을 방어하여 RFC 9457 ProblemDetail 400 응답으로 변환하는 가드레일을 구축합니다.
 date: 2026-04-23 12:00:00 +0900
-tags: [spring-ai, gemini, safety-settings, guardrails, security, problem-detail]
+tags: [spring-ai, gemini, guardrails, security, rest-api]
 mermaid: true
 image:
   path: /assets/images/2026-04-23/safety-settings-test-pass.png

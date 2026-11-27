@@ -2,7 +2,7 @@
 title: "JPA 기반 게시글 멀티 반응(Reaction) 토글 시스템 설계"
 description: 5가지 감정 반응(화나요, 시원해요, 슬퍼요 등)을 1인 1선택/변경/취소 가능하도록 멱등하게 처리하고 실시간 카운트를 최적화 집계하는 JPA 도메인 설계와 쿼리 전략을 다룹니다.
 date: 2026-05-18 12:00:00 +0900
-tags: [spring-boot, jpa, reaction, concurrency, kotlin]
+tags: [spring-boot, jpa, database, concurrency, kotlin]
 mermaid: true
 image:
   path: /assets/images/2026-05-18/article-reactions-5-emojis-ui.png

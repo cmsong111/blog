@@ -2,7 +2,7 @@
 title: "Prometheus와 Node Exporter를 활용한 홈서버 시스템 메트릭 수집"
 description: "맥미니 홈서버의 CPU·메모리·디스크·네트워크 지표를 수집하기 위한 Node Exporter·Prometheus 구축, Retention 정책, NPM 리버스 프록시 연동을 정리합니다."
 date: 2025-04-12 10:00:00 +0900
-tags: [docker, homelab, prometheus, node-exporter, monitoring, metrics]
+tags: [docker, homelab, prometheus, monitoring, observability]
 mermaid: true
 ---
 

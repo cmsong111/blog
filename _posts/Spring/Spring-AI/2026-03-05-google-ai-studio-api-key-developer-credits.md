@@ -2,7 +2,7 @@
 title: "Google AI Studio API 키 발급과 Gemini Pro 구독자 매월 $10 크레딧 연동 가이드"
 description: Google AI Studio API 키 발급 절차와 Google One AI Premium(Gemini Pro) 구독자 대상 매월 $10(약 15,000원) 개발자 크레딧 연동, 선불 결제 계정을 통한 Pay-as-you-go 활성화 노하우를 정리합니다.
 date: 2026-03-05 12:00:00 +0900
-tags: [gemini, google-ai-studio, google-developer-program, api-key, billing]
+tags: [gemini, ai, configuration]
 mermaid: true
 image:
   path: /assets/images/2026-03-05/google-developer-benefits-monthly-credit.png

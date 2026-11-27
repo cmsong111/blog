@@ -2,7 +2,7 @@
 title: "GitHub 기반 에이전트 스킬 마켓플레이스 구축: 배포, 버전 관리, 그리고 자동 설치 생태계"
 description: "개별 개발자가 제작한 AI 에이전트 스킬을 GitHub 저장소를 통해 공유하고, Git 태그 기반 버전 관리, MCP 의존성 자동 감지, 상위 플러그인 번들링 및 보안 검증을 지원하는 마켓플레이스 아키텍처를 구축합니다."
 date: 2025-12-15 12:00:00 +0900
-tags: [ai, agent-skills, github, marketplace, plugin-distribution, package-manager]
+tags: [ai, ai-agent, agent-skills, github]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "Human-in-the-Loop(HITL)과 에이전트 보안: 권한 격리와 안전한 도구 실행"
 description: 에이전트의 파괴적 도구 실행과 보안 사고를 방어하기 위해 Safe Read-only와 Destructive 도구를 분리하고, 인간 승인(HITL) 인터럽트와 샌드박스 격리 체계를 설계합니다.
 date: 2025-12-29 12:00:00 +0900
-tags: [ai, hitl, human-in-the-loop, agent-security, guardrails]
+tags: [ai, ai-agent, hitl, guardrails, security]
 mermaid: true
 ---
 

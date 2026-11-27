@@ -2,7 +2,7 @@
 title: "Docker 멀티스테이지 빌드를 활용한 Spring Boot 이미지 최적화"
 description: "스프링 부트 애플리케이션을 Docker 멀티스테이지 빌드와 Layered JAR 기법으로 최적화하여 이미지 크기를 700MB에서 140MB로 80% 감축하고 보안을 강화한 실무 경험을 공유합니다."
 date: 2026-06-01 12:00:00 +0900
-tags: [docker, docker-image, multi-stage-build, spring-boot, optimization]
+tags: [docker, spring-boot, performance]
 mermaid: true
 ---
 

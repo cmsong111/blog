@@ -2,7 +2,7 @@
 title: "GitHub Actions와 Buildpacks 기반 멀티아치 Docker CI/CD 구축"
 description: "단일 GitHub Actions 워크플로우로 Lint·테스트·SonarCloud 분석과 네이티브 멀티아치 Buildpacks Docker 이미지 배포를 통합한 CI/CD 파이프라인 설계를 정리합니다."
 date: 2024-08-09 12:00:00 +0000
-tags: [github-actions, docker, buildpacks, sonarcloud, ci-cd, spring-boot]
+tags: [spring-boot, github-actions, docker, ci-cd]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

@@ -2,7 +2,7 @@
 title: "Vite server.warmup 옵션을 활용한 개발 서버 첫 페이지 로딩 속도 최적화"
 description: "Vite 개발 서버의 On-demand 변환 특성으로 인해 발생하는 초기 페이지 로딩(Cold Start Waterfall) 지연을 server.warmup 옵션을 활용해 사전에 컴파일하고 최적화하는 기법을 정리합니다."
 date: 2026-09-04 12:00:00 +0900
-tags: [vite, server-warmup, cold-start, dx-tuning, performance]
+tags: [vite, dev-server, performance, dx]
 mermaid: true
 ---
 

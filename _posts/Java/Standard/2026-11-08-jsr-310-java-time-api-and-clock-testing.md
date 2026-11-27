@@ -2,7 +2,7 @@
 title: "JSR-310 (java.time): 불변 날짜·시간 API 설계와 Clock 기반 테스트 전략"
 description: "기존 Date·Calendar의 가변성 및 스레드 안전성 문제를 해결한 JSR-310(java.time)의 설계 원칙과 Instant·LocalDateTime·ZonedDateTime 선택 기준, Clock 주입 기반 테스트 패턴을 다룹니다."
 date: 2026-11-08 09:00:00 +0900
-tags: [java, jsr-310, java-time, testing, clock]
+tags: [java, jsr, testing]
 mermaid: true
 ---
 

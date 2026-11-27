@@ -2,7 +2,7 @@
 title: Dokka를 활용한 코드 문서화 (with 배포)
 description: Kotlin 프로젝트에 Gradle Dokka 플러그인을 적용해 HTML·Markdown API 문서를 생성하고, GitHub Actions와 GitHub Pages로 자동 배포하는 방법을 정리합니다.
 date: 2024-06-18 12:00:00 +0000
-tags: [java, swing, refactoring, Dokka]
+tags: [java, swing, refactoring, documentation]
 image:
   path: /assets/images/2024-06-15/java-swing-thumbnail.png
 ---

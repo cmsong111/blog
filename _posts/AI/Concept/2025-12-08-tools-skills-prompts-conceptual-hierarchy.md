@@ -2,7 +2,7 @@
 title: "Tools, Skills, Prompts의 개념적 위계: 원자적 도구에서 실행 가능한 스킬로"
 description: "단일 함수 호출에 불과한 Tool의 원자적 한계를 극복하고, 프롬프트 지침·도구 오케스트레이션·도메인 규칙·폴백 로직을 캡슐화한 'Skill'의 개념적 위계와 최신 에이전트 런타임의 표준 스킬 아키텍처를 분석합니다."
 date: 2025-12-08 12:00:00 +0900
-tags: [ai, agent-skills, tools, prompt-engineering, modularity]
+tags: [ai, ai-agent, agent-skills, tool-calling, prompt-engineering]
 mermaid: true
 ---
 

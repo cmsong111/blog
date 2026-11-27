@@ -2,7 +2,7 @@
 title: "Cloudflare DDNS와 Nginx Proxy Manager를 활용한 홈서버 와일드카드 SSL 구축"
 description: "유동 IP 홈서버에서 Cloudflare DDNS로 공인 IP를 동기화하고, Nginx Proxy Manager와 DNS-01 챌린지로 와일드카드 SSL 인증서와 라우팅을 자동화합니다."
 date: 2025-03-15 10:00:00 +0900
-tags: [docker, homelab, nginx-proxy-manager, cloudflare, ssl, ddns]
+tags: [docker, homelab, nginx, dns, https]
 mermaid: true
 ---
 

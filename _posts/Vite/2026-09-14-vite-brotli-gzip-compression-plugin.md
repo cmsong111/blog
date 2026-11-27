@@ -2,7 +2,7 @@
 title: "vite-plugin-compression을 활용한 프로덕션 Gzip 및 Brotli 사전 압축 파이프라인"
 description: "Vite 빌드 단계에서 vite-plugin-compression을 활용하여 정적 에셋(.js, .css, .html)을 Gzip 및 Brotli로 미리 압축하고, 웹 서버(Nginx)의 정적 모듈과 연동하여 CPU 낭비 없이 최고 압축률로 서빙하는 아키텍처를 구축합니다."
 date: 2026-09-14 12:00:00 +0900
-tags: [vite, compression, brotli, gzip, production-build]
+tags: [vite, compression, performance, build-tools]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "Jekyll 폴더 구조로 카테고리 자동 주입하기"
 description: "Jekyll _posts 디렉토리 구조를 단일 진실 공급원(SSOT)으로 삼아 Front Matter의 categories 중복 선언을 없애는 커스텀 Ruby Hook 플러그인 구현과 운영 주의사항을 정리합니다."
 date: 2026-11-20 09:00:00 +0900
-tags: [jekyll, chirpy, ruby, plugin, category, blog]
+tags: [jekyll, chirpy, ruby, blog]
 mermaid: true
 ---
 

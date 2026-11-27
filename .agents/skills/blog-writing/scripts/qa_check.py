@@ -145,8 +145,19 @@ def main():
         if not tags_val and not re.search(r"^tags:\s*\n\s*-", fm, re.M):
             warnings["missing_tags"].append(p)
         else:
-            for tag in parse_fm_tags(fm):
+            post_tags = parse_fm_tags(fm)
+            seen_in_post = set()
+            for tag in post_tags:
+                if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", tag):
+                    errors["invalid_tag_format"].append(f"{p}: {tag}")
+                if tag in seen_in_post:
+                    errors["duplicate_tag_in_post"].append(f"{p}: {tag}")
+                seen_in_post.add(tag)
                 tag_slug_variants[slugify_tag(tag)][tag].append(p)
+            if len(post_tags) < 3 or len(post_tags) > 5:
+                warnings["tag_count_out_of_range"].append(
+                    f"{p} ({len(post_tags)}개)"
+                )
         if re.search(r"^categories:\s*\S", fm, re.M):
             warnings["explicit_categories_in_fm"].append(p)
 

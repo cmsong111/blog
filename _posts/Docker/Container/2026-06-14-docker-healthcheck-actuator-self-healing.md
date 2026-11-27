@@ -2,7 +2,7 @@
 title: "Docker HEALTHCHECK와 Spring Boot Actuator 연동을 통한 상태 모니터링"
 description: "PID 1번 프로세스는 정상이지만 내부 데드락이나 풀 고갈로 멈춰버린 좀비 컨테이너를 감지하고, Spring Boot Actuator와 Docker HEALTHCHECK, Autoheal을 연동해 스스로 복구하는 자가 치유 환경을 구축합니다."
 date: 2026-06-14 12:00:00 +0900
-tags: [docker, healthcheck, actuator, spring-boot, self-healing]
+tags: [docker, healthcheck, observability, spring-boot]
 mermaid: true
 ---
 

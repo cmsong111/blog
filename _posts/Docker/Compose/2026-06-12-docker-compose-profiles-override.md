@@ -2,7 +2,7 @@
 title: "Docker Compose Profiles와 Override를 활용한 로컬 개발 환경 분리"
 description: "서비스가 비대해진 로컬 개발 환경에서 Docker Compose Profiles와 compose.override.yaml을 활용해 리소스 낭비를 막고 개발자별 맞춤형 환경을 구성하는 실무 전략을 정리합니다."
 date: 2026-06-12 12:00:00 +0900
-tags: [docker-compose, profiles, compose-override, local-environment, multi-env]
+tags: [docker-compose, configuration, dx]
 mermaid: true
 ---
 

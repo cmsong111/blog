@@ -2,7 +2,7 @@
 title: "Docker 컨테이너 MTU 불일치 및 DNS 지연 트러블슈팅"
 description: "도커 컨테이너 내부에서 외부 API 호출 시 발생하는 대용량 페이로드 행(Hang) 현상과 5초 DNS 딜레이 문제를 MTU 최적화 및 musl libc 동작 원리로 해결한 트러블슈팅 기록입니다."
 date: 2026-06-15 12:00:00 +0900
-tags: [docker, mtu, dns-timeout, packet-drop, Troubleshooting]
+tags: [docker, networking, dns, troubleshooting]
 mermaid: true
 ---
 

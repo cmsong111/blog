@@ -2,7 +2,7 @@
 title: "Chirpy 테마 한글 가독성 튜닝과 Rouge 문법 강조 오류 해결"
 description: "영문 기준 Chirpy 테마에서 모바일 한글 본문이 크게 보이는 원인을 분석해 타이포그래피를 최적화하고, Rouge 문법 강조기의 붉은 배경 오류(.highlight .err)와 코딩 폰트 스택을 개선한 방법을 정리합니다."
 date: 2026-11-22 09:00:00 +0900
-tags: [jekyll, chirpy, scss, typography, rouge, mobile]
+tags: [jekyll, chirpy, css, frontend, troubleshooting]
 mermaid: true
 ---
 

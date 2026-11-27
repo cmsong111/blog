@@ -2,7 +2,7 @@
 title: "Docker 컨테이너 PID 1 프로세스와 Graceful Shutdown 설정"
 description: "docker stop 명령 시 컨테이너가 10초 타임아웃 후 SIGKILL로 비정상 종료되는 근본 원인(PID 1, 쉘 폼)을 분석하고, tini와 Spring Boot graceful shutdown을 통한 무중단 종료 구현 방법을 정리합니다."
 date: 2026-06-06 12:00:00 +0900
-tags: [docker, graceful-shutdown, tini, sigterm, pid1]
+tags: [docker, linux, troubleshooting]
 mermaid: true
 ---
 

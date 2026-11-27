@@ -2,7 +2,7 @@
 title: "Spring Boot Docker Compose 연동과 멱등성 보장 시드 데이터 초기화"
 description: "스프링 부트 실행 시 PostgreSQL과 Redis를 자동으로 기동하고, ddl-auto: update 환경에서도 중복 없이 단 1회만 초기 예제 데이터를 안전하게 적재하는 개발 환경 구축기입니다."
 date: 2026-05-19 12:00:00 +0900
-tags: [spring-boot, docker-compose, devops, postgresql, redis, dx]
+tags: [spring-boot, docker-compose, postgresql, redis, dx]
 mermaid: true
 image:
   path: /assets/images/2026-05-19/spring-boot-docker-compose-auto-start-log.png

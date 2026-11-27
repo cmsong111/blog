@@ -2,7 +2,7 @@
 title: "gradle-git-properties로 Swagger UI에 마지막 커밋 정보 표시하기"
 description: "Spring Boot에서 gradle-git-properties 플러그인과 GitProperties 빈을 활용해 Swagger UI에 마지막 커밋 해시, 브랜치, 커밋 링크, 배포 시각을 표시하는 방법과 테스트·CI·운영 주의사항을 정리합니다."
 date: 2024-10-05 12:00:00 +0900
-tags: [spring-boot, swagger, springdoc, gradle, git-properties]
+tags: [spring-boot, rest-api, documentation, gradle, git]
 ---
 
 > 개발 서버 배포 후 프론트엔드와 협업할 때 "어느 커밋이 반영됐는지" 즉시 확인할 수 있도록, `gradle-git-properties`와 `GitProperties` 빈으로 Swagger UI 상단에 마지막 커밋 정보를 표시하는 방법을 정리합니다.

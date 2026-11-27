@@ -2,7 +2,7 @@
 title: "Jekyll Chirpy 테마에 수동 애드센스 배치하기"
 description: "구글 애드센스 자동 광고의 포스트 카드 깨짐 문제를 해결하고, Chirpy 레이아웃을 덮어쓰지 않고 넓은 화면 목차 하단 세로형·본문 h2 자동 삽입·모바일 320x100 슬림 배너를 구현한 과정을 정리합니다."
 date: 2026-11-21 09:00:00 +0900
-tags: [jekyll, chirpy, adsense, javascript, css, blog]
+tags: [jekyll, chirpy, adsense, css, frontend]
 mermaid: true
 ---
 

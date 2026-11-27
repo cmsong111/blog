@@ -2,7 +2,7 @@
 title: "JSR-221 (JDBC 4.x): DataSource, 드라이버 SPI 로딩과 트랜잭션 경계 원리"
 description: "JPA·MyBatis·HikariCP의 기반이 되는 자바 데이터베이스 표준 JSR-221(JDBC 4.x)의 ServiceLoader 드라이버 자동 등록, DataSource 커넥션 풀, autoCommit과 트랜잭션 경계 동작 원리를 정리합니다."
 date: 2026-11-13 09:00:00 +0900
-tags: [java, jsr-221, jdbc, datasource, hikaricp, transaction]
+tags: [java, jsr, jdbc, database, transaction]
 mermaid: true
 ---
 

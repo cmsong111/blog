@@ -2,7 +2,7 @@
 title: Chirpy 테마 핵심 환경 설정하기 (_config.yml)
 description: Jekyll Chirpy 테마의 기본 브랜딩, 다국어/타임존 설정, utterances 댓글 위젯 및 GoatCounter 방문자 통계 연동까지 핵심 설정을 마스터합니다.
 date: 2025-03-02 12:00:00 +0900
-tags: [chirpy, jekyll, github-pages, configuration, Utterances, GoatCounter]
+tags: [jekyll, chirpy, github-pages, configuration, blog]
 mermaid: true
 image:
   path: /assets/images/2025-03-02/sidebar-profile-config.png

@@ -2,7 +2,7 @@
 title: "vite-plugin-image-optimizer를 활용한 빌드 타임 WebP·AVIF 이미지 변환"
 description: "Vite 빌드 파이프라인에서 vite-plugin-image-optimizer와 Sharp를 활용하여 PNG, JPG, SVG 이미지를 무손실/고효율 압축하고, 차세대 이미지 포맷인 WebP 및 AVIF로 자동 변환하여 LCP를 극대화하는 방법을 다룹니다."
 date: 2026-09-18 12:00:00 +0900
-tags: [vite, image-optimizer, webp, avif, asset-compression]
+tags: [vite, assets, performance, compression]
 mermaid: true
 ---
 

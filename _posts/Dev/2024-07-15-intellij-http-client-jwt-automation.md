@@ -2,7 +2,7 @@
 title: "IntelliJ HTTP Client로 Postman 없이 API 테스트와 JWT 자동 주입하기"
 description: "IntelliJ HTTP Client의 .http 파일과 환경 변수 분리, Response Handler 스크립트로 로그인 JWT 토큰을 자동 주입하고 ijhttp CLI로 검증하는 실무 워크플로를 정리합니다."
 date: 2024-07-15 12:00:00 +0900
-tags: [intellij, http-client, api-test, jwt, productivity]
+tags: [dx, rest-client, testing, jwt]
 mermaid: true
 ---
 

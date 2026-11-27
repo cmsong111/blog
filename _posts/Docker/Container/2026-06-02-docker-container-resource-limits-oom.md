@@ -2,7 +2,7 @@
 title: "Docker 컨테이너 리소스 제한 설정과 JVM OOMKilled(137) 대응"
 description: "컨테이너가 호스트 머신의 메모리를 잠식하여 발생하는 시스템 다운을 방지하기 위해 cgroup v2 기반 CPU·메모리 상한선을 설정하고, JVM 메모리 오버헤드 계산 및 OOMKilled(Exit Code 137) 디버깅 전략을 다룹니다."
 date: 2026-06-02 12:00:00 +0900
-tags: [docker, docker-container, resource-limits, oom, cgroup, Troubleshooting]
+tags: [docker, performance, troubleshooting]
 mermaid: true
 ---
 

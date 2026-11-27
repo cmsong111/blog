@@ -2,7 +2,7 @@
 title: "Spring HttpExchange 기반 ImgBB 이미지 업로드와 트랜잭션 분리"
 description: "Spring 6 HttpExchange와 RestClient로 ImgBB 이미지 업로드를 추상화하고, TransactionTemplate으로 외부 HTTP I/O를 트랜잭션 밖으로 분리해 DB 커넥션 고갈을 막는 설계를 정리합니다."
 date: 2024-08-04 12:00:00 +0900
-tags: [spring-boot, kotlin, restclient, http-exchange, transaction]
+tags: [spring-boot, kotlin, rest-client, transaction]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

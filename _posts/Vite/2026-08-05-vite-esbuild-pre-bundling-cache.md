@@ -2,7 +2,7 @@
 title: "esbuild를 활용한 Vite 의존성 사전 번들링 메커니즘과 캐시 제어"
 description: "Vite가 CommonJS 호환성과 네트워크 요청 폭포 문제를 해결하기 위해 Go 기반 esbuild로 의존성을 사전 번들링하는 내부 메커니즘과 .vite/deps 캐시 생명주기를 분석합니다."
 date: 2026-08-05 12:00:00 +0900
-tags: [vite, esbuild, pre-bundling, node-modules, caching]
+tags: [vite, build-tools, performance, caching]
 mermaid: true
 ---
 

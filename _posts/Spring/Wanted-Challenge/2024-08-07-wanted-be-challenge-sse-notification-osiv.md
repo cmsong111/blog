@@ -2,7 +2,7 @@
 title: "Spring MVC SseEmitter 기반 실시간 알림 구현과 OSIV 커넥션 관리"
 description: "Spring MVC SseEmitter로 단방향 실시간 알림을 구현하고, 다중 탭 생명주기 관리와 OSIV 비활성화, Java 21 Virtual Threads로 장기 연결 리소스를 제어하는 방법을 정리합니다."
 date: 2024-08-07 12:00:00 +0900
-tags: [spring-boot, kotlin, sse, osiv, virtual-threads]
+tags: [spring-boot, kotlin, sse, jpa, concurrency]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

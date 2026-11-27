@@ -2,7 +2,7 @@
 title: "Vite server.proxy 설정을 활용한 로컬 CORS 해결 및 인증 쿠키 포워딩"
 description: "Vite 개발 서버의 server.proxy 옵션을 통해 로컬 개발 환경의 CORS 제약과 SameSite 인증 쿠키 누락 문제를 해결하고, proxyRes 후킹으로 Set-Cookie 도메인을 재작성하는 실무 기법을 정리합니다."
 date: 2026-08-28 12:00:00 +0900
-tags: [vite, server-proxy, cors, cookies, dev-server]
+tags: [vite, dev-server, networking, security]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "mysqld_exporter와 redis_exporter를 활용한 데이터베이스 메트릭 연동"
 description: "MariaDB와 Redis 인스턴스의 내부 런타임 지표를 안전하게 수집하기 위한 전용 모니터링 계정 생성과 권한 격리, mysqld_exporter 및 redis_exporter의 Docker 환경 구성과 Prometheus 스크랩 연동 방법을 상세히 정리합니다."
 date: 2025-04-18 10:00:00 +0900
-tags: [docker, homelab, prometheus, mysqld-exporter, redis-exporter, observability]
+tags: [docker, homelab, prometheus, monitoring, observability]
 mermaid: true
 ---
 

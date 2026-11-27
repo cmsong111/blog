@@ -2,7 +2,7 @@
 title: 카카오·구글·네이버 다중 소셜 계정 연동(1:N) 모델링과 사용자/관리자 로그인 진입점 분리
 description: 하나의 사용자 계정에 여러 소셜 제공자(카카오, 구글, 네이버)를 연동하는 JPA 엔티티 모델링과, 일반 사용자와 관리자의 소셜 로그인 진입점/보안 분리 방식을 다룹니다.
 date: 2026-05-04 12:00:00 +0900
-tags: [spring-boot, oauth2, social-login, jpa, kotlin]
+tags: [spring-boot, kotlin, oauth2, jpa]
 mermaid: true
 image:
   path: /assets/images/2026-05-04/user-profile-multi-social-chips.png

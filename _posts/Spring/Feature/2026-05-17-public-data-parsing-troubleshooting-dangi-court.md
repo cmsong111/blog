@@ -2,7 +2,7 @@
 title: "공공 데이터 연호 변환과 사건번호 정규화 파싱 트러블슈팅"
 description: 실제 공공 판례 데이터에 존재하는 '단기 4286년' 선고일 서기 변환, '서울고법 형사1부'의 법원명 표준화, 병합 사건번호 오탐 방지 등 현실적인 비정형 더티 데이터 정제 노하우를 정리합니다.
 date: 2026-05-17 12:00:00 +0900
-tags: [spring-boot, parsing, open-api, regex, kotlin]
+tags: [spring-boot, parsing, rest-api, kotlin]
 mermaid: true
 image:
   path: /assets/images/2026-05-17/dangi-calendar-conversion-unit-test.png

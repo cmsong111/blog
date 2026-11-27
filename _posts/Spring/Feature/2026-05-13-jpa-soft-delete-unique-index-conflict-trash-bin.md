@@ -2,7 +2,7 @@
 title: JPA 소프트 삭제(Soft Delete) 시 복합 Unique 인덱스 충돌 해결과 휴지통 패턴
 description: 데이터 소프트 삭제(Soft Delete) 시 삭제된 행으로 인해 발생하는 Unique 제약 조건 충돌을 부분 인덱스로 우회하고, 삭제된 데이터를 안전하게 조회/복구하는 관리자 휴지통 아키텍처를 소개합니다.
 date: 2026-05-13 12:00:00 +0900
-tags: [spring-boot, jpa, soft-delete, unique-constraint, postgresql]
+tags: [spring-boot, jpa, database, postgresql]
 mermaid: true
 image:
   path: /assets/images/2026-05-13/admin-trash-bin-dashboard-restore-button.png

@@ -2,7 +2,7 @@
 title: "pnpm Workspaces 모노레포 환경에서 Vite 서브 프로젝트 설정 및 패키지 공유"
 description: "pnpm Workspaces와 Vite를 연계하여 다중 웹 애플리케이션과 공통 UI 라이브러리를 효율적으로 관리하는 모노레포 아키텍처를 구축하고, 심볼릭 링크 기반 HMR 최적화와 위상 정렬 빌드 전략을 정리합니다."
 date: 2026-10-07 12:00:00 +0900
-tags: [vite, pnpm-workspaces, monorepo, symlinks, multi-package]
+tags: [vite, monorepo, build-tools]
 mermaid: true
 ---
 

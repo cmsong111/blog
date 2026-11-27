@@ -2,7 +2,7 @@
 title: "EditorConfig와 ktlint로 Kotlin 프로젝트 코드 스타일 자동화하기"
 description: "Kotlin 프로젝트에서 EditorConfig와 ktlint Gradle 플러그인, GitHub Actions CI를 연동해 코드 스타일 검사와 포맷팅을 자동화하는 실무 설정을 정리합니다."
 date: 2024-11-04 12:00:00 +0900
-tags: [kotlin, ktlint, editorconfig, gradle, ci]
+tags: [kotlin, gradle, ci-cd, dx]
 ---
 
 > 코드 리뷰의 스타일 논쟁을 줄이기 위해 `.editorconfig`와 `ktlint`로 Kotlin 코드 스타일을 자동화하고 GitHub Actions CI까지 연동하는 실무 설정을 정리합니다.

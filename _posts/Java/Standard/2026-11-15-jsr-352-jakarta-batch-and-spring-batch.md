@@ -2,7 +2,7 @@
 title: "JSR-352 (Jakarta Batch): 표준 청크 배치 모델과 Spring Batch 아키텍처 비교"
 description: "Job, Step, ItemReader·ItemProcessor·ItemWriter 청크 처리 모델을 정의한 JSR-352(Jakarta Batch) 표준 스펙과 Spring Batch의 구현 구조 및 실무 선택 기준을 비교합니다."
 date: 2026-11-15 09:00:00 +0900
-tags: [java, jsr-352, jakarta-batch, spring-batch, batch]
+tags: [java, jsr, jakarta-ee, spring, batch]
 mermaid: true
 ---
 

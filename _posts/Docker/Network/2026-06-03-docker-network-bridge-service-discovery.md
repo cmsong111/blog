@@ -2,7 +2,7 @@
 title: "Docker 브릿지 네트워크와 DNS 기반 서비스 디스커버리 동작 원리"
 description: "기본 docker0 브릿지와 사용자 정의 브릿지의 DNS 해석 차이, veth pair 및 127.0.0.11 임베디드 DNS 서버의 내부 동작 원리를 실무 예제와 함께 파헤칩니다."
 date: 2026-06-03 12:00:00 +0900
-tags: [docker, docker-network, bridge-network, DNS, service-discovery]
+tags: [docker, networking, dns]
 mermaid: true
 ---
 

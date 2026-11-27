@@ -2,7 +2,7 @@
 title: "TypeScript 경로 별칭 설정과 vite-tsconfig-paths 연동"
 description: "Vite와 TypeScript 환경에서 상대 경로 지옥을 탈출하고, vite-tsconfig-paths 플러그인을 통해 tsconfig.json과 번들러 간 경로 별칭 설정을 단일 진실 공급원으로 동기화하는 방법을 정리합니다."
 date: 2026-08-10 12:00:00 +0900
-tags: [vite, typescript, path-aliases, tsconfig, module-resolution]
+tags: [vite, typescript, configuration]
 mermaid: true
 ---
 

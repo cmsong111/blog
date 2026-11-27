@@ -2,7 +2,7 @@
 title: "Gemini 비전 및 오디오 멀티모달을 활용한 영수증 분석과 음성 회의록 요약"
 description: Spring AI 2.0.1의 Media 추상화와 Google Gemini 네이티브 멀티모달을 결합하여, 별도의 OCR이나 STT 엔진 없이 영수증 이미지와 음성 회의 녹음 파일을 구조화된 DTO로 파싱하는 엔지니어링 파이프라인을 구축합니다.
 date: 2026-04-16 12:00:00 +0900
-tags: [spring-ai, gemini, multimodal, vision, audio, ocr, structured-output]
+tags: [spring-ai, gemini, multimodal, structured-output]
 mermaid: true
 image:
   path: /assets/images/2026-04-16/multimodal-receipt-structured-output-pass.png

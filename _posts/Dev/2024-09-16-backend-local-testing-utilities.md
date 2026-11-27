@@ -2,7 +2,7 @@
 title: "백엔드 로컬 개발에 유용한 무료 테스트 유틸리티 모음"
 description: "로컬 백엔드 개발에서 SMTP 메일 발송, 결제·OAuth 웹훅 페이로드, HTTP 타임아웃·장애 응답, REST 목업 API를 무료로 검증하는 Mailpit, Webhook.site, httpbin, JSONPlaceholder 활용법을 정리합니다."
 date: 2024-09-16 12:00:00 +0900
-tags: [backend, testing, mailpit, webhook, httpbin]
+tags: [backend, testing, rest-api, dx]
 ---
 
 > 백엔드 로컬 개발에서 이메일 발송, 외부 웹훅 수신, HTTP 타임아웃·5xx 장애 응답, REST 목업 API를 무료로 검증하는 4가지 테스트 유틸리티(Mailpit, Webhook.site, httpbin.org, JSONPlaceholder)의 활용법과 주의점을 정리합니다.

@@ -2,7 +2,7 @@
 title: "로컬 개발 환경 HTTPS 구성을 위한 mkcert 및 vite-plugin-basic-ssl 설정"
 description: "최신 웹 API 보안 제약과 HTTP/2 프로토콜 검증을 위해 Vite 개발 환경에 HTTPS를 구축하는 2가지 접근법(mkcert와 vite-plugin-basic-ssl)의 차이점과 설정법을 정리합니다."
 date: 2026-08-31 12:00:00 +0900
-tags: [vite, https, mkcert, ssl, http2]
+tags: [vite, https, dev-server, security]
 mermaid: true
 ---
 

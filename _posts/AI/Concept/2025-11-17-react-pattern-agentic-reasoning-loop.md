@@ -2,7 +2,7 @@
 title: "에이전트 추론 루프의 정석: ReAct 패턴과 자율적 문제 해결 흐름"
 description: 단순 1회성 함수 호출을 넘어 모델이 스스로 생각(Thought), 행동(Action), 관찰(Observation)을 반복하며 복합 문제를 해결하는 ReAct 패턴의 아키텍처와 자기 교정 메커니즘을 상세히 다룹니다.
 date: 2025-11-17 12:00:00 +0900
-tags: [ai, agent, react-pattern, reasoning, agentic-loop]
+tags: [ai, llm, ai-agent]
 mermaid: true
 ---
 

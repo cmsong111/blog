@@ -2,7 +2,7 @@
 title: "Kotlin과 Spring Boot 기반 회원 및 인증 API 설계와 구현"
 description: "Kotlin과 Spring Boot 환경에서 Soft Delete 기반 User 엔티티, @field: 유효성 검증, RTR 토큰 재발급, CQRS 회원 API를 설계하고 구현한 과정을 정리합니다."
 date: 2024-08-02 12:00:00 +0000
-tags: [원티드, 백엔드, 챌린지, kotlin, spring-boot, jwt]
+tags: [spring-boot, kotlin, jwt, backend]
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg
   alt: 프리온보딩 백엔드 챌린지 회원 및 인증 API 배너

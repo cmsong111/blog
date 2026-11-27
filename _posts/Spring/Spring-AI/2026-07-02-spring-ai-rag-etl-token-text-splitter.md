@@ -2,7 +2,7 @@
 title: "문서 수집 ETL 파이프라인과 TokenTextSplitter를 활용한 사내 문서 청킹"
 description: Spring AI 2.0.1의 DocumentReader와 TokenTextSplitter를 결합하여 사내 PDF·Markdown 문서를 추출하고, 한글 음절 깨짐을 방지하는 문장 단위 ChunkOverlapTransformer와 메타데이터 인리치먼트 RAG 파이프라인을 구축합니다.
 date: 2026-07-02 12:00:00 +0900
-tags: [spring-ai, rag, etl, document-reader, token-text-splitter, chunking, pdfbox]
+tags: [spring-ai, rag, ai]
 mermaid: true
 image:
   path: /assets/images/2026-07-02/rag-etl-test-pass.png

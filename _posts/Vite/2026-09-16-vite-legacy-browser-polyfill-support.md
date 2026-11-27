@@ -2,7 +2,7 @@
 title: "@vitejs/plugin-legacy를 활용한 구형 브라우저 호환성 및 폴리필 번들 분리"
 description: "Vite 환경에서 모던 브라우저의 성능 이점을 희생하지 않고, @vitejs/plugin-legacy의 차등 서빙(Differential Serving) 기법을 통해 구형 웹뷰 및 레거시 브라우저용 폴리필 번들을 분리 생성하는 최적화 전략을 정리합니다."
 date: 2026-09-16 12:00:00 +0900
-tags: [vite, plugin-legacy, polyfill, core-js, browser-compatibility]
+tags: [vite, vite-plugin, frontend, build-tools]
 mermaid: true
 ---
 

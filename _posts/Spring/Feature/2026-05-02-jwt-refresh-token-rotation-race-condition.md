@@ -2,7 +2,7 @@
 title: Refresh Token Rotation(RTR) 동시 요청 경합(Race Condition)과 토큰 탈취 대응
 description: Refresh Token Rotation(RTR) 환경에서 브라우저 다중 탭 동시 갱신 요청으로 인한 원자성 깨짐 문제를 Redis 원자적 소비와 토큰 탈취 감지(Theft Detection)로 해결한 과정을 정리합니다.
 date: 2026-05-02 12:00:00 +0900
-tags: [spring-boot, spring-security, jwt, refresh-token, redis, concurrency]
+tags: [spring-boot, spring-security, jwt, redis, concurrency]
 mermaid: true
 image:
   path: /assets/images/2026-05-02/redis-refresh-token-metadata-cli.png

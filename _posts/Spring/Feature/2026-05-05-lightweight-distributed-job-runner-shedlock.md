@@ -2,7 +2,7 @@
 title: Redis ShedLock과 DB 리스 기반 경량 분산 작업 실행기(Job Runner) 구현
 description: 대규모 프레임워크인 Spring Batch 대신, Redis ShedLock과 PostgreSQL 리스(Heartbeat)를 결합하여 다중 인스턴스 환경에서 안전하게 동작하는 경량 분산 작업 실행기를 구축한 경험을 공유합니다.
 date: 2026-05-05 12:00:00 +0900
-tags: [spring-boot, redis, shedlock, batch, distributed-lock, kotlin]
+tags: [spring-boot, kotlin, redis, batch, concurrency]
 mermaid: true
 image:
   path: /assets/images/2026-05-05/admin-jobs-dashboard-overview.png

@@ -2,7 +2,7 @@
 title: "Portainer Business(EE) 3대 무료 라이선스를 활용한 도커 컨테이너 중앙 관리 및 GitOps 스택 배포"
 description: "3 Nodes Free 정책의 Portainer Business(EE)를 맥미니 홈서버에 구축하고, GitHub 비공개 저장소와 연동해 Webhook 기반 GitOps 스택 배포 체계를 구성합니다."
 date: 2025-03-20 10:00:00 +0900
-tags: [docker, homelab, portainer, portainer-ee, gitops, docker-compose]
+tags: [docker, docker-compose, homelab, ci-cd, automation]
 mermaid: true
 ---
 

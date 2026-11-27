@@ -2,7 +2,7 @@
 title: "Authelia와 Nginx Proxy Manager를 활용한 홈랩 통합 SSO 및 Forward Auth 구축"
 description: "Nginx Proxy Manager의 auth_request 스니펫과 Authelia를 연동하여 관리자 대시보드 접근을 1차 차단하는 Forward Auth를 구성하고, LLDAP과 OIDC Provider를 결합한 무중단 싱글 사인온(SSO) 보안 아키텍처를 완성합니다."
 date: 2026-10-20 10:00:00 +0900
-tags: [docker, docker-compose, homelab, authelia, nginx, sso, oidc, security]
+tags: [docker-compose, homelab, nginx, sso, oidc]
 mermaid: true
 ---
 

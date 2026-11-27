@@ -2,7 +2,7 @@
 title: "Docker 포트 바인딩(-p)과 EXPOSE 차이 및 호스트 네트워크 모드 분석"
 description: "Dockerfile의 EXPOSE 지시어가 포트를 실제로 열지 않는 이유부터 iptables DNAT를 통한 -p 포트 포워딩 원리, --network host의 성능과 보안 트레이드오프, 그리고 0.0.0.0 바인딩 보안 함정까지 깊이 있게 파헤칩니다."
 date: 2026-06-07 12:00:00 +0900
-tags: [docker, port-mapping, expose, host-network, iptables]
+tags: [docker, networking, linux]
 mermaid: true
 ---
 

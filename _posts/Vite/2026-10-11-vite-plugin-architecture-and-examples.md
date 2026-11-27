@@ -2,7 +2,7 @@
 title: "Vite 플러그인 아키텍처 분석과 Vite 7·8 번들러 진화(Rollup vs Rolldown) 및 실무 제작 가이드"
 description: "Vite 플러그인의 생명주기 훅 원리를 분석하고, Vite 7의 Rollup 기반 과도기에서 Vite 8의 Rolldown Rust 단일 통합 엔진으로 이어지는 번들러 진화 과정과 실무 커스텀 플러그인 제작 예제 3선을 정리합니다."
 date: 2026-10-11 22:00:00 +0900
-tags: [vite, vite-plugin, rollup, rolldown, vite8, frontend, build-tools]
+tags: [vite, vite-plugin, rollup, frontend, build-tools]
 mermaid: true
 ---
 

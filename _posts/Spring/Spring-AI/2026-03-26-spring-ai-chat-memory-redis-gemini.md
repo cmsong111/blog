@@ -2,7 +2,7 @@
 title: "MessageChatMemoryAdvisor와 Redis를 활용한 멀티턴 대화 세션 관리"
 description: Spring AI 2.0.1의 MessageChatMemoryAdvisor와 Redis(Jedis/RediSearch)를 결합하여, 서버 재기동에도 대화 맥락이 유실되지 않는 분산 세션 영속화와 슬라이딩 윈도우 토큰 최적화를 구현합니다.
 date: 2026-03-26 12:00:00 +0900
-tags: [spring-ai, chat-memory, redis, advisors, multi-turn, gemini]
+tags: [spring-ai, gemini, redis, llm]
 mermaid: true
 image:
   path: /assets/images/2026-03-26/redis-chat-memory-integration-test-pass.png

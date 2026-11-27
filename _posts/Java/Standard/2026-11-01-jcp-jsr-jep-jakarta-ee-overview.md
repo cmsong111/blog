@@ -2,7 +2,7 @@
 title: "JCP, JSR, JEP, 그리고 Jakarta EE: 자바 표준 스펙 체계와 네임스페이스 전환"
 description: "자바 표준을 정의하는 JCP, JSR, JEP, RI, TCK의 개념과 Oracle에서 Eclipse Foundation으로 이관되며 javax에서 jakarta로 네임스페이스가 전환된 배경을 정리합니다."
 date: 2026-11-01 09:00:00 +0900
-tags: [java, jsr, jep, jcp, jakarta-ee, standard]
+tags: [java, jsr, jakarta-ee]
 mermaid: true
 ---
 

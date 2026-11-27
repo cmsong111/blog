@@ -2,7 +2,7 @@
 title: "Docker Buildx를 활용한 멀티 아키텍처(ARM64/AMD64) 이미지 빌드"
 description: "로컬 Mac(ARM64)에서 빌드한 컨테이너 이미지를 x86_64 리눅스 서버에 배포했을 때 발생하는 'exec format error'의 근본 원인을 분석하고, docker buildx와 OCI 매니페스트 리스트를 활용한 멀티 아키텍처 빌드 및 최적화 전략을 정리합니다."
 date: 2026-06-13 12:00:00 +0900
-tags: [docker, buildx, multi-arch, arm64, amd64]
+tags: [docker, ci-cd, github-actions, build-tools]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "Grafana를 활용한 홈서버 통합 모니터링 대시보드 및 알림 구축"
 description: "Prometheus 시계열 데이터를 시각화하는 Grafana 컨테이너 구축, 데이터소스 프로비저닝, 공식 추천 대시보드(ID 1860, 7362, 11835) 임포트, NPM 리버스 프록시 연동 및 텔레그램·디스코드 Alerting 규칙 설정까지 완벽히 정리합니다."
 date: 2025-04-25 10:00:00 +0900
-tags: [docker, homelab, grafana, prometheus, alerting, dashboard]
+tags: [docker, homelab, grafana, prometheus, monitoring]
 mermaid: true
 ---
 

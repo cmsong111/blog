@@ -2,7 +2,7 @@
 title: "Docker BuildKit 캐시 마운트를 활용한 Gradle 빌드 속도 개선"
 description: "Docker BuildKit의 캐시 마운트(--mount=type=cache) 기능을 활용하여 소스 코드 변경 시에도 Gradle 의존성 재다운로드 없이 3분 넘게 걸리던 빌드를 20초대로 단축하는 실무 전략을 다룹니다."
 date: 2026-06-05 12:00:00 +0900
-tags: [docker, buildkit, cache, gradle, ci-cd]
+tags: [docker, caching, gradle, ci-cd]
 mermaid: true
 ---
 

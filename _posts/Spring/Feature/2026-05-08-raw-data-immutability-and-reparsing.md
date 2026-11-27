@@ -2,7 +2,7 @@
 title: "외부 데이터 수집 파이프라인의 원문(Raw Data) 불변 보존과 재파싱 아키텍처"
 description: "외부 API 응답 원본 JSON을 불변 테이블에 영구 보존하고, 비즈니스 규칙이나 파서 버전이 변경되었을 때 외부 재호출 없이 안전하게 재파싱하는 데이터 파이프라인을 구축합니다."
 date: 2026-05-08 12:00:00 +0900
-tags: [spring-boot, jpa, data-pipeline, parsing, postgresql]
+tags: [spring-boot, jpa, architecture, parsing, postgresql]
 mermaid: true
 image:
   path: /assets/images/2026-05-08/admin-raw-judgment-json-viewer.png

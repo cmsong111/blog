@@ -2,7 +2,7 @@
 title: "JSR-330 (Jakarta Dependency Injection): @Inject와 Spring @Autowired 비교"
 description: "자바 의존성 주입 표준 스펙인 JSR-330의 @Inject, @Named, @Qualifier, Provider<T>를 살펴보고 Spring @Autowired와의 동작 차이와 선택 기준을 비교합니다."
 date: 2026-11-02 09:00:00 +0900
-tags: [java, jsr-330, jakarta-inject, spring, dependency-injection]
+tags: [java, jsr, jakarta-ee, spring]
 mermaid: true
 ---
 

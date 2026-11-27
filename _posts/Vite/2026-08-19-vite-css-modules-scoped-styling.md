@@ -2,7 +2,7 @@
 title: "CSS Modules 네이밍 캡슐화와 Vite PostCSS 파이프라인 연동"
 description: "글로벌 CSS 오염을 차단하기 위한 Vite 내장 CSS Modules의 클래스명 스코핑 원리와, PostCSS 플러그인(Autoprefixer, Preset-Env)을 파이프라인에 결합하여 크로스 브라우징 및 타입 안정성을 확보하는 방법을 정리합니다."
 date: 2026-08-19 12:00:00 +0900
-tags: [vite, css-modules, postcss, styling, frontend]
+tags: [vite, css, frontend]
 mermaid: true
 ---
 

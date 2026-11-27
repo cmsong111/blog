@@ -2,7 +2,7 @@
 title: "개발·스테이징·프로덕션 환경을 위한 vite.config.ts 설정 모듈화 전략"
 description: "단일 vite.config.ts 파일에 집중되는 복잡한 분기 처리를 해소하고, Vite의 mergeConfig 유틸리티를 활용해 공통·개발·프로덕션 설정을 깔끔하게 분리하는 모듈화 아키텍처를 정리합니다."
 date: 2026-08-12 12:00:00 +0900
-tags: [vite, vite-config, multi-env, config-splitting, build-tools]
+tags: [vite, configuration, build-tools]
 mermaid: true
 ---
 

@@ -2,7 +2,7 @@
 title: "JSR-133 (Java Memory Model): volatile, happens-before와 멀티스레드 가시성"
 description: "CPU 캐시와 명령어 재배치로 발생하는 멀티스레드 가시성 문제를 해결하는 JSR-133 Java Memory Model의 happens-before 규칙과 volatile·synchronized·final의 메모리 보장 원리를 정리합니다."
 date: 2026-11-09 09:00:00 +0900
-tags: [java, jsr-133, jmm, concurrency, volatile, multithreading]
+tags: [java, jsr, concurrency]
 mermaid: true
 ---
 

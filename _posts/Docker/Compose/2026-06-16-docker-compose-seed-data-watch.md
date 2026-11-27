@@ -2,7 +2,7 @@
 title: "Docker Compose initdb.d 시드 데이터 초기화와 Compose Watch 적용"
 description: "로컬 개발 환경 구축 시 Docker initdb.d를 활용한 시드 데이터 멱등성 보장 기법과 Docker Compose Watch(develop.watch)를 통한 개발 생산성 극대화 가이드입니다."
 date: 2026-06-16 12:00:00 +0900
-tags: [docker-compose, seed-data, initdb, compose-watch, hot-reload]
+tags: [docker-compose, database, dx]
 mermaid: true
 ---
 

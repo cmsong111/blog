@@ -2,7 +2,7 @@
 title: "웹 폰트 로컬 서빙과 font-display·preload를 활용한 렌더링 지연 방지"
 description: "Google Fonts 등 외부 웹 폰트 로딩 시 발생하는 FOIT·FOUT 깜빡임과 렌더링 블로킹을 해결하기 위해 WOFF2 로컬 서빙, font-display 전략, Vite 빌드 타임 link rel=preload 주입 기법을 체계적으로 정리합니다."
 date: 2026-08-24 12:00:00 +0900
-tags: [vite, web-fonts, preload, foit, performance]
+tags: [vite, assets, performance]
 mermaid: true
 ---
 

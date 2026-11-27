@@ -2,7 +2,7 @@
 title: "JSR-370 (JAX-RS / Jakarta REST): 표준 REST API 스펙과 Spring MVC 비교"
 description: "Quarkus와 Jakarta EE 생태계의 표준 REST 스펙인 JSR-370(JAX-RS)의 @Path·@GET·Provider 구조를 살펴보고 Spring MVC 어노테이션 모델과의 차이점을 비교합니다."
 date: 2026-11-19 09:00:00 +0900
-tags: [java, jsr-370, jax-rs, jakarta-rest, spring-mvc, rest-api]
+tags: [java, jsr, jakarta-ee, spring-mvc, rest-api]
 mermaid: true
 ---
 

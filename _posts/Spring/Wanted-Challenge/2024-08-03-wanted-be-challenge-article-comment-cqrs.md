@@ -2,7 +2,7 @@
 title: "Kotlin과 Spring Data JPA로 구현한 게시글·댓글 CQRS와 조회 최적화"
 description: "Spring Boot와 Kotlin 환경에서 게시글·댓글 서비스를 CQRS로 분리하고 ElementCollection Set 설계, 배치 조회 N+1 제거, Clock 기반 10일 수정 제한을 구현한 과정을 정리합니다."
 date: 2024-08-03 12:00:00 +0900
-tags: [spring-boot, kotlin, jpa, cqrs, wanted-challenge]
+tags: [spring-boot, kotlin, jpa, architecture]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

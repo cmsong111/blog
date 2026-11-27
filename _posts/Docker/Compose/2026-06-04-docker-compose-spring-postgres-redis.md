@@ -2,7 +2,7 @@
 title: "Docker Compose를 활용한 로컬 개발 환경 구축 (Spring Boot, PostgreSQL, Redis)"
 description: "신규 입사자 온보딩부터 로컬 통합 테스트까지, Spring Boot에 필요한 PostgreSQL과 Redis를 Docker Compose v2로 표준화하고 안전하게 격리·구축하는 실무 템플릿과 노하우를 다룹니다."
 date: 2026-06-04 12:00:00 +0900
-tags: [docker, docker-compose, spring-boot, postgresql, redis, local-development]
+tags: [docker, docker-compose, spring-boot, postgresql, redis]
 mermaid: true
 ---
 

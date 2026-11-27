@@ -2,7 +2,7 @@
 title: "WebFlux와 SSE(Server-Sent Events)를 활용한 Gemini 실시간 스트리밍 채팅 구현"
 description: Spring Boot 4.x 및 Spring AI 2.0.1 환경에서 Gemini 스트리밍 API와 Server-Sent Events(SSE)를 결합하여, 첫 글자 응답 지연을 0.3초로 단축하고 대화 맥락(ChatMemory)을 유지하는 실시간 채팅 서버를 구축합니다.
 date: 2026-03-19 12:00:00 +0900
-tags: [spring-ai, gemini, sse, webflux, streaming-chat, reactive]
+tags: [spring-ai, gemini, sse, reactive]
 mermaid: true
 image:
   path: /assets/images/2026-03-19/spring-ai-sse-streaming-test-pass.png

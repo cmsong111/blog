@@ -2,7 +2,7 @@
 title: "Spring Event와 MdcTaskDecorator로 구현하는 비동기 도메인 알림 처리"
 description: "Spring Boot와 Kotlin 환경에서 ApplicationEventPublisher, TransactionalEventListener, Async, MdcTaskDecorator를 조합해 도메인 결합도를 낮추고 비동기 스레드에 MDC를 전파하는 방법을 정리합니다."
 date: 2024-08-06 12:00:00 +0900
-tags: [spring-boot, kotlin, spring-event, async, mdc]
+tags: [spring-boot, kotlin, async, logging]
 mermaid: true
 image:
   path: /assets/images/2024-08-01/wanted-challenge-banner.jpg

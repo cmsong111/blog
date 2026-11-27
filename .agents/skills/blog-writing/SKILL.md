@@ -67,7 +67,7 @@ description: >-
 title: "핵심 기술 키워드와 적용 대상·목적이 명확한 담백한 제목 (30~55자 권장)"
 description: "검색엔진·SNS 카드용 핵심 요약 1~2문장 (80~155자 권장, 절대 누락 금지)"
 date: YYYY-MM-DD HH:MM:SS +0900
-tags: [소문자-영문-또는-표준키워드, 태그2, 태그3]
+tags: [spring-boot, kotlin, jpa, redis] # 100% 영문 소문자 kebab-case, 글당 3~5개 (동의어·약어 중복 금지, 기존 표준 태그 우선 재사용)
 mermaid: true # 본문에 mermaid 코드 블록이 있을 때만 선언 (없으면 생략)
 image:
   path: /assets/images/YYYY-MM-DD/thumbnail.png # 로컬 저장 시 프로덕션 jsDelivr CDN 자동 적용
