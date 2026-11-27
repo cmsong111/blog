@@ -2,7 +2,7 @@
 title: Fixture Monkey를 활용한 더미 데이터 생성
 description: "정적 data.sql의 한계를 극복하기 위해 네이버 Fixture Monkey로 검증 어노테이션을 반영한 테스트 더미 데이터를 동적으로 생성하는 방법을 정리합니다."
 date: 2025-03-24 12:00:00 +0000
-tags: [Fixture-Monkey, 더미데이터, 테스트]
+tags: [fixture-monkey, 더미데이터, 테스트]
 image:
   path: /assets/images/2025-03-24/fixture-monkey-banner.png
 ---

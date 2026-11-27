@@ -2,7 +2,7 @@
 title: Chirpy 테마로 GitHub Pages 블로그 시작하기
 description: Jekyll Chirpy Starter 템플릿을 사용하여 GitHub Pages 기반의 정적 블로그를 생성하고, GitHub Actions 자동 배포 파이프라인을 구축하는 전체 과정을 다룹니다.
 date: 2025-03-01 12:00:00 +0900
-tags: [chirpy, jekyll, github-pages, Starter, GitHub-Actions]
+tags: [chirpy, jekyll, github-pages, Starter, github-actions]
 mermaid: true
 image:
   path: /assets/images/2025-03-01/chirpy-home-card-preview.png

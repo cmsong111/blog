@@ -5,7 +5,7 @@
 검사 항목:
 1. Front Matter 필수 필드 (title, description, date, tags) 및 categories 생략 여부
 2. 제목 금지어 (어그로/과장 표현) 검사
-3. 파일명 규칙, 미래 날짜, 퍼머링크 슬러그 중복 검사
+3. 파일명 규칙, 미래 날짜, 퍼머링크·태그 슬러그 중복 검사
 4. 본문 분량 (코드·Mermaid 제외 순수 본문 < 600자 Thin Content 경고)
 5. Mermaid 문법 (노드/엣지 특수문자 따옴표, 스타일링 HTML 태그, mermaid: true 일치)
 6. 이미지 무결성 (깨진 로컬 이미지, 이중 슬래시 /assets//, 외부 핫링크, >1MB 대용량, 고아 이미지)
@@ -52,6 +52,45 @@ def get_fm_value(fm, key):
     return m.group(1).strip().strip("\"'") if m else ""
 
 
+def parse_fm_tags(fm):
+    lines = fm.splitlines()
+    tags = []
+    i = 0
+    while i < len(lines):
+        m = re.match(r"^tags?\s*:\s*(.*)$", lines[i])
+        if m:
+            rest = m.group(1).strip()
+            if rest.startswith("[") and rest.endswith("]"):
+                for item in rest[1:-1].split(","):
+                    item = item.strip().strip("\"'")
+                    if item:
+                        tags.append(item)
+            elif rest:
+                for item in rest.split():
+                    item = item.strip("\"'")
+                    if item:
+                        tags.append(item)
+            else:
+                i += 1
+                while i < len(lines):
+                    lm = re.match(r"^\s+-\s+(.*)$", lines[i])
+                    if not lm:
+                        break
+                    item = lm.group(1).strip().strip("\"'")
+                    if item:
+                        tags.append(item)
+                    i += 1
+                continue
+        i += 1
+    return tags
+
+
+def slugify_tag(tag):
+    s = str(tag).strip().lower()
+    s = re.sub(r"[^a-z0-9가-힣]+", "-", s)
+    return s.strip("-")
+
+
 def main():
     today_str = datetime.date.today().isoformat()
     posts = sorted(glob.glob("_posts/**/*.md", recursive=True))
@@ -63,6 +102,7 @@ def main():
     slug_counts = Counter()
     valid_slugs = set()
     all_img_refs = set()
+    tag_slug_variants = defaultdict(lambda: defaultdict(list))
 
     for p in posts:
         fname = os.path.basename(p)
@@ -104,6 +144,9 @@ def main():
             errors["missing_date"].append(p)
         if not tags_val and not re.search(r"^tags:\s*\n\s*-", fm, re.M):
             warnings["missing_tags"].append(p)
+        else:
+            for tag in parse_fm_tags(fm):
+                tag_slug_variants[slugify_tag(tag)][tag].append(p)
         if re.search(r"^categories:\s*\S", fm, re.M):
             warnings["explicit_categories_in_fm"].append(p)
 
@@ -182,6 +225,13 @@ def main():
             errors["potential_sk_key"].append(p)
         if re.search(r"ghp_[0-9A-Za-z]{36}", content):
             errors["potential_ghp_token"].append(p)
+
+    for slug, variants in sorted(tag_slug_variants.items()):
+        if len(variants) > 1:
+            detail = ", ".join(
+                f"{var}({len(files)}건)" for var, files in sorted(variants.items())
+            )
+            errors["duplicate_tag_slug"].append(f"/tags/{slug}/ -> {detail}")
 
     # Check drafts + tabs + configs for image references so draft images aren't flagged as orphan
     extra_refs = set()
