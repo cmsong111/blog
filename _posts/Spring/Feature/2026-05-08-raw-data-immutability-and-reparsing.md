@@ -127,8 +127,8 @@ class RawJudgment(
 ) : BaseEntity()
 ```
 
-> [!NOTE]
 > `rawJson` 컬럼에는 Hibernate의 `Length.LONG32`(PostgreSQL 기준 `TEXT` 타입)을 적용하여 수십~수백 킬로바이트에 달하는 긴 판결문 원문 전문을 온전히 담을 수 있도록 설계했습니다.
+{: .prompt-info }
 
 ### 2. 도메인 엔티티 (`Judgment`)의 파서 추적 필드
 
@@ -458,8 +458,8 @@ class JudgmentImportService(
 }
 ```
 
-> [!TIP]
 > `reject()` 메서드는 파싱에 실패했을 때 트랜잭션을 롤백시켜 원문까지 지워버리는 것이 아니라, `raw.parsedAt = null`과 `raw.parseError = error`를 정상 커밋합니다. 실패한 원문이 DB에 그대로 남아있어야 개발자가 관리자 화면에서 원인을 확인하고 파서를 수정할 수 있기 때문입니다.
+{: .prompt-tip }
 
 ---
 

@@ -195,8 +195,8 @@ class TextGenerationService(
 }
 ```
 
-> [!NOTE]
 > `.entity(BookRecommendation::class.java)`를 체이닝하면 Spring AI 내부의 `BeanOutputConverter`가 동작하여 프롬프트에 DTO의 JSON Schema 지침을 자동 주입하고, 모델이 반환한 JSON 문자열을 객체로 안전하게 파싱합니다.
+{: .prompt-info }
 
 ---
 

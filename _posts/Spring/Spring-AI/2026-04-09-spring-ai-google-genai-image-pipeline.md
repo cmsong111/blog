@@ -107,8 +107,8 @@ image:
       base-dir: ./generated-images
 ```
 
-> [!TIP]
 > `person-generation` 옵션(인물 생성 필터링)은 Google Cloud Vertex AI 모드에서만 지원됩니다. 일반 Google AI Studio API 키 모드에서 설정하면 `IllegalArgumentException`이 발생하므로 주의해야 합니다.
+{: .prompt-tip }
 
 ---
 

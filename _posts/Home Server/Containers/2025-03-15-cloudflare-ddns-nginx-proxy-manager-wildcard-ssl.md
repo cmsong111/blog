@@ -78,7 +78,6 @@ flowchart TD
 
 DNS-01 챌린지와 DDNS 갱신을 수행하려면 Cloudflare 계정에서 최소 권한 원칙(Principle of Least Privilege)을 적용한 전용 API 토큰(API Token)을 발급받아야 합니다.
 
-> [!WARNING]
 > 모든 권한을 가진 전역 API 키(Global API Key)는 절대로 사용하지 마세요. 홈서버 설정 파일에 노출될 경우 Cloudflare에 등록된 모든 도메인의 제어권이 탈취될 수 있습니다. 반드시 특정 도메인(Zone)에만 국한된 제한적 API Token을 생성해야 합니다.
 {: .prompt-warning }
 
@@ -116,7 +115,6 @@ CF_DOMAINS=namju.kim,*.namju.kim
 NPM_ADMIN_PORT=81
 ```
 
-> [!TIP]
 > 81번 NPM 웹 대시보드 포트는 외부 인터넷으로 포트포워딩하지 마세요. 로컬 LAN(`192.168.x.x:81`) 또는 향후 구성할 VPN(Tailscale/WireGuard)을 통해서만 안전하게 접속하는 것이 보안상 매우 중요합니다.
 {: .prompt-tip }
 

@@ -100,9 +100,9 @@ enum class Category {
 
 Spring AI 2.0.1의 기본 `BeanOutputConverter`를 중첩 DTO에 적용하면 중요한 문제에 직면하게 됩니다.
 
-> [!WARNING]
 > `BeanOutputConverter`는 동일한 타입(예: `Level` enum이 상위와 하위 DTO에서 중복 사용됨)이 여러 번 나타나면 JSON Schema의 **`$defs`와 `$ref`(#/$defs/Level)**로 참조를 생성합니다.  
 > 하지만 **Spring AI 2.0.1의 GoogleGenAiChatModel은 Gemini SDK의 `Schema` 객체로 변환하는 과정에서 `$defs`/`$ref`를 해석하지 않고 누락**시켜 버립니다. 결과적으로 해당 필드의 Enum 제약이 사라져 모델이 임의 문자열을 반환하게 됩니다.
+{: .prompt-warning }
 
 이를 해결하기 위해 `$ref`를 실제 인라인 정의로 자동 치환해 주는 **`GeminiBeanOutputConverter`**와 **`JsonSchemaInliner`**를 구현합니다:
 

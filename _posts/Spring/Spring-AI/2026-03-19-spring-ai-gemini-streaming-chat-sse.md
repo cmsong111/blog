@@ -156,8 +156,8 @@ class ChatSseService(
 }
 ```
 
-> [!TIP]
 > `MessageChatMemoryAdvisor`를 전역 어드바이저로 등록한 경우, advisor 파라미터에 `chat_memory_conversation_id`가 누락되면 `IllegalArgumentException: conversationId cannot be null`이 발생합니다. 따라서 파라미터가 비어 있을 경우 `"default"` 세션으로 위임하거나 컨트롤러에서 기본값을 할당해 주는 설계가 필수적입니다.
+{: .prompt-tip }
 
 ---
 

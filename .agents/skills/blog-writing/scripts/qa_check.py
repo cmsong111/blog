@@ -287,6 +287,15 @@ def main():
                     fence_char = fm_open.group(1)[0]
                     fence_len = len(fm_open.group(1))
                     continue
+                if re.match(r"^>\s*\[!(?:NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]", line):
+                    errors["github_alert_syntax"].append(
+                        f"{p} (본문 {line_no}행): {line.strip()[:80]}"
+                    )
+                pm = re.match(r"^\{:\s*\.prompt-([a-z-]+)\s*\}\s*$", line)
+                if pm and pm.group(1) not in ("tip", "info", "warning", "danger"):
+                    errors["invalid_chirpy_prompt"].append(
+                        f"{p} (본문 {line_no}행): .prompt-{pm.group(1)}"
+                    )
                 prose_line = re.sub(r"(`+)(?!`).+?(?<!`)\1(?!`)", "", line)
                 if "{{" in prose_line:
                     errors["unescaped_liquid_expression"].append(

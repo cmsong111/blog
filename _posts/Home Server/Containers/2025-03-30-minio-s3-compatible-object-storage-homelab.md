@@ -102,7 +102,6 @@ MINIO_BROWSER_REDIRECT_URL=https://s3-console.namju.kim
 TZ=Asia/Seoul
 ```
 
-> [!WARNING]
 > 루트 비밀번호(`MINIO_ROOT_PASSWORD`)는 모든 버킷과 객체에 대한 최고 관리자 권한을 가집니다. 운영 환경에서는 반드시 영문 대소문자, 숫자, 특수문자를 혼합한 강력한 비밀번호를 설정하시고, `.env` 파일은 절대 Git 저장소에 커밋되지 않도록 주의해야 합니다.
 {: .prompt-warning }
 
@@ -183,7 +182,6 @@ docker compose up -d
    - **HTTP/2 Support**: ON
    - **HSTS Enabled**: ON
 
-> [!IMPORTANT]
 > **Websockets Support 활성화는 필수입니다.**
 > MinIO 웹 콘솔은 SPA(Single Page Application) 구조로 동작하며, 실시간 버킷 용량 추이, 서버 I/O 지표, 이벤트 로그를 모니터링하기 위해 백엔드와 지속적인 WebSocket 커넥션을 맺습니다. 이 옵션이 꺼져 있으면 대시보드 로딩 시 `Connection Closed` 경고가 반복되거나 파일 업로드 진행률이 멈추는 에러가 발생합니다.
 {: .prompt-warning }
@@ -338,7 +336,6 @@ class S3StorageConfig(
 }
 ```
 
-> [!TIP]
 > **`forcePathStyle(true)` 설정의 이유**:  
 > AWS S3는 기본적으로 가상 호스팅 스타일(`https://{bucket-name}.s3.namju.kim`) 주소 형식을 사용합니다. 하지만 홈서버 환경에서 버킷마다 별도의 서브도메인 DNS 레코드를 등록하지 않고 공용 API 엔드포인트(`https://s3.namju.kim/{bucket-name}`)로 통신하기 위해서는 반드시 **경로 스타일(Path-Style Access)**을 강제해야 합니다.
 {: .prompt-tip }

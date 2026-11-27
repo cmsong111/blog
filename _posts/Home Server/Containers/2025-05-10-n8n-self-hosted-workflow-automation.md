@@ -93,8 +93,8 @@ N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 N8N_ENCRYPTION_KEY=your_generated_random_32char_key_xxxx
 ```
 
-> [!NOTE]
 > `N8N_ENCRYPTION_KEY`는 노드에 저장되는 인증 정보(API Key, OAuth Token)를 암호화하는 핵심 키입니다. 설정 후 변경하면 기존 저장된 자격 증명을 복호화할 수 없으므로 안전한 곳에 별도로 백업해 두어야 합니다.
+{: .prompt-info }
 
 ### 3.2 Docker Compose 파일 작성 (`docker-compose.yml`)
 
@@ -181,8 +181,8 @@ proxy_set_header Connection "upgrade";
 proxy_set_header Host $host;
 ```
 
-> [!WARNING]
 > 만약 `WEBHOOK_URL` 환경 변수를 지정하지 않거나 리버스 프록시의 HTTPS 도메인과 일치시키지 않으면, Webhook 노드가 내부 Docker IP(`http://localhost:5678`)로 엔드포인트를 노출하여 GitHub이나 슬랙 등 외부 서비스에서 호출 시 `Connection Refused` 에러가 발생합니다.
+{: .prompt-warning }
 
 ---
 

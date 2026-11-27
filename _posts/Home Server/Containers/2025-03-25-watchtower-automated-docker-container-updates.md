@@ -87,7 +87,6 @@ DISCORD_WEBHOOK_URL=discord://your-masked-token-xxxx@123456789012345678
 # TELEGRAM_WEBHOOK_URL=telegram://123456789:ABCdef-masked-token@telegram?channels=-100123456789
 ```
 
-> [!TIP]
 > Watchtower는 다양한 메신저 알림을 위해 [Shoutrrr](https://containrrr.dev/shoutrrr/) 라이브러리를 내장하고 있습니다. Discord 웹훅 URL(`https://discord.com/api/webhooks/12345/token`)을 Shoutrrr 형식으로 변환할 때는 `discord://token@12345` 형태로 프로토콜과 인자 순서를 변경해야 합니다.
 {: .prompt-tip }
 

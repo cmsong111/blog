@@ -46,10 +46,10 @@ order-service     latest    a8c91d4e21b0   1 minute ago    748MB
 
 이러한 비대한 이미지는 다음과 같은 실무 문제를 야기합니다.
 
-> [!WARNING]
 > - **CI/CD 파이프라인 지연**: 700MB가 넘는 이미지를 GitHub Actions나 Jenkins 러너에서 빌드하고, AWS ECR 등의 원격 레지스트리로 푸시/풀하는 과정에서 네트워크 I/O 병목이 발생합니다.
 > - **오토스케일링(HPA) 반응 지연**: 트래픽 급증 시 쿠버네티스 노드가 무거운 이미지를 다운로드하느라 파드(Pod) 기동 완료까지 불필요한 대기 시간이 소요됩니다.
 > - **보안 취약점 표면(Attack Surface) 극대화**: 패키지 매니저, 컴파일러, 셸 유틸리티가 남아 있어 Trivy나 Snyk 같은 취약점 점검 도구 실행 시 대량의 CVE(High/Critical)가 검출됩니다.
+{: .prompt-warning }
 
 ---
 

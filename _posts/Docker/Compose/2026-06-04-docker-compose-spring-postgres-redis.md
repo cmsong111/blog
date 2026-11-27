@@ -77,7 +77,6 @@ REDIS_HOST_PORT=6379
 REDIS_PASSWORD=local_redis_secret!
 ```
 
-> [!WARNING]
 > `.env` 파일은 실제 동작에 쓰이는 민감 정보를 담을 수 있으므로 반드시 `.gitignore`에 등록해야 합니다. 신규 작업자는 `cp .env.example .env` 명령어로 복사한 후 로컬 환경에 맞게 조정하도록 유도합니다.
 {: .prompt-warning }
 
@@ -202,7 +201,6 @@ spring:
           min-idle: 2
 ```
 
-> [!TIP]
 > Spring Boot 3.1 이상에서는 `spring-boot-docker-compose` 모듈을 의존성에 추가할 수도 있습니다. 이 경우 애플리케이션 시작 시 IDE가 `compose.yaml`을 감지하여 자동으로 컨테이너를 올리고, 데이터소스 URL과 비밀번호를 스프링 컨텍스트에 자동 바인딩(Service Connection)해 주는 편의 기능을 제공합니다.
 {: .prompt-tip }
 
@@ -263,7 +261,6 @@ docker compose down -v
 docker compose up -d
 ```
 
-> [!CAUTION]
 > `docker compose down -v`는 네임드 볼륨(`local_postgres_data`, `local_redis_data`)을 디스크에서 영구적으로 삭제합니다. 보존해야 하는 로컬 테스트 데이터가 있다면 사전에 덤프를 백업해 두어야 합니다.
 {: .prompt-warning }
 

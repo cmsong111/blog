@@ -214,8 +214,8 @@ bash scripts/preflight_check.sh
 - 임의로 `git push --force` 명령을 실행하는 것은 엄격히 금지됩니다.
 ```
 
-> [!TIP]
 > `SKILL.md` 내부에 사용 금지 규칙(Constraints)과 명시적 롤백 명령어(`git tag -d`)를 정의해 두면, 예외 상황 발생 시 에이전트가 패닉 상태에 빠져 파괴적인 명령어(`rm -rf`, `--force`)를 실행하는 위험을 방지할 수 있습니다.
+{: .prompt-tip }
 
 ---
 

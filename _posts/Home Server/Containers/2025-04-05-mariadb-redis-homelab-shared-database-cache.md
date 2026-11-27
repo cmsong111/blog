@@ -141,7 +141,6 @@ long_query_time = 2
 lower_case_table_names = 1
 ```
 
-> [!TIP]
 > `innodb_flush_log_at_trx_commit = 2` 설정은 트랜잭션 커밋마다 매번 디스크 플러시를 수행하지 않고 초당 1회씩 플러시하도록 하여 쓰기 I/O 성능을 비약적으로 높입니다. 홈서버의 SSD 수명을 보호하면서도 전원 차단 시 최대 1초 내외의 트랜잭션 손실만 감수하는 최적의 실무 절충점입니다.
 {: .prompt-tip }
 

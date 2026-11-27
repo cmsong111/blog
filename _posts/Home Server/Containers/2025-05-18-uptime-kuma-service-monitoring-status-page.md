@@ -100,8 +100,8 @@ networks:
     driver: bridge
 ```
 
-> [!CAUTION]
 > `/var/run/docker.sock`은 호스트의 도커 데몬을 제어할 수 있는 루트 권한 통로입니다. 보안 사고를 방지하기 위해 반드시 읽기 전용 플래그(`:ro`)를 붙이고, 컨테이너에 `no-new-privileges:true` 보안 옵션을 명시해야 합니다.
+{: .prompt-danger }
 
 컨테이너를 백그라운드로 실행합니다:
 

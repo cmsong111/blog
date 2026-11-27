@@ -104,9 +104,9 @@ app:
 
 Spring AI 2.0.1의 `RedisChatMemoryRepository`를 구성할 때 반드시 해결해야 하는 중요한 트러블슈팅 포인트가 있습니다.
 
-> [!WARNING]
 > `RedisChatMemoryRepository`는 RediSearch 모듈을 사용하여 메시지를 인덱싱합니다. `metadataFields`를 명시적으로 지정하지 않으면 기본적으로 `$.metadata.*` 전체가 `TEXT` 인덱스로 등록됩니다.  
 > 그러나 **Google Gemini의 응답(`ASSISTANT`) 메시지 메타데이터에는 문자열 외의 객체/불리언 타입(예: finishReason, tokenUsage 등)이 포함**되어 있어 RediSearch 인덱싱 에러가 발생하며, 데이터는 Redis에 저장되지만 `findByConversationId`로 조회되지 않는 현상이 발생합니다.
+{: .prompt-warning }
 
 이를 해결하기 위해 인덱싱 대상 메타데이터 필드를 `messageType`만 `tag`로 선언하여 등록합니다:
 
