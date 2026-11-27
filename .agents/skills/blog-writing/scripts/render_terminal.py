@@ -61,17 +61,30 @@ TAG_PATTERN = re.compile(
 
 
 def find_font(size):
+    win_fonts = os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts")
+    local_win_fonts = os.path.join(
+        os.environ.get("LOCALAPPDATA", ""), "Microsoft", "Windows", "Fonts"
+    )
     candidates = (
         glob.glob(os.path.expanduser("~/Library/Fonts/D2Coding*.ttc"))
         + glob.glob(os.path.expanduser("~/Library/Fonts/D2Coding*.ttf"))
+        + glob.glob(os.path.join(local_win_fonts, "D2Coding*.tt[fc]"))
+        + glob.glob(os.path.join(win_fonts, "D2Coding*.tt[fc]"))
         + [
+            # Windows
+            os.path.join(win_fonts, "malgun.ttf"),
+            os.path.join(win_fonts, "consola.ttf"),
+            # macOS
             "/System/Library/Fonts/Menlo.ttc",
             "/System/Library/Fonts/AppleSDGothicNeo.ttc",
+            # Linux / Dev Container
+            "/usr/share/fonts/truetype/d2coding/D2Coding.ttf",
+            "/usr/share/fonts/truetype/nanum/NanumGothicCoding.ttf",
             "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
         ]
     )
     for path in candidates:
-        if os.path.exists(path):
+        if path and os.path.exists(path):
             try:
                 return ImageFont.truetype(path, size)
             except OSError:

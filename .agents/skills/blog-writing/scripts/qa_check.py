@@ -7,8 +7,8 @@
 2. 제목 금지어 (어그로/과장 표현) 검사
 3. 파일명 규칙, 미래 날짜, 퍼머링크·태그·중분류 카테고리 슬러그 중복 검사
 4. 본문 분량 (코드·Mermaid 제외 순수 본문 < 600자 Thin Content 경고)
-5. Mermaid 문법 (노드/엣지 특수문자 따옴표, 스타일링 HTML 태그, mermaid: true 일치)
-6. 이미지 무결성 (깨진 로컬 이미지, 이중 슬래시 /assets//, 외부 핫링크, >1MB 대용량, 고아 이미지)
+5. Mermaid 및 Chart.js 문법 (노드/엣지 특수문자 따옴표, 스타일링 HTML 태그, mermaid/chart flag 일치, JSON 유효성)
+6. 이미지 무결성 (깨진 로컬 이미지, 빈 alt, 이중 슬래시 /assets//, 외부 핫링크, >1MB 대용량, 고아 이미지)
 7. 내부 포스트 링크 (/posts/<slug>/) 깨짐 검사
 8. 보안 (API 키 / 토큰 패턴 노출 검사) 및 미이스케이프 Liquid 구문({{ }}, 코드 블록 내 {% %}) 검사
 9. 설정 검증 (_config.yml / workflow에 AGENTS.md 제외 여부)
@@ -19,6 +19,7 @@
 
 import datetime
 import glob
+import json
 import os
 import re
 import sys
@@ -147,6 +148,8 @@ def main():
             errors["missing_title"].append(p)
         if not desc:
             errors["missing_description"].append(p)
+        elif len(desc) < 50 or len(desc) > 170:
+            warnings["description_length_out_of_range"].append(f"{p} ({len(desc)}자)")
         if not date_val:
             errors["missing_date"].append(p)
         if not tags_val and not re.search(r"^tags:\s*\n\s*-", fm, re.M):
@@ -202,11 +205,32 @@ def main():
                     ):
                         errors["mermaid_unquoted_edge"].append(f"{p}: |{em}|")
 
+        # 4b. Chart.js block checks (```json ... ``` followed by {: .chart-js })
+        chart_blocks = re.findall(
+            r"```json\s*\n(.*?)\n```\s*\n\{:\s*\.chart-js\s*\}", body, re.DOTALL
+        )
+        fm_chart = bool(re.search(r"^chart:\s*true\b", fm, re.M))
+        if chart_blocks and not fm_chart:
+            errors["chart_missing_fm_flag"].append(p)
+        if not chart_blocks and fm_chart:
+            warnings["chart_unused_fm_flag"].append(p)
+        for c_idx, c_block in enumerate(chart_blocks, 1):
+            try:
+                parsed = json.loads(c_block)
+                if not isinstance(parsed, dict) or "type" not in parsed or "data" not in parsed:
+                    errors["invalid_chart_json"].append(
+                        f"{p} (chart #{c_idx}: type/data 필드 누락)"
+                    )
+            except json.JSONDecodeError as exc:
+                errors["invalid_chart_json"].append(f"{p} (chart #{c_idx}: {exc.msg})")
+
         # 5. Image checks
         if "/assets//" in content:
             errors["double_slash_assets_path"].append(p)
 
-        for im in re.findall(r"!\[[^\]]*\]\((/assets/[^)\s]+)\)", body):
+        for alt_text, im in re.findall(r"!\[([^\]]*)\]\((/assets/[^)\s]+)\)", body):
+            if not alt_text.strip():
+                warnings["empty_image_alt"].append(f"{p}: {im}")
             clean = im.lstrip("/").split("?")[0].split("#")[0]
             all_img_refs.add(clean)
             if not os.path.exists(clean):

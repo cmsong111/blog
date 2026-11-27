@@ -10,27 +10,31 @@ description: >-
 
 블로그 포스트 작성·수정·최신화·정기 점검 시 반드시 아래 참조 문서를 확인하고, 작업 종료 전 내장 QA 스크립트(`scripts/qa_check.py`)를 실행해 오류 0건을 검증합니다.
 
-- **톤앤매너·템플릿·심화 집필 체크리스트**: [`references/writing-tone.md`](./references/writing-tone.md)
+- **톤앤매너·템플릿 3종·심화 집필 체크리스트**: [`references/writing-tone.md`](./references/writing-tone.md)
+- **표준 태그 사전 (103개 SSOT)**: [`references/tag-taxonomy.md`](./references/tag-taxonomy.md)
 - **블로그 운영·애드센스·정기 유지보수 플레이북**: [`references/operations-guide.md`](./references/operations-guide.md)
 - **자동 QA 검증 스크립트**: [`scripts/qa_check.py`](./scripts/qa_check.py)
 - **터미널 실행 결과 캡처 생성기**: [`scripts/render_terminal.py`](./scripts/render_terminal.py)
+- **웹 캡처 부분 파싱·강조·마스킹 후처리기**: [`scripts/annotate_screenshot.py`](./scripts/annotate_screenshot.py)
 
 ---
 
 ## 1. 작업 유형별 표준 워크플로우
 
 ### A. 신규 포스트 작성 (단편)
-1. **톤앤매너 장착**: [`references/writing-tone.md`](./references/writing-tone.md)를 읽고 경어체(`~합니다/~습니다`), 담백한 제목 원칙, 2대 템플릿(트러블슈팅 / 튜토리얼) 확인
+1. **톤앤매너 장착**: [`references/writing-tone.md`](./references/writing-tone.md)를 읽고 경어체(`~합니다/~습니다`), 담백한 제목 원칙, 3대 템플릿(트러블슈팅 / 튜토리얼 / 개념·아키텍처 심화) 확인
 2. **공식 문서 팩트체크**: 추측 작성 금지. 최신 공식 문서·릴리즈 노트 기준으로 버전과 아티팩트명·설정 키를 검증
-3. **경로 및 날짜 결정**:
-   - `_posts/{대분류}/{중분류}/YYYY-MM-DD-kebab-case-slug.md`
+3. **경로 · 날짜 · 태그 결정**:
+   - `_posts/{대분류}/{중분류}/YYYY-MM-DD-kebab-case-slug.md` (단, 서로 다른 대분류 아래 동일 중분류명 금지)
    - **미래 날짜 금지** (`date <= 오늘`, Jekyll `future: false` 기본값)
    - **퍼머링크 슬러그 중복 금지** (전역 퍼머링크가 `/posts/:title/`이므로 파일명의 `slug`는 저장소 전체에서 유일해야 함)
+   - **태그**: [`references/tag-taxonomy.md`](./references/tag-taxonomy.md)의 표준 103개 소문자 kebab-case 태그에서 3~5개 우선 선택
 4. **구조 설계 (`<h2>` 4~7개 권장)**:
    - 본문 수동 인아티클 광고(`assets/js/adsense-layout.js`)가 직계 `<h2>` 4개 이상일 때 45% 지점, 8개 이상일 때 78% 지점에 자동 삽입되므로 **`<h2>` 섹션을 4~7개로 균형 있게 나누면 목차(TOC)와 광고 배치가 모두 깔끔하게 동작**합니다.
 5. **분량 및 품질 기준**:
    - **코드 블록·Mermaid 제외 순수 본문 1,500 ~ 3,500자 내외** (5분 읽기 분량)
-   - `Why / Trade-off` + 내부 동작 원리(One Layer Deeper) + 복붙 가능한 최소 재현 코드 + 운영 함정(Edge Case) 포함
+   - 상황별 선택 기준표(Decision Matrix) + "언제 쓰지 말아야 하는가" + 내부 동작 원리(One Layer Deeper) + 복붙 가능한 최소 재현 코드/진단 명령 + 운영 함정(Edge Case) + 마무리 체크리스트 포함
+   - 본문 문맥상 기존 블로그 글(`/posts/<slug>/`)과 직결되는 지점이 있다면 **인라인 내부 링크 1~2개**를 자연스럽게 연결 (단, 상·하단 이전/다음 시리즈 네비게이션 블록은 금지)
    - 600자 미만의 메모/링크 1줄 초안은 절대 `_posts/`에 두지 않고 `_drafts/`에 보관 (Thin Content 방지)
 6. **QA 실행 및 보고**: `python3 .agents/skills/blog-writing/scripts/qa_check.py` 실행 후 `AGENTS.md` 커밋 컨벤션(`post:` / `edit:` 등 영문 접두사 + 한글 요약)으로 커밋 명령어만 제시 (`git commit`/`push` 금지)
 
@@ -70,6 +74,7 @@ description: "검색엔진·SNS 카드용 핵심 요약 1~2문장 (80~155자 권
 date: YYYY-MM-DD HH:MM:SS +0900
 tags: [spring-boot, kotlin, jpa, redis] # 100% 영문 소문자 kebab-case, 글당 3~5개 (동의어·약어 중복 금지, 기존 표준 태그 우선 재사용)
 mermaid: true # 본문에 mermaid 코드 블록이 있을 때만 선언 (없으면 생략)
+chart: true # 본문에 {: .chart-js } Chart.js 블록이 있을 때만 선언 (없으면 생략)
 image:
   path: /assets/images/YYYY-MM-DD/thumbnail.png # 로컬 저장 시 프로덕션 jsDelivr CDN 자동 적용
   alt: 대표 썸네일 설명
@@ -80,13 +85,38 @@ image:
 
 ---
 
-## 3. 이미지 · CDN · 보안 규칙
+## 3. 시각 자료 · 캡처 · JS 차트 · 보안 규칙
 
 1. **로컬 내재화 우선 (외부 핫링크 금지)**: `velog.velcdn.com` 등 외부 호스팅 이미지에 의존하지 말고 `assets/images/YYYY-MM-DD/`에 저장해 `/assets/images/...` 경로로 참조합니다(이중 슬래시 `/assets//` 주의). 프로덕션 배포 시 `_config_prod.yml`의 jsDelivr CDN이 자동 적용됩니다.
-2. **용량 관리**: 단일 이미지 파일은 **1MB 이하**를 유지합니다(필요 시 PNG→WebP/JPG 변환 또는 리사이즈).
-3. **시각 자료 유형별 제작 파이프라인 (코드 캡처 금지)**:
-   - **소스 코드·YAML·설정**: 반드시 복붙 가능한 마크다운 백틱 코드 블록으로 작성합니다(에디터 스크린샷 금지).
-   - **터미널 실행 결과(빌드·테스트·벤치마크·CLI 출력)**: 내장 스크립트 `scripts/render_terminal.py`로 일관된 다크 macOS 터미널 PNG를 생성해 `assets/images/YYYY-MM-DD/`에 저장합니다(이모지 대신 `✓`, `→`, `●` 기호 사용):
+2. **해상도 · 용량 · 캡션 기준**:
+   - Chirpy 본문 폭(2x 레티나) 기준 **가로 1,200~1,600px**, WebP 또는 최적화 PNG **100~300KB**(단일 파일 **1MB 이하** 필수) 권장
+   - 모든 본문 이미지에는 구체적 `alt`를 작성하고, 바로 아래 `_그림 1. ..._` 한 줄 캡션을 붙여 스캐닝 가독성을 높입니다.
+3. **시각 자료 유형별 의사결정 표 (무엇을 캡처하고 어떻게 만들 것인가)**:
+
+| 유형 | 적합한 장면 | 표준 제작 도구 | 금지 사항 |
+| :--- | :--- | :--- | :--- |
+| **실제 웹 캡처** | Before/After 변화(DevTools·Lighthouse·Grafana·모바일 390px), 클릭 위치가 헷갈리는 클라우드/콘솔 UI | Antigravity 사이드바 `browser` 서브에이전트 + `scripts/annotate_screenshot.py` | 여백 많은 전체 화면, 코드·YAML 스크린샷 |
+| **터미널 PNG** | 테스트 통과, `curl` 응답, `ss`/`jcmd`/`EXPLAIN` 실제 출력 증거 | `scripts/render_terminal.py` (Tokyo Night 다크 테마, Win/Mac/Linux 폰트 대응) | 30줄 이상 긴 로그 통째로 이미지화(핵심 5~12줄만) |
+| **JS 수치 차트** | 벤치마크·전후 수치 비교(p99 지연시간, 번들 크기, 메모리 사용량) | 단순 1시리즈: 내장 `mermaid@11` `xychart-beta` / 다중 시리즈·인터랙티브: `chart: true` + `{: .chart-js }` | 의미 없는 AI 감성 배너·스톡 이미지 남발 |
+| **구조 다이어그램** | 요청 흐름·상태 전이·아키텍처 | 4~6노드 세로 흐름: Mermaid `flowchart TD` / 넓은 메모리 맵·계층: 고정 비율 SVG/PNG | 모바일에서 글자가 뭉개지는 대형 `flowchart LR` |
+
+4. **Antigravity 사이드바 브라우저 캡처 & 부분 파싱 4단계 파이프라인**:
+   - **1단계 (사이드바 웹뷰 열기)**: Antigravity 내장 `browser` 서브에이전트로 대상 URL을 열고 뷰포트(데스크톱 `1280×800` 또는 모바일 `390×844`)와 로딩 완료를 확인합니다.
+   - **2단계 (1차 부분 파싱 — DOM 요소 단위 캡처 우선)**: 가능한 경우 특정 CSS 셀렉터/컴포넌트 영역만 지정해 바로 캡처하고, 페이지 전체 문맥이 필요하면 뷰포트 단위로 캡처합니다.
+   - **3단계 (2차 부분 파싱 & 후처리 — `scripts/annotate_screenshot.py`)**: 원본 캡처에서 핵심 UI 영역만 정밀 크롭(`--crop` / `--crop-pct` / `--auto-trim`), 클릭 지점 강조 박스(`--box`)·번호 배지(`--badge`), 민감정보 블러/마스킹(`--blur` / `--mask`)을 적용해 `assets/images/YYYY-MM-DD/<descriptive-name>.webp`(또는 `.png`)로 저장합니다.
+     ```bash
+     python3 .agents/skills/blog-writing/scripts/annotate_screenshot.py \
+       --in /path/to/raw-capture.png \
+       --out assets/images/YYYY-MM-DD/console-setting.webp \
+       --crop-pct 15,10,70,65 \
+       --box 420,180,260,48 \
+       --badge 405,180,1 \
+       --blur 60,40,240,28 \
+       --max-width 1400
+     ```
+   - **4단계 (보안 재확인)**: API 키(`AIza...`, `sk-...`, `ghp_...`), 이메일, 계정 ID가 완전히 가려졌는지 `read_file`로 최종 이미지를 확인합니다(코드에도 환경 변수 `${API_KEY}` 표기).
+5. **터미널 실행 결과 캡처 (`scripts/render_terminal.py`)**:
+   - 이모지 대신 `✓`, `→`, `●` 기호를 사용하고 핵심 5~12줄만 깔끔하게 렌더링합니다:
      ```bash
      cat << 'EOF' | python3 .agents/skills/blog-writing/scripts/render_terminal.py \
        --title "zsh — ./gradlew test" \
@@ -96,13 +126,39 @@ image:
      [green]BUILD SUCCESSFUL[/] in 1s
      EOF
      ```
-   - **실제 웹 화면(대시보드·Swagger UI·콘솔·반응형 비교)**: 사용 가능한 브라우저 도구(Antigravity 내장 `browser` 서브에이전트, Chrome DevTools MCP, `aside` MCP 등)로 페이지를 열어 다음 절차로 캡처합니다:
-     1. 목적에 맞는 뷰포트 설정(데스크톱 `1280×800` 또는 모바일 `390×844`) 및 모든 이미지·차트 로딩 완료 확인
-     2. 불필요한 여백·사이드바를 제외하고 핵심 UI 요소만 **타이트 크롭(Tight Crop)** 캡처
-     3. API 키(`AIza...`, `sk-...`, 토큰), 이메일, 계정 ID 등 민감 정보가 노출된 경우 저장 전 반드시 **모자이크/블러/블랙박스 마스킹** 처리(Pillow 등 활용)
-     4. `assets/images/YYYY-MM-DD/<descriptive-name>.png`에 저장하고 `/assets/images/...`로 링크(1MB 이하 유지)
-4. **타이트 크롭 & 민감 정보 마스킹**: 불필요한 브라우저 여백을 제거하고, API 키(`AIza...`, `sk-...`, `ghp_...`)·이메일·비밀번호·토큰은 이미지에서 반드시 모자이크/블러 처리하며 코드에도 환경 변수(`${API_KEY}`) 형태로 표기합니다.
-5. **외부 참고 링크**: 단순 URL 나열 대신 `{% linkpreview "URL" %}` 태그를 적극 활용합니다.
+6. **문서 내 JS 차트 삽입 규칙 (2가지 방식)**:
+   - **방식 A — 내장 Mermaid `xychart-beta` (추가 JS 0바이트, 단순 1시리즈 막대/선 차트 권장)**:
+     - Front Matter에 `mermaid: true`만 선언(Chirpy v7.6의 `mermaid@11`이 기본 지원).
+     ````markdown
+     ```mermaid
+     xychart-beta
+         title "p99 응답 지연시간 비교 (ms)"
+         x-axis ["G1GC", "Generational ZGC"]
+         y-axis "Latency (ms)" 0 --> 200
+         bar [145, 4]
+     ```
+     ````
+   - **방식 B — 조건부 Chart.js 4 (다중 시리즈·도넛·호버 툴팁 등 인터랙티브 차트)**:
+     - Front Matter에 `chart: true`를 선언하면 `_includes/metadata-hook.html`이 해당 글에서만 Chart.js 4와 `assets/js/chart-renderer.js`(다크/라이트 모드 자동 동기화)를 로드합니다.
+     - 본문에는 유효한 Chart.js JSON 설정을 ` ```json ` 코드 블록으로 작성하고 직후 줄에 `{: .chart-js }`를 붙입니다:
+     ````markdown
+     ```json
+     {
+       "type": "bar",
+       "data": {
+         "labels": ["HTTP/1.1", "HTTP/2", "HTTP/3"],
+         "datasets": [
+           { "label": "초기 로딩 (ms)", "data": [820, 460, 310], "backgroundColor": "#7aa2f7" }
+         ]
+       },
+       "options": {
+         "plugins": { "title": { "display": true, "text": "프로토콜별 초기 페이지 로딩 비교" } }
+       }
+     }
+     ```
+     {: .chart-js }
+     ````
+7. **외부 참고 링크**: 단순 URL 나열 대신 `{% linkpreview "URL" %}` 태그를 적극 활용합니다.
 
 ---
 
