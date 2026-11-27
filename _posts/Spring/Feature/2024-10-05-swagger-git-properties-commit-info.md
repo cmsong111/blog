@@ -131,7 +131,7 @@ class SwaggerConfig(
             termsOfService = ""
             contact = Contact().apply {
                 name = "Namju Kim"
-                email = "cmsong111@gmail.com"
+                email = "user@example.com"
             }
             version = gitProperties.get("build.version")
         }
@@ -157,7 +157,7 @@ IDE에서 `processResources` 없이 테스트를 실행하면 `git.properties`�
 # src/test/resources/git.properties
 git.branch=File-Upload
 git.build.host=MacBook-Pro.local
-git.build.user.email=cmsong111@naver.com
+git.build.user.email=user@example.com
 git.build.user.name=Namju Kim
 git.build.version=0.0.1-SNAPSHOT
 git.closest.tag.commit.count=
@@ -168,7 +168,7 @@ git.commit.id.describe=
 git.commit.message.full=cicd\: lint\n
 git.commit.message.short=cicd\: lint
 git.commit.time=2025-03-09T22\:23\:32+0900
-git.commit.user.email=cmsong111@naver.com
+git.commit.user.email=user@example.com
 git.commit.user.name=Namju Kim
 git.dirty=true
 git.remote.origin.url=https\://github.com/cmsong111/Wanted-PreOnBoarding-Backend-Challenge.git

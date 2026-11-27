@@ -1,11 +1,14 @@
 ---
 title: 스프링 AI MCP Server 사용해보기
-description: Spring AI의 Model Control Plane(MCP)을 STDIO 형식으로 구성해 간단한 예제 서버를 만들어보는 방법을 정리합니다.
+description: Spring AI의 Model Context Protocol(MCP) 서버를 STDIO 형식으로 구성해 간단한 예제 서버를 만들어보는 방법을 정리합니다.
 date: 2025-11-03 12:00:00 +0900
 tags: [spring-boot, spring-ai, mcp, ai]
 ---
 
-> Spring AI의 MCP(Model Control Plane)를 STDIO 방식으로 구성해 간단한 도구(툴)들을 노출하는 예제를 만들어봤습니다. 이 글에서는 주요 코드와 설정 파일, 빌드 및 실행 방법, 결과 확인 스크린샷을 짧게 정리합니다.
+> STDIO와 Streamable HTTP 전송 방식을 모두 다루는 최신 정리는 [Spring Boot 애플리케이션의 MCP Server(STDIO / Streamable HTTP) 구축](/posts/spring-ai-mcp-server-stdio-webmvc/) 글을 참고해 주세요.
+{: .prompt-info }
+
+> Spring AI의 MCP(Model Context Protocol) 서버를 STDIO 방식으로 구성해 간단한 도구(툴)들을 노출하는 예제를 만들어봤습니다. 이 글에서는 주요 코드와 설정 파일, 빌드 및 실행 방법, 결과 확인 스크린샷을 짧게 정리합니다.
 
 ## 준비 사항
 - JDK, Gradle 설정이 된 Spring Boot 프로젝트
