@@ -4,6 +4,7 @@ description: "JVM Heap·Metaspace·Thread Stack·Direct Buffer·CodeCache 메모
 date: 2024-12-09 12:00:00 +0900
 tags: [java, performance, troubleshooting, docker]
 mermaid: true
+chart: true
 ---
 
 > Docker 컨테이너에 메모리 1GB를 할당하고 힙을 800MB로 설정했을 때 JVM 예외 없이 `OOMKilled(137)`가 발생하는 원인은 힙 바깥의 네이티브 메모리에 있습니다. 이 글에서는 HotSpot JVM 런타임 메모리 지도, 주요 `OutOfMemoryError` 유형별 진단 명령, 컨테이너 힙 산정 기준과 운영 함정을 정리합니다.
@@ -33,6 +34,37 @@ flowchart TD
 - `Total RSS ≈ Heap + Metaspace + (Thread Stack × 스레드 수) + CodeCache + Direct ByteBuffer + GC·네이티브 오버헤드`
 
 Spring Boot 앱이 힙을 800MB까지 채운 상태에서 Metaspace 120MB, 스레드 150개의 커밋 스택 약 60MB, CodeCache 80MB, Direct Buffer 64MB, G1GC 내부 오버헤드 80MB가 더해지면 총 RSS는 1,200MB를 넘깁니다. 힙은 아직 여유가 있더라도 컨테이너 한계(1,024MB)를 초과하는 순간 커널이 `SIGKILL(9)`로 프로세스를 즉시 종료합니다(`128 + 9 = 137`).
+
+```json
+{
+  "type": "doughnut",
+  "data": {
+    "labels": [
+      "Heap (800MB)",
+      "Metaspace (120MB)",
+      "CodeCache (80MB)",
+      "G1GC 오버헤드 (80MB)",
+      "Direct Buffer (64MB)",
+      "Thread Stack (60MB)"
+    ],
+    "datasets": [
+      {
+        "label": "메모리 점유 (MB)",
+        "data": [800, 120, 80, 80, 64, 60]
+      }
+    ]
+  },
+  "options": {
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "1GB 컨테이너에서 -Xmx800m 설정 시 전체 RSS 1,204MB 초과 구성"
+      }
+    }
+  }
+}
+```
+{: .chart-js }
 
 ## OutOfMemoryError 유형별 원인과 진단 도구
 

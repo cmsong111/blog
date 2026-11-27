@@ -4,6 +4,7 @@ description: "Java 9에서 도입된 JSR-376 모듈 시스템(JPMS)의 requires�
 date: 2026-11-16 09:00:00 +0900
 tags: [java, jsr, architecture, docker, performance]
 mermaid: true
+chart: true
 ---
 
 > Java 9에서 도입된 JSR-376(JPMS)의 설계 의도와 `module-info.java` 지시자를 정리합니다. Split Package 충돌과 리플렉션(`opens`) 원리를 짚고, `jdeps`와 `jlink`로 Docker 자바 런타임 이미지를 경량화하는 방법을 살펴봅니다.
@@ -134,6 +135,47 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 | `eclipse-temurin:21-jdk-jammy` | 약 430 MB | 컴파일러·도구 전체 포함 (운영 비권장) |
 | `eclipse-temurin:21-jre-jammy` | 약 270 MB | 전체 표준 JDK 모듈 포함 |
 | `debian:bookworm-slim` + `jlink` JRE | **약 120~140 MB** | 필요 모듈만 포함, 보안 공격 표면 최소화 |
+
+```json
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "eclipse-temurin:21-jdk-jammy",
+      "eclipse-temurin:21-jre-jammy",
+      "debian:bookworm-slim + jlink JRE"
+    ],
+    "datasets": [
+      {
+        "label": "런타임 이미지 크기 (MB)",
+        "data": [430, 270, 130]
+      }
+    ]
+  },
+  "options": {
+    "indexAxis": "y",
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "Java 21 컨테이너 베이스 이미지별 용량 비교 (MB)"
+      },
+      "legend": {
+        "display": false
+      }
+    },
+    "scales": {
+      "x": {
+        "beginAtZero": true,
+        "title": {
+          "display": true,
+          "text": "대략적인 크기 (MB)"
+        }
+      }
+    }
+  }
+}
+```
+{: .chart-js }
 
 ## 실무 운영 함정과 주의사항
 

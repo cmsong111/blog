@@ -4,6 +4,7 @@ description: "스프링 부트 애플리케이션을 Docker 멀티스테이지 �
 date: 2026-06-01 12:00:00 +0900
 tags: [docker, spring-boot, performance]
 mermaid: true
+chart: true
 ---
 
 > 단 한 줄의 비즈니스 코드 수정 때문에 매번 700MB가 넘는 컨테이너 이미지를 빌드하고 레지스트리에 푸시하고 계신가요? 멀티스테이지 빌드와 Spring Boot Layered JAR를 결합하여 이미지 용량을 80% 이상 줄이고, CI/CD 배포 속도와 컨테이너 런타임 보안을 동시에 확보한 최적화 과정을 정리합니다.
@@ -246,6 +247,47 @@ Fat JAR 형태의 `java -jar application.jar` 대신 압축이 해제된 디렉�
 | **단일 단계 빌드** | `eclipse-temurin:21-jdk` | JDK 21 전체, Gradle, 소스 코드, 캐시, Fat JAR | **748 MB** | 기준 |
 | **단순 멀티스테이지** | `eclipse-temurin:21-jre-alpine` | JRE 21 Alpine, 단일 Fat JAR | **193 MB** | 74.2% 감축 |
 | **레이어드 멀티스테이지** | `eclipse-temurin:21-jre-alpine` | JRE 21 Alpine, 4단 분리된 Layered 클래스 | **142 MB** | **81.0% 감축** |
+
+```json
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "단일 단계 빌드 (JDK 21)",
+      "단순 멀티스테이지 (JRE Alpine)",
+      "레이어드 멀티스테이지 (JRE Alpine)"
+    ],
+    "datasets": [
+      {
+        "label": "최종 이미지 크기 (MB)",
+        "data": [748, 193, 142]
+      }
+    ]
+  },
+  "options": {
+    "indexAxis": "y",
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "Docker 빌드 방식별 Spring Boot 최종 이미지 용량 비교 (MB)"
+      },
+      "legend": {
+        "display": false
+      }
+    },
+    "scales": {
+      "x": {
+        "beginAtZero": true,
+        "title": {
+          "display": true,
+          "text": "이미지 크기 (MB)"
+        }
+      }
+    }
+  }
+}
+```
+{: .chart-js }
 
 ```bash
 $ docker images

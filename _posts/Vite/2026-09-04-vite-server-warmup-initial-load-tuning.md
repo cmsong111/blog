@@ -4,6 +4,7 @@ description: "Vite 개발 서버의 On-demand 변환 특성으로 인해 발생�
 date: 2026-09-04 12:00:00 +0900
 tags: [vite, dev-server, performance, dx]
 mermaid: true
+chart: true
 ---
 
 > Vite는 개발 서버 기동 시 전체 애플리케이션을 번들링하지 않고 브라우저의 요청에 따라 필요한 파일만 실시간으로 변환(On-demand Transform)함으로써 100~200ms 수준의 경이로운 시작 속도를 제공합니다. 하지만 대규모 모듈을 보유한 프로젝트에서는 브라우저가 첫 페이지를 열 때 수백 개의 ESM 파일이 연쇄적으로 요청(Waterfall)되면서 초기 화면 로딩이 수 초간 멈칫하는 '콜드 스타트 지연' 현상이 발생합니다. 본 글에서는 Vite 5.0에 도입된 `server.warmup` 옵션의 동작 원리를 분석하고, 핵심 진입 파일들을 선별하여 사전 컴파일함으로써 첫 페이지 체감 속도를 극대화하는 실무 튜닝 기법을 정리합니다.
@@ -136,6 +137,48 @@ Warmup 옵션을 적용하기 전과 후의 실제 성능 차이를 검증하기
 | **첫 페이지 TTFB (Time to First Byte)** | 1,420 ms | 135 ms | **90.5% 단축** |
 | **모듈 변환 블로킹 시간 (Transform Blocking)** | 1,280 ms | 42 ms (캐시 히트) | **96.7% 단축** |
 | **DOMContentLoaded 완료 시점** | 1,650 ms | 198 ms | **88.0% 단축** |
+
+```json
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "Cold Start",
+      "첫 페이지 TTFB",
+      "모듈 변환 블로킹",
+      "DOMContentLoaded"
+    ],
+    "datasets": [
+      {
+        "label": "Warmup 적용 전 (ms)",
+        "data": [158, 1420, 1280, 1650]
+      },
+      {
+        "label": "Warmup 적용 후 (ms)",
+        "data": [162, 135, 42, 198]
+      }
+    ]
+  },
+  "options": {
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "Vite server.warmup 적용 전후 초기 로딩 지표 비교 (ms)"
+      }
+    },
+    "scales": {
+      "y": {
+        "beginAtZero": true,
+        "title": {
+          "display": true,
+          "text": "소요 시간 (ms)"
+        }
+      }
+    }
+  }
+}
+```
+{: .chart-js }
 
 서버 시작 시간은 단 4ms 늘어났을 뿐이지만, 브라우저의 첫 페이지 렌더링 완료 시간은 1.65초에서 0.19초로 **약 88% 단축**되는 비약적인 개선 효과를 확인할 수 있습니다.
 

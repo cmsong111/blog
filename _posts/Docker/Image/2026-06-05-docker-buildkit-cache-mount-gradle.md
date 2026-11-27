@@ -4,6 +4,7 @@ description: "Docker BuildKit의 캐시 마운트(--mount=type=cache) 기능을 
 date: 2026-06-05 12:00:00 +0900
 tags: [docker, caching, gradle, ci-cd]
 mermaid: true
+chart: true
 ---
 
 > 소스 코드 단 한 줄을 수정했을 뿐인데 매번 수백 메가바이트의 Gradle 의존성을 처음부터 다시 내려받느라 CI 파이프라인과 로컬 빌드가 늘어지던 문제를, Docker BuildKit의 캐시 마운트(`--mount=type=cache`)와 GitHub Actions Cache 백엔드 연동으로 20초대에 끝내도록 최적화한 실무 경험을 정리합니다.
@@ -251,11 +252,43 @@ jobs:
 | **`dependencies` 복사 편법** | 부분 재다운로드 + 중복 빌드 | **1분 58초** | 약 110 MB 수신 |
 | **BuildKit 캐시 마운트 적용** | **네트워크 다운로드 0% (로컬 캐시 적중)** | **22초** | **0 MB (네트워크 무관)** |
 
-```text
-[Benchmark Result]
-기존 레이어 캐시 방식: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 222s
-BuildKit 캐시 마운트: ▇█ 22s  (약 90.1% 빌드 타임 단축!)
+```json
+{
+  "type": "bar",
+  "data": {
+    "labels": [
+      "기존 기본 빌드 (캐시 없음)",
+      "dependencies 복사 편법",
+      "BuildKit 캐시 마운트"
+    ],
+    "datasets": [
+      {
+        "label": "빌드 소요 시간 (초)",
+        "data": [222, 118, 22]
+      },
+      {
+        "label": "의존성 다운로드 (MB)",
+        "data": [420, 110, 0]
+      }
+    ]
+  },
+  "options": {
+    "indexAxis": "y",
+    "plugins": {
+      "title": {
+        "display": true,
+        "text": "Gradle Docker 빌드 방식별 소요 시간(초) 및 네트워크 트래픽(MB)"
+      }
+    },
+    "scales": {
+      "x": {
+        "beginAtZero": true
+      }
+    }
+  }
+}
 ```
+{: .chart-js }
 
 BuildKit 캐시 마운트를 적용하자, 소스 코드 수정 후 빌드 시 Gradle은 이미 캐시된 JAR 파일을 로컬 디스크에서 즉시 참조하여 증분 컴파일(Incremental Compilation) 및 최종 `bootJar` 패키징만 수행하고 끝납니다. 네트워크 레이턴시와 대역폭 제약이 완벽하게 제거되었습니다.
 
