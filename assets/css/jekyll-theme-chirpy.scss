@@ -620,3 +620,8 @@ html[data-mode='dark'] .skip-to-content {
     flex-wrap: wrap;
   }
 }
+
+/* 표 내부 미리보기 이미지가 옆 열의 긴 URL 텍스트에 밀려 과도하게 축소되지 않도록 보호 */
+.table-wrapper > table td .img-link img {
+  max-width: none;
+}
