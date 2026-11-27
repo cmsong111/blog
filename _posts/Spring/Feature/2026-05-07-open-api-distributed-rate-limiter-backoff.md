@@ -75,13 +75,13 @@ class LawApiRequestGate(
     private val properties: LawApiProperties,
     @Value("\${spring.profiles.active:default}") private val environment: String,
 ) {
-    private val key: String get(스프링 부트 예제 애플리케이션) = "demo-app:$environment:law-api:request-slot"
+    private val key: String get() = "demo-app:$environment:law-api:request-slot"
 
-    fun await(스프링 부트 예제 애플리케이션) {
+    fun await() {
         var waited = 0L
         while (true) {
             val delay = try {
-                redis.execute(SLOT, listOf(key), properties.requestInterval.toMillis(스프링 부트 예제 애플리케이션).toString(스프링 부트 예제 애플리케이션))
+                redis.execute(SLOT, listOf(key), properties.requestInterval.toMillis().toString())
                     ?: throw LawPrecedentException("판례 API 호출 간격을 확인할 수 없습니다.")
             } catch (e: org.springframework.dao.DataAccessException) {
                 throw LawPrecedentException("판례 API 호출 간격 제어에 실패했습니다. Redis 상태를 확인해 주세요.")
@@ -98,7 +98,7 @@ class LawApiRequestGate(
     /** 429 대기 시간을 다른 작업·인스턴스에도 적용한다. 기존 대기 시간을 줄이지 않는다. */
     fun defer(duration: Duration) {
         try {
-            redis.execute(DEFER, listOf(key), duration.toMillis(스프링 부트 예제 애플리케이션).coerceAtLeast(1).toString(스프링 부트 예제 애플리케이션))
+            redis.execute(DEFER, listOf(key), duration.toMillis().coerceAtLeast(1).toString())
         } catch (e: org.springframework.dao.DataAccessException) {
             throw LawPrecedentException("판례 API 호출 대기 시간 저장에 실패했습니다. Redis 상태를 확인해 주세요.")
         }
@@ -110,7 +110,7 @@ class LawApiRequestGate(
             if ttl > 0 then return ttl end
             redis.call('SET', KEYS[1], '1', 'PX', ARGV[1])
             return 0
-        """.trimIndent(스프링 부트 예제 애플리케이션), Long::class.java)
+        """.trimIndent(), Long::class.java)
 
         private val DEFER = DefaultRedisScript("""
             local delay = tonumber(ARGV[1])
@@ -118,7 +118,7 @@ class LawApiRequestGate(
                 redis.call('SET', KEYS[1], '1', 'PX', delay)
             end
             return 1
-        """.trimIndent(스프링 부트 예제 애플리케이션), Long::class.java)
+        """.trimIndent(), Long::class.java)
     }
 }
 ```
@@ -146,7 +146,7 @@ sequenceDiagram
     Node2->>External: GET /DRF/lawService.do (호출 시작)
 ```
 
-1. 요청 전 `await(스프링 부트 예제 애플리케이션)`를 호출하면 Redis에서 슬롯을 획득할 때까지 루프를 돕니다.
+1. 요청 전 `await()`를 호출하면 Redis에서 슬롯을 획득할 때까지 루프를 돕니다.
 2. 반환된 `delay`가 `0`이면 호출 즉시 진입하고, `delay > 0`이면 정확히 남은 밀리초만큼 `Thread.sleep(delay)`을 수행한 뒤 다시 확인합니다.
 3. 만약 대기 시간이 30초(`30_000ms`)를 넘어서면 무한 대기에 빠지지 않도록 `LawPrecedentException`을 발생시켜 안전하게 차단합니다.
 
@@ -185,23 +185,23 @@ _그림 2. 429 Too Many Requests 수신 시 Retry-After 헤더 파싱 후 Redis 
 
 ```kotlin
 // src/main/kotlin/com/example/server/judgment/application/LawPrecedentClient.kt (발췌)
-private fun request(path: String, parameters: Map<String, Any>, check: (스프링 부트 예제 애플리케이션) -> Unit): String {
-    if (properties.oc.isBlank(스프링 부트 예제 애플리케이션)) throw LawPrecedentException("국가법령정보센터 인증값 LAW_API_OC가 설정되지 않았습니다.")
+private fun request(path: String, parameters: Map<String, Any>, check: () -> Unit): String {
+    if (properties.oc.isBlank()) throw LawPrecedentException("국가법령정보센터 인증값 LAW_API_OC가 설정되지 않았습니다.")
     repeat(properties.maxAttempts) { attempt ->
-        check(스프링 부트 예제 애플리케이션)
-        beforeRequest(스프링 부트 예제 애플리케이션) // gate::await 호출 (1초 간격 보장)
-        check(스프링 부트 예제 애플리케이션)
+        check()
+        beforeRequest() // gate::await 호출 (1초 간격 보장)
+        check()
         try {
-            return client.get(스프링 부트 예제 애플리케이션).uri { uri ->
+            return client.get().uri { uri ->
                 uri.path("/DRF/$path").queryParam("OC", "{oc}").queryParam("target", "prec").queryParam("type", "JSON")
                 parameters.keys.forEach { key -> uri.queryParam(key, "{$key}") }
                 uri.build(parameters + mapOf("oc" to properties.oc))
             }.accept(MediaType.APPLICATION_JSON).exchange { _, response ->
-                val status = response.statusCode.value(스프링 부트 예제 애플리케이션)
+                val status = response.statusCode.value()
                 if (status != 200) throw HttpFailure(status, response.headers.getFirst("Retry-After"))
                 val bytes = response.body.readNBytes(properties.maxResponseBytes + 1)
                 if (bytes.size > properties.maxResponseBytes) throw LawPrecedentException("판례 API 응답 크기 한도를 초과했습니다.")
-                if (bytes.isEmpty(스프링 부트 예제 애플리케이션)) throw LawPrecedentException("판례 API 응답이 비어 있습니다.")
+                if (bytes.isEmpty()) throw LawPrecedentException("판례 API 응답이 비어 있습니다.")
                 String(bytes, response.headers.contentType?.charset ?: Charsets.UTF_8)
             }
         } catch (e: HttpFailure) {
@@ -217,7 +217,7 @@ private fun request(path: String, parameters: Map<String, Any>, check: (스프�
             }
             pause(delay)
         } catch (e: ResourceAccessException) {
-            if (Thread.currentThread(스프링 부트 예제 애플리케이션).isInterrupted) throw InterruptedException("판례 API 호출이 중단되었습니다.")
+            if (Thread.currentThread().isInterrupted) throw InterruptedException("판례 API 호출이 중단되었습니다.")
             if (attempt + 1 == properties.maxAttempts) {
                 throw LawPrecedentException("판례 API 네트워크 호출에 실패했습니다 (시도 ${attempt + 1}회).")
             }
@@ -231,11 +231,11 @@ private fun request(path: String, parameters: Map<String, Any>, check: (스프�
 
 private fun retryAfter(value: String?): Duration {
     if (value == null) return Duration.ZERO
-    if (value.matches(Regex("\\d+")) && value.toLongOrNull(스프링 부트 예제 애플리케이션) == null) return Duration.ofDays(1)
-    value.toLongOrNull(스프링 부트 예제 애플리케이션)?.let { return Duration.ofSeconds(it.coerceAtLeast(0)) }
+    if (value.matches(Regex("\\d+")) && value.toLongOrNull() == null) return Duration.ofDays(1)
+    value.toLongOrNull()?.let { return Duration.ofSeconds(it.coerceAtLeast(0)) }
     return try {
         // RFC 1123 날짜 포맷 (예: Wed, 21 Oct 2026 07:28:00 GMT) 파싱
-        Duration.between(Instant.now(스프링 부트 예제 애플리케이션), ZonedDateTime.parse(value, DateTimeFormatter.RFC_1123_DATE_TIME).toInstant(스프링 부트 예제 애플리케이션)).coerceAtLeast(Duration.ZERO)
+        Duration.between(Instant.now(), ZonedDateTime.parse(value, DateTimeFormatter.RFC_1123_DATE_TIME).toInstant()).coerceAtLeast(Duration.ZERO)
     } catch (e: java.time.format.DateTimeParseException) { Duration.ZERO }
 }
 ```
@@ -268,17 +268,17 @@ import java.net.http.HttpClient
 class LawApiConfig {
     @Bean
     fun lawPrecedentClient(builder: RestClient.Builder, properties: LawApiProperties, mapper: JsonMapper, gate: LawApiRequestGate): LawPrecedentClient {
-        val http = HttpClient.newBuilder(스프링 부트 예제 애플리케이션)
+        val http = HttpClient.newBuilder()
             .connectTimeout(properties.connectTimeout) // 3초
             .followRedirects(HttpClient.Redirect.NEVER) // 자동 리다이렉트 금지
-            .build(스프링 부트 예제 애플리케이션)
+            .build()
         val factory = JdkClientHttpRequestFactory(http).apply { 
             setReadTimeout(properties.readTimeout) // 10초
         }
-        val client = builder.clone(스프링 부트 예제 애플리케이션)
+        val client = builder.clone()
             .baseUrl("https://www.law.go.kr")
             .requestFactory(factory)
-            .build(스프링 부트 예제 애플리케이션)
+            .build()
         return LawPrecedentClient(client, mapper, properties, gate::await, cooldown = gate::defer)
     }
 }
@@ -306,7 +306,7 @@ class LawApiConfig {
 ```kotlin
 // ❌ 위험한 구현 예시: URL 문자열에 키를 직접 결합
 val url = "https://www.law.go.kr/DRF/lawSearch.do?OC=${properties.oc}&target=prec"
-restClient.get(스프링 부트 예제 애플리케이션).uri(url)...
+restClient.get().uri(url)...
 ```
 
 이렇게 작성하면 RestClient 내부 로깅(`DEBUG org.springframework.web.client.RestClient`), 웹 인프라 프록시, Datadog/Pinpoint 같은 APM 수집기, 그리고 예외 발생 시 에러 스택트레이스에 비밀 인증키가 평문으로 남게 됩니다.
@@ -320,7 +320,7 @@ _그림 3. URI 템플릿 마스킹과 에러 메시지 살균을 통해 예외 �
 
 ```kotlin
 // ⭕ 안전한 구현: URI 템플릿 매개변수화
-client.get(스프링 부트 예제 애플리케이션).uri { uri ->
+client.get().uri { uri ->
     uri.path("/DRF/$path")
         .queryParam("OC", "{oc}") // 템플릿 플레이스홀더 지정
         .queryParam("target", "prec")
@@ -344,18 +344,18 @@ client.get(스프링 부트 예제 애플리케이션).uri { uri ->
 ```kotlin
 // src/test/kotlin/com/example/server/judgment/LawPrecedentClientTest.kt (보안 검증 테스트)
 @Test
-fun `인증 오류와 리다이렉트는 재시도하지 않고 인증값과 외부 본문을 오류에 넣지 않는다`(스프링 부트 예제 애플리케이션) {
+fun `인증 오류와 리다이렉트는 재시도하지 않고 인증값과 외부 본문을 오류에 넣지 않는다`() {
     val statuses = listOf(HttpStatus.FORBIDDEN, HttpStatus.MOVED_PERMANENTLY)
     statuses.forEach { status ->
         server.expect { }.andRespond(withStatus(status).body("OC=비밀키_12345, 제공자 오류 상세"))
     }
     for (status in statuses) {
-        assertThatThrownBy { client(스프링 부트 예제 애플리케이션).detail(12) }
+        assertThatThrownBy { client().detail(12) }
             .isInstanceOf(LawPrecedentException::class.java)
-            .hasMessageContaining("HTTP ${status.value(스프링 부트 예제 애플리케이션)}")
+            .hasMessageContaining("HTTP ${status.value()}")
             .hasMessageNotContaining("OC=")
             .hasMessageNotContaining("비밀키_12345")
-            .hasNoCause(스프링 부트 예제 애플리케이션) // 하위 스택 유출 차단
+            .hasNoCause() // 하위 스택 유출 차단
     }
 }
 ```
@@ -372,27 +372,27 @@ fun `인증 오류와 리다이렉트는 재시도하지 않고 인증값과 외
 
 ```kotlin
 @Test
-fun `독립 게이트 두 개와 동시 요청이 Redis 호출 간격을 공유한다`(스프링 부트 예제 애플리케이션) {
-    val env = "검증-${UUID.randomUUID(스프링 부트 예제 애플리케이션)}"
+fun `독립 게이트 두 개와 동시 요청이 Redis 호출 간격을 공유한다`() {
+    val env = "검증-${UUID.randomUUID()}"
     val key = "demo-app:$env:law-api:request-slot"
     val properties = LawApiProperties(requestInterval = Duration.ofMillis(200))
     val gates = listOf(LawApiRequestGate(redis, properties, env), LawApiRequestGate(redis, properties, env))
     val pool = Executors.newFixedThreadPool(4)
     val ready = CountDownLatch(1)
     try {
-        val times = (0..3).map { i -> pool.submit<Long> { ready.await(스프링 부트 예제 애플리케이션); gates[i % 2].await(스프링 부트 예제 애플리케이션); System.nanoTime(스프링 부트 예제 애플리케이션) } }
-        ready.countDown(스프링 부트 예제 애플리케이션)
-        val completed = times.map { it.get(5, TimeUnit.SECONDS) }.sorted(스프링 부트 예제 애플리케이션)
+        val times = (0..3).map { i -> pool.submit<Long> { ready.await(); gates[i % 2].await(); System.nanoTime() } }
+        ready.countDown()
+        val completed = times.map { it.get(5, TimeUnit.SECONDS) }.sorted()
         
         // 4개 요청의 전체 소요 시간은 최소 200ms * 3 = 600ms 이상이어야 함
-        assertThat(Duration.ofNanos(completed.last(스프링 부트 예제 애플리케이션) - completed.first(스프링 부트 예제 애플리케이션)).toMillis(스프링 부트 예제 애플리케이션)).isGreaterThanOrEqualTo(550)
+        assertThat(Duration.ofNanos(completed.last() - completed.first()).toMillis()).isGreaterThanOrEqualTo(550)
         
         // 글로벌 쿨다운(defer) 연장 시 TTL이 축소되지 않고 유지되는지 검증
         gates[0].defer(Duration.ofSeconds(1))
         val ttl = redis.getExpire(key, TimeUnit.MILLISECONDS)!!
         gates[1].defer(Duration.ofMillis(200)) // 더 짧은 요청은 무시되어야 함
         assertThat(ttl).isGreaterThan(800)
-    } finally { pool.shutdownNow(스프링 부트 예제 애플리케이션); redis.delete(key) }
+    } finally { pool.shutdownNow(); redis.delete(key) }
 }
 ```
 

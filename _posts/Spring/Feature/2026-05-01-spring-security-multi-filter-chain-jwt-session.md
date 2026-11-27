@@ -96,7 +96,7 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfig {
 
     @Bean
-    fun passwordEncoder(스프링 부트 예제 애플리케이션): PasswordEncoder = BCryptPasswordEncoder(스프링 부트 예제 애플리케이션)
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
     fun authenticationManager(
@@ -113,9 +113,9 @@ class SecurityConfig {
     @Order(0)
     fun swaggerFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.securityMatcher("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
-            .csrf { it.disable(스프링 부트 예제 애플리케이션) }
-            .authorizeHttpRequests { it.anyRequest(스프링 부트 예제 애플리케이션).permitAll(스프링 부트 예제 애플리케이션) }
-        return http.build(스프링 부트 예제 애플리케이션)
+            .csrf { it.disable() }
+            .authorizeHttpRequests { it.anyRequest().permitAll() }
+        return http.build()
     }
 
     @Bean
@@ -124,17 +124,17 @@ class SecurityConfig {
         http: HttpSecurity,
         h2ConsoleProperties: ObjectProvider<H2ConsoleProperties>,
     ): SecurityFilterChain {
-        val h2Console = h2ConsoleProperties.ifAvailable?.let { PathRequest.toH2Console(스프링 부트 예제 애플리케이션) }
+        val h2Console = h2ConsoleProperties.ifAvailable?.let { PathRequest.toH2Console() }
         http
             .authorizeHttpRequests {
-                it.requestMatchers(PathRequest.toStaticResources(스프링 부트 예제 애플리케이션).atCommonLocations(스프링 부트 예제 애플리케이션)).permitAll(스프링 부트 예제 애플리케이션)
-                h2Console?.let { matcher -> it.requestMatchers(matcher).permitAll(스프링 부트 예제 애플리케이션) }
-                it.requestMatchers("/error", "/actuator/**").permitAll(스프링 부트 예제 애플리케이션)
-                it.anyRequest(스프링 부트 예제 애플리케이션).denyAll(스프링 부트 예제 애플리케이션)
+                it.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                h2Console?.let { matcher -> it.requestMatchers(matcher).permitAll() }
+                it.requestMatchers("/error", "/actuator/**").permitAll()
+                it.anyRequest().denyAll()
             }
             .csrf { csrf -> h2Console?.let { csrf.ignoringRequestMatchers(it) } }
-            .headers { headers -> headers.frameOptions { it.sameOrigin(스프링 부트 예제 애플리케이션) } }
-        return http.build(스프링 부트 예제 애플리케이션)
+            .headers { headers -> headers.frameOptions { it.sameOrigin() } }
+        return http.build()
     }
 }
 ```
@@ -145,7 +145,7 @@ class SecurityConfig {
 
 REST API 체인의 핵심은 **'완전한 무상태성'**과 **'JSON 형식의 에러 응답'**입니다.
 
-`SessionCreationPolicy.STATELESS`만 선언하면 스프링 시큐리티가 기존 세션의 컨텍스트를 조회할 여지가 남습니다. `NullSecurityContextRepository(스프링 부트 예제 애플리케이션)`를 명시적으로 주입하여 컨텍스트의 세션 저장 및 조회를 원천 차단합니다.
+`SessionCreationPolicy.STATELESS`만 선언하면 스프링 시큐리티가 기존 세션의 컨텍스트를 조회할 여지가 남습니다. `NullSecurityContextRepository()`를 명시적으로 주입하여 컨텍스트의 세션 저장 및 조회를 원천 차단합니다.
 
 ```kotlin
 // src/main/kotlin/com/example/server/security/api/ApiSecurityConfig.kt
@@ -173,22 +173,22 @@ class ApiSecurityConfig(
     @Order(2)
     fun apiFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.securityMatcher("/api/**")
-            .csrf { it.disable(스프링 부트 예제 애플리케이션) }
+            .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .securityContext { it.securityContextRepository(NullSecurityContextRepository(스프링 부트 예제 애플리케이션)) }
-            .requestCache { it.disable(스프링 부트 예제 애플리케이션) }
+            .securityContext { it.securityContextRepository(NullSecurityContextRepository()) }
+            .requestCache { it.disable() }
             .authorizeHttpRequests {
                 it.requestMatchers(
                     HttpMethod.POST,
                     "/api/v1/auth/login",
                     "/api/v1/auth/join",
                     "/api/v1/auth/refresh",
-                ).permitAll(스프링 부트 예제 애플리케이션)
+                ).permitAll()
                 it.requestMatchers("/api/v1/admin/**").hasRole(UserRole.ADMIN.name)
-                it.anyRequest(스프링 부트 예제 애플리케이션).authenticated(스프링 부트 예제 애플리케이션)
+                it.anyRequest().authenticated()
             }
             .oauth2ResourceServer { resourceServer ->
-                resourceServer.jwt { it.jwtAuthenticationConverter(jwtAuthenticationConverter(스프링 부트 예제 애플리케이션)) }
+                resourceServer.jwt { it.jwtAuthenticationConverter(jwtAuthenticationConverter()) }
                 resourceServer.authenticationEntryPoint(apiSecurityHandlers)
                 resourceServer.accessDeniedHandler(apiSecurityHandlers)
             }
@@ -196,15 +196,15 @@ class ApiSecurityConfig(
                 it.authenticationEntryPoint(apiSecurityHandlers)
                 it.accessDeniedHandler(apiSecurityHandlers)
             }
-        return http.build(스프링 부트 예제 애플리케이션)
+        return http.build()
     }
 
-    private fun jwtAuthenticationConverter(스프링 부트 예제 애플리케이션): JwtAuthenticationConverter {
-        val authoritiesConverter = JwtGrantedAuthoritiesConverter(스프링 부트 예제 애플리케이션).apply {
+    private fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
+        val authoritiesConverter = JwtGrantedAuthoritiesConverter().apply {
             setAuthoritiesClaimName(JwtProvider.ROLES_CLAIM)
             setAuthorityPrefix(UserRole.ROLE_PREFIX)
         }
-        return JwtAuthenticationConverter(스프링 부트 예제 애플리케이션).apply {
+        return JwtAuthenticationConverter().apply {
             setJwtGrantedAuthoritiesConverter(authoritiesConverter)
         }
     }
@@ -257,9 +257,9 @@ class ApiSecurityHandlers(
     }
 
     private fun write(response: HttpServletResponse, errorCode: ErrorCode) {
-        response.status = errorCode.status.value(스프링 부트 예제 애플리케이션)
+        response.status = errorCode.status.value()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
-        response.characterEncoding = Charsets.UTF_8.name(스프링 부트 예제 애플리케이션)
+        response.characterEncoding = Charsets.UTF_8.name()
         jsonMapper.writeValue(response.outputStream, ApiResponse.error(errorCode))
     }
 }
@@ -275,7 +275,7 @@ class ApiSecurityHandlers(
 
 관리자 웹 체인은 운영진이 브라우저에서 안전하게 작업할 수 있도록 세션과 폼 로그인을 구성합니다.
 
-- **세션 고정(Session Fixation) 방어**: 로그인 성공 시 `changeSessionId(스프링 부트 예제 애플리케이션)`를 적용하여 세션 하이재킹을 방지합니다.
+- **세션 고정(Session Fixation) 방어**: 로그인 성공 시 `changeSessionId()`를 적용하여 세션 하이재킹을 방지합니다.
 - **CSRF 토큰 활성화**: Thymeleaf의 `th:action` 폼을 통해 자동 주입되는 CSRF 토큰을 검증합니다.
 - **예외 처리 분리**: 미인증 접근 시 `LoginUrlAuthenticationEntryPoint`를 통해 `/admin/login`으로 안내하고, 권한 부족 시 `/admin/403` 에러 페이지를 렌더링합니다.
 
@@ -302,15 +302,15 @@ class AdminWebSecurityConfig {
         http
             .securityMatcher("/admin/**")
             .authorizeHttpRequests {
-                it.requestMatchers("/admin/login", "/admin/403").permitAll(스프링 부트 예제 애플리케이션)
-                it.anyRequest(스프링 부트 예제 애플리케이션).hasRole(UserRole.ADMIN.name)
+                it.requestMatchers("/admin/login", "/admin/403").permitAll()
+                it.anyRequest().hasRole(UserRole.ADMIN.name)
             }
             .formLogin {
                 it.loginPage(LOGIN_PAGE)
                 it.loginProcessingUrl(LOGIN_PAGE)
                 it.defaultSuccessUrl("/admin/dashboard")
                 it.failureUrl("$LOGIN_PAGE?error")
-                it.permitAll(스프링 부트 예제 애플리케이션)
+                it.permitAll()
             }
             .exceptionHandling {
                 it.authenticationEntryPoint(LoginUrlAuthenticationEntryPoint(LOGIN_PAGE))
@@ -318,7 +318,7 @@ class AdminWebSecurityConfig {
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                it.sessionFixation { fixation -> fixation.changeSessionId(스프링 부트 예제 애플리케이션) }
+                it.sessionFixation { fixation -> fixation.changeSessionId() }
                 it.invalidSessionUrl("$LOGIN_PAGE?expired")
             }
             .logout {
@@ -328,7 +328,7 @@ class AdminWebSecurityConfig {
                 it.clearAuthentication(true)
                 it.deleteCookies(SessionConfig.SESSION_COOKIE_NAME)
             }
-        return http.build(스프링 부트 예제 애플리케이션)
+        return http.build()
     }
 
     companion object {
@@ -362,26 +362,26 @@ import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.get
 
 @DisplayName("API 체인 (JWT, 무상태)")
-class ApiSecurityTest : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class ApiSecurityTest : IntegrationTestSupport() {
 
     @Test
-    fun `유효한 JWT로 인증되고 세션을 만들지 않는다`(스프링 부트 예제 애플리케이션) {
-        val user = createUser(스프링 부트 예제 애플리케이션)
+    fun `유효한 JWT로 인증되고 세션을 만들지 않는다`() {
+        val user = createUser()
 
         mockMvc.get("/api/v1/users/me") {
             header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenOf(user)}")
         }.andExpect {
-            status { isOk(스프링 부트 예제 애플리케이션) }
-            jsonPath("$.data.id") { value(user.id.toString(스프링 부트 예제 애플리케이션)) }
+            status { isOk() }
+            jsonPath("$.data.id") { value(user.id.toString()) }
             header { doesNotExist(HttpHeaders.SET_COOKIE) }
             request { sessionAttributeDoesNotExist("SPRING_SECURITY_CONTEXT") }
         }
     }
 
     @Test
-    fun `JWT가 없으면 로그인 리다이렉트 대신 JSON 401을 반환한다`(스프링 부트 예제 애플리케이션) {
+    fun `JWT가 없으면 로그인 리다이렉트 대신 JSON 401을 반환한다`() {
         mockMvc.get("/api/v1/users/me").andExpect {
-            status { isUnauthorized(스프링 부트 예제 애플리케이션) }
+            status { isUnauthorized() }
             content { contentTypeCompatibleWith("application/json") }
             jsonPath("$.success") { value(false) }
             jsonPath("$.code") { value("AUTH-000") }
@@ -413,34 +413,34 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @DisplayName("Admin Web 체인 (formLogin, 세션)")
-class AdminWebSecurityTest : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class AdminWebSecurityTest : IntegrationTestSupport() {
 
     @Test
-    fun `미인증 사용자는 로그인 페이지로 리다이렉트된다`(스프링 부트 예제 애플리케이션) {
+    fun `미인증 사용자는 로그인 페이지로 리다이렉트된다`() {
         mockMvc.get("/admin/dashboard").andExpect {
-            status { is3xxRedirection(스프링 부트 예제 애플리케이션) }
+            status { is3xxRedirection() }
             redirectedUrl("/admin/login")
         }
     }
 
     @Test
-    fun `로그인 성공 시 세션 ID가 바뀌고 인증 정보가 세션에 저장된다`(스프링 부트 예제 애플리케이션) {
-        val admin = createAdmin(스프링 부트 예제 애플리케이션)
-        val anonymousCookie = mockMvc.get("/admin/login").andReturn(스프링 부트 예제 애플리케이션).sessionCookie(스프링 부트 예제 애플리케이션)!!
+    fun `로그인 성공 시 세션 ID가 바뀌고 인증 정보가 세션에 저장된다`() {
+        val admin = createAdmin()
+        val anonymousCookie = mockMvc.get("/admin/login").andReturn().sessionCookie()!!
 
         val result = mockMvc.post("/admin/login") {
-            with(csrf(스프링 부트 예제 애플리케이션))
+            with(csrf())
             cookie(anonymousCookie)
             param("username", admin.email!!)
             param("password", PASSWORD)
         }.andExpect {
-            status { is3xxRedirection(스프링 부트 예제 애플리케이션) }
+            status { is3xxRedirection() }
             redirectedUrl("/admin/dashboard")
-        }.andReturn(스프링 부트 예제 애플리케이션)
+        }.andReturn()
 
-        val sessionCookie = result.sessionCookie(스프링 부트 예제 애플리케이션)!!
+        val sessionCookie = result.sessionCookie()!!
         assertThat(sessionCookie.value).isNotEqualTo(anonymousCookie.value)
-        assertThat(sessionCookie.isHttpOnly).isTrue(스프링 부트 예제 애플리케이션)
+        assertThat(sessionCookie.isHttpOnly).isTrue()
 
         val principal = securityContextOf(sessionCookie)?.authentication?.principal
         assertThat(principal).isInstanceOf(AuthUser::class.java)
@@ -456,6 +456,6 @@ class AdminWebSecurityTest : IntegrationTestSupport(스프링 부트 예제 애�
 단일 스프링 부트에서 이질적인 인증 모델을 공존시킬 때 기억해야 할 핵심 체크리스트입니다:
 
 1. **`@Order` 우선순위의 엄격한 배치**: 구체적인 URL 패턴(`Swagger` ➔ `OAuth Callback` ➔ `/api/**` ➔ `/admin/**` ➔ `Fallback`) 순으로 배치해야 보안 필터 우회나 가로채기 사고를 예방할 수 있습니다.
-2. **REST API 체인의 완전 무상태 봉인**: `SessionCreationPolicy.STATELESS` 선언뿐만 아니라 `NullSecurityContextRepository(스프링 부트 예제 애플리케이션)`를 함께 지정하여 기존 세션 컨텍스트 조회를 차단하세요.
+2. **REST API 체인의 완전 무상태 봉인**: `SessionCreationPolicy.STATELESS` 선언뿐만 아니라 `NullSecurityContextRepository()`를 함께 지정하여 기존 세션 컨텍스트 조회를 차단하세요.
 3. **체인별 맞춤 예외 핸들러 지정**: API 체인은 `ApiSecurityHandlers`로 정형화된 JSON과 `WWW-Authenticate` 헤더를 내려주고, 관리자 웹은 `LoginUrlAuthenticationEntryPoint`로 로그인 화면 이동을 분리하세요.
-4. **명시적 Fallback 체인 구축**: 보안 설정이 누락된 신규 엔드포인트가 무방비로 노출되지 않도록 최하단 체인(`Ordered.LOWEST_PRECEDENCE`)에서 화이트리스트 외 요청을 `denyAll(스프링 부트 예제 애플리케이션)`로 차단하는 방어적 설계를 권장합니다.
+4. **명시적 Fallback 체인 구축**: 보안 설정이 누락된 신규 엔드포인트가 무방비로 노출되지 않도록 최하단 체인(`Ordered.LOWEST_PRECEDENCE`)에서 화이트리스트 외 요청을 `denyAll()`로 차단하는 방어적 설계를 권장합니다.

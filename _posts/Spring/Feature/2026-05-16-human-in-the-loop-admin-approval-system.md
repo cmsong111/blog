@@ -116,13 +116,13 @@ class JudgmentDiscovery(
     var precSerial: Long? = null,
     @Column(length = 100) var officialDataSourceName: String? = null,
     var judgmentId: Long? = null,
-    @Column(nullable = false) var firstDiscoveredAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
-    @Column(nullable = false) var lastDiscoveredAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    @Column(nullable = false) var firstDiscoveredAt: Instant = Instant.now(),
+    @Column(nullable = false) var lastDiscoveredAt: Instant = Instant.now(),
     @ColumnDefault("1") var discoveryCount: Int = 1,
     var lastRunId: Long? = null,
     @Column(nullable = false, length = 100) var modelName: String,
     @Column(nullable = false, length = 50) var promptVersion: String,
-    @Column(name = "next_verify_at") var nextVerifyAt: Instant? = Instant.now(스프링 부트 예제 애플리케이션),
+    @Column(name = "next_verify_at") var nextVerifyAt: Instant? = Instant.now(),
     @ColumnDefault("0") var verifyAttempts: Int = 0,
     var lastVerifiedAt: Instant? = null,
     /** 관리자가 식별 정보를 보정한 후보는 재발견 시 AI 추출값으로 덮어쓰지 않습니다. */
@@ -130,11 +130,11 @@ class JudgmentDiscovery(
     @ElementCollection
     @CollectionTable(name = "judgment_discovery_sources", joinColumns = [JoinColumn(name = "discovery_id")])
     @OrderColumn(name = "position")
-    val sources: MutableList<DiscoverySource> = mutableListOf(스프링 부트 예제 애플리케이션),
-) : BaseEntity(스프링 부트 예제 애플리케이션) {
+    val sources: MutableList<DiscoverySource> = mutableListOf(),
+) : BaseEntity() {
 
-    val identified: Boolean get(스프링 부트 예제 애플리케이션) = caseNumber != null && courtName != null && sentenceDate != null
-    val open: Boolean get(스프링 부트 예제 애플리케이션) = status in setOf(DiscoveryStatus.NEW, DiscoveryStatus.NEEDS_REVIEW, DiscoveryStatus.AWAITING_SOURCE)
+    val identified: Boolean get() = caseNumber != null && courtName != null && sentenceDate != null
+    val open: Boolean get() = status in setOf(DiscoveryStatus.NEW, DiscoveryStatus.NEEDS_REVIEW, DiscoveryStatus.AWAITING_SOURCE)
 
     /** 운영자의 보정: 식별 정보를 수정한 뒤 기존 공식 매칭을 초기화하고 즉시 재확인 큐로 진입합니다. */
     fun correct(
@@ -153,10 +153,10 @@ class JudgmentDiscovery(
         this.instance = instance
         this.recency = recency
         this.corrected = true
-        requestVerification(스프링 부트 예제 애플리케이션)
+        requestVerification()
     }
 
-    fun requestVerification(now: Instant = Instant.now(스프링 부트 예제 애플리케이션)) {
+    fun requestVerification(now: Instant = Instant.now()) {
         if (status == DiscoveryStatus.IMPORTED) throw BusinessException(DiscoveryErrorCode.ALREADY_IMPORTED)
         status = DiscoveryStatus.NEW
         statusReason = null
@@ -208,7 +208,7 @@ class AdminDiscoveryService(
 ) {
     @Transactional(readOnly = true)
     fun page(status: DiscoveryStatus?, q: String?, pageable: Pageable): Page<AdminDiscoveryRow> =
-        discoveries.search(status, q.orEmpty(스프링 부트 예제 애플리케이션), pageable).map(AdminDiscoveryRow::from)
+        discoveries.search(status, q.orEmpty(), pageable).map(AdminDiscoveryRow::from)
 
     @Transactional(readOnly = true)
     fun detail(id: Long): AdminDiscoveryDetail {
@@ -237,9 +237,9 @@ class AdminDiscoveryService(
         service.correct(
             id = id,
             version = form.version,
-            title = form.title.trim(스프링 부트 예제 애플리케이션),
-            caseNumber = form.caseNumber.trim(스프링 부트 예제 애플리케이션).ifEmpty { null },
-            courtName = form.courtName.trim(스프링 부트 예제 애플리케이션).ifEmpty { null },
+            title = form.title.trim(),
+            caseNumber = form.caseNumber.trim().ifEmpty { null },
+            courtName = form.courtName.trim().ifEmpty { null },
             sentenceDate = form.sentenceDate,
             instance = form.instance
         )
@@ -322,7 +322,7 @@ class AdminDiscoveryController(private val discoveries: AdminDiscoveryService) {
     @GetMapping("/{id}")
     fun detail(@PathVariable id: Long, model: Model): String {
         if (!model.containsAttribute("form")) model.addAttribute("form", discoveries.form(id))
-        if (!model.containsAttribute("rejectForm")) model.addAttribute("rejectForm", AdminDiscoveryRejectForm(스프링 부트 예제 애플리케이션))
+        if (!model.containsAttribute("rejectForm")) model.addAttribute("rejectForm", AdminDiscoveryRejectForm())
         model.addAttribute("detail", discoveries.detail(id))
         return "admin/judgment-discovery-detail"
     }
@@ -335,7 +335,7 @@ class AdminDiscoveryController(private val discoveries: AdminDiscoveryService) {
         model: Model,
         redirect: RedirectAttributes
     ): String {
-        if (!binding.hasErrors(스프링 부트 예제 애플리케이션)) {
+        if (!binding.hasErrors()) {
             try {
                 discoveries.correct(id, form)
                 redirect.addFlashAttribute("message", "식별 정보를 보정했습니다. 공식 원문과 즉시 재대조합니다.")
@@ -360,9 +360,9 @@ class AdminDiscoveryController(private val discoveries: AdminDiscoveryService) {
         "공식 원문과 다시 대조했습니다: ${discoveries.reverify(id).label}"
     }
 
-    private fun operation(id: Long, redirect: RedirectAttributes, action: (스프링 부트 예제 애플리케이션) -> String): String {
+    private fun operation(id: Long, redirect: RedirectAttributes, action: () -> String): String {
         try {
-            redirect.addFlashAttribute("message", action(스프링 부트 예제 애플리케이션))
+            redirect.addFlashAttribute("message", action())
         } catch (e: BusinessException) {
             redirect.addFlashAttribute("error", e.errorCode.message)
         } catch (e: ImportHeld) {
@@ -386,7 +386,7 @@ _그림 2. 탐색 후보 상세 및 식별 정보 보정 폼 (`/admin/judgment-d
 
 새로운 데이터 소스가 추가되었다고 해서 '판례 생성' 로직을 새롭게 작성하는 것은 대표적인 안티패턴입니다. 기사에서 온 후보든, 기존 정기 크롤러에서 온 판례든 시스템 내의 모든 판례는 동일한 무결성 검증을 거쳐야 합니다.
 
-따라서 저희는 기존에 운영되던 `JudgmentImportService.collect(스프링 부트 예제 애플리케이션)` 파이프라인을 그대로 재사용했습니다:
+따라서 저희는 기존에 운영되던 `JudgmentImportService.collect()` 파이프라인을 그대로 재사용했습니다:
 
 ```kotlin
 // JudgmentDiscoveryService.kt

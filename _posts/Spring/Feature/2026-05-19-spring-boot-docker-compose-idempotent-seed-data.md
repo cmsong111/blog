@@ -237,18 +237,18 @@ BEGIN
 
     -- ---------- 2. 테스트 유저 10명 적재 ----------
     INSERT INTO users (id, email, password, nickname, profile_image_url, created_at, updated_at, created_user, updated_user)
-    VALUES ('0192f000-0000-7000-8000-000000000001', 'minjun@example.com', '$2a$10$fQOlprBgjTx7auQ/j0wc1eE5yR9qyi4Rsn89uvhSqknzB9q4kKplq', '민준',   'https://api.dicebear.com/7.x/lorelei/svg?seed=minjun@example.com', now(스프링 부트 예제 애플리케이션) - interval '30 days', now(스프링 부트 예제 애플리케이션) - interval '2 days',  'SYSTEM (seed)', 'SYSTEM (seed)'),
-           ('0192f000-0000-7000-8000-000000000002', 'seoyeon@example.com', '$2a$10$fQOlprBgjTx7auQ/j0wc1eE5yR9qyi4Rsn89uvhSqknzB9q4kKplq', '서연',  'https://api.dicebear.com/7.x/lorelei/svg?seed=seoyeon@example.com', now(스프링 부트 예제 애플리케이션) - interval '28 days', now(스프링 부트 예제 애플리케이션) - interval '28 days', 'SYSTEM (seed)', 'SYSTEM (seed)'),
-           ('0192f000-0000-7000-8000-000000000003', 'jiho@gmail.com', NULL, '지호', 'https://api.dicebear.com/7.x/lorelei/svg?seed=jiho@gmail.com', now(스프링 부트 예제 애플리케이션) - interval '25 days', now(스프링 부트 예제 애플리케이션) - interval '25 days', 'SYSTEM (seed)', 'SYSTEM (seed)');
+    VALUES ('0192f000-0000-7000-8000-000000000001', 'minjun@example.com', '$2a$10$fQOlprBgjTx7auQ/j0wc1eE5yR9qyi4Rsn89uvhSqknzB9q4kKplq', '민준',   'https://api.dicebear.com/7.x/lorelei/svg?seed=minjun@example.com', now() - interval '30 days', now() - interval '2 days',  'SYSTEM (seed)', 'SYSTEM (seed)'),
+           ('0192f000-0000-7000-8000-000000000002', 'seoyeon@example.com', '$2a$10$fQOlprBgjTx7auQ/j0wc1eE5yR9qyi4Rsn89uvhSqknzB9q4kKplq', '서연',  'https://api.dicebear.com/7.x/lorelei/svg?seed=seoyeon@example.com', now() - interval '28 days', now() - interval '28 days', 'SYSTEM (seed)', 'SYSTEM (seed)'),
+           ('0192f000-0000-7000-8000-000000000003', 'jiho@gmail.com', NULL, '지호', 'https://api.dicebear.com/7.x/lorelei/svg?seed=jiho@gmail.com', now() - interval '25 days', now() - interval '25 days', 'SYSTEM (seed)', 'SYSTEM (seed)');
 
     -- ---------- 3. 판사 및 판례 데이터 적재 ----------
     INSERT INTO judges (name, court, profile_image_url, created_at, updated_at, created_user, updated_user)
-    VALUES ('김도윤', '대법원', 'https://api.dicebear.com/7.x/lorelei/svg?seed=김도윤', now(스프링 부트 예제 애플리케이션) - interval '40 days', now(스프링 부트 예제 애플리케이션) - interval '40 days', 'SYSTEM (seed)', 'SYSTEM (seed)'),
-           ('최민서', '서울고등법원', 'https://api.dicebear.com/7.x/lorelei/svg?seed=최민서', now(스프링 부트 예제 애플리케이션) - interval '35 days', now(스프링 부트 예제 애플리케이션) - interval '35 days', 'SYSTEM (seed)', 'SYSTEM (seed)');
+    VALUES ('김도윤', '대법원', 'https://api.dicebear.com/7.x/lorelei/svg?seed=김도윤', now() - interval '40 days', now() - interval '40 days', 'SYSTEM (seed)', 'SYSTEM (seed)'),
+           ('최민서', '서울고등법원', 'https://api.dicebear.com/7.x/lorelei/svg?seed=최민서', now() - interval '35 days', now() - interval '35 days', 'SYSTEM (seed)', 'SYSTEM (seed)');
 
     -- ---------- 4. 자연키(사건번호) 매핑을 통한 댓글 적재 (시퀀스 충돌 방지) ----------
     INSERT INTO article_comments (article_id, author_id, content, created_at, updated_at, created_user, updated_user)
-    SELECT a.id, v.author_id::uuid, v.content, now(스프링 부트 예제 애플리케이션) - (v.hours_ago || ' hours')::interval, now(스프링 부트 예제 애플리케이션) - (v.hours_ago || ' hours')::interval, 'SYSTEM (seed)', 'SYSTEM (seed)'
+    SELECT a.id, v.author_id::uuid, v.content, now() - (v.hours_ago || ' hours')::interval, now() - (v.hours_ago || ' hours')::interval, 'SYSTEM (seed)', 'SYSTEM (seed)'
     FROM (VALUES ('2024도10234', '0192f000-0000-7000-8000-000000000001', '처음부터 보낼 생각이 없었는지가 핵심이군요.', 400),
                  ('2023다21345', '0192f000-0000-7000-8000-000000000003', '통상의 손모 기준이 궁금합니다. 몇 년 살면 인정되나요?', 300)
          ) AS v(case_number, author_id, content, hours_ago)
@@ -262,7 +262,7 @@ $seed$;
 ### 4.3 IDENTITY 시퀀스 오염 방지 전략
 
 시드 데이터를 넣을 때 흔히 저지르는 실수가 `id = 1, 2, 3`처럼 `BIGSERIAL` / `IDENTITY` 기본키를 하드코딩해서 넣는 것입니다.
-이렇게 하면 데이터베이스 내부의 `seq` 카운터가 증가하지 않아, 이후 애플리케이션에서 신규 엔티티를 `save(스프링 부트 예제 애플리케이션)`할 때 시퀀스가 1을 채번하면서 `Unique index or primary key violation` 에러가 터지게 됩니다.
+이렇게 하면 데이터베이스 내부의 `seq` 카운터가 증가하지 않아, 이후 애플리케이션에서 신규 엔티티를 `save()`할 때 시퀀스가 1을 채번하면서 `Unique index or primary key violation` 에러가 터지게 됩니다.
 
 따라서 위의 SQL처럼:
 - 기본키가 UUIDv7인 경우 고정된 식별자를 명시합니다.

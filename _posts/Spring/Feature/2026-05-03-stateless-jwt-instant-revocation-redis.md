@@ -111,18 +111,18 @@ class TokenVersionStore(
     // 리프레시 토큰과 액세스 토큰 중 더 긴 TTL에 여유 시간(ClockSkew)을 더해 만료 시간 설정
     private val ttl = maxOf(properties.refreshTokenTtl, properties.accessTokenTtl) + properties.clockSkew
 
-    fun current(userId: String): String = redis.opsForValue(스프링 부트 예제 애플리케이션).get(key(userId)) ?: ""
+    fun current(userId: String): String = redis.opsForValue().get(key(userId)) ?: ""
 
     /** 
      * 새 토큰보다 먼저 폐기 표식이 만료되지 않게 조회와 TTL 갱신을 한 번에 원자적으로 수행한다(GETEX). 
      */
-    fun forIssue(userId: String): String = redis.opsForValue(스프링 부트 예제 애플리케이션).getAndExpire(key(userId), ttl) ?: ""
+    fun forIssue(userId: String): String = redis.opsForValue().getAndExpire(key(userId), ttl) ?: ""
 
     /**
      * 전체 로그아웃 또는 탈퇴 시 호출하여 새로운 UUID로 버전을 덮어쓴다.
      */
     fun revoke(userId: String) {
-        redis.opsForValue(스프링 부트 예제 애플리케이션).set(key(userId), UUID.randomUUID(스프링 부트 예제 애플리케이션).toString(스프링 부트 예제 애플리케이션), ttl)
+        redis.opsForValue().set(key(userId), UUID.randomUUID().toString(), ttl)
     }
 
     private fun key(userId: String): String = "token:version:$userId"
@@ -165,8 +165,8 @@ class JwtConfig(
     private val userRepository: UserRepository,
 ) {
     @Bean
-    fun jwtDecoder(스프링 부트 예제 애플리케이션): JwtDecoder {
-        val decoder = NimbusJwtDecoder.withSecretKey(secretKey).build(스프링 부트 예제 애플리케이션)
+    fun jwtDecoder(): JwtDecoder {
+        val decoder = NimbusJwtDecoder.withSecretKey(secretKey).build()
 
         // 1. 표준 서명 및 만료 시간 검증기 (CPU 암호화 연산)
         val standardValidators = DelegatingOAuth2TokenValidator(
@@ -182,7 +182,7 @@ class JwtConfig(
         decoder.setJwtValidator { token ->
             val result = standardValidators.validate(token)
             // 표준 검증을 통과한 유효한 서명의 토큰만 Redis를 조회하여 부하를 최소화
-            if (result.hasErrors(스프링 부트 예제 애플리케이션)) result else activeTokens.validate(token)
+            if (result.hasErrors()) result else activeTokens.validate(token)
         }
         return decoder
     }
@@ -193,15 +193,15 @@ class JwtConfig(
         private val users: UserRepository,
     ) : OAuth2TokenValidator<Jwt> {
         override fun validate(token: Jwt): OAuth2TokenValidatorResult {
-            val userId = runCatching { UUID.fromString(token.subject) }.getOrNull(스프링 부트 예제 애플리케이션)
+            val userId = runCatching { UUID.fromString(token.subject) }.getOrNull()
                 ?: return OAuth2TokenValidatorResult.failure(OAuth2Error(OAuth2ErrorCodes.INVALID_TOKEN, "유효한 sub가 없습니다.", null))
             
             val version = token.getClaimAsString(JwtProvider.TOKEN_VERSION_CLAIM) ?: ""
             // 토큰 내부 버전이 Redis의 최신 버전과 다르거나 회원이 탈퇴(소프트 삭제)된 경우 즉시 차단
-            if (version != versions.current(userId.toString(스프링 부트 예제 애플리케이션)) || !users.existsById(userId)) {
+            if (version != versions.current(userId.toString()) || !users.existsById(userId)) {
                 return OAuth2TokenValidatorResult.failure(OAuth2Error(REVOKED_ERROR_CODE, "폐기된 토큰입니다.", null))
             }
-            return OAuth2TokenValidatorResult.success(스프링 부트 예제 애플리케이션)
+            return OAuth2TokenValidatorResult.success()
         }
     }
 
@@ -246,8 +246,8 @@ class UserService(
      */
     @Transactional
     fun withdraw(userId: UUID) {
-        findUser(userId).delete(스프링 부트 예제 애플리케이션)
-        tokenService.revokeAll(userId.toString(스프링 부트 예제 애플리케이션))
+        findUser(userId).delete()
+        tokenService.revokeAll(userId.toString())
     }
 }
 ```

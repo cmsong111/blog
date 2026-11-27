@@ -69,7 +69,7 @@ sequenceDiagram
     Server-->>TabB: 401 Unauthorized (REUSED_REFRESH_TOKEN)
 ```
 
-애플리케이션 계층에서 흔히 작성하는 `findById(스프링 부트 예제 애플리케이션)` 후 비즈니스 로직 처리, 그리고 `save(스프링 부트 예제 애플리케이션)`나 `delete(스프링 부트 예제 애플리케이션)`를 호출하는 전형적인 Read-Modify-Write 패턴에서는 스레드 간 원자성이 보장되지 않습니다.
+애플리케이션 계층에서 흔히 작성하는 `findById()` 후 비즈니스 로직 처리, 그리고 `save()`나 `delete()`를 호출하는 전형적인 Read-Modify-Write 패턴에서는 스레드 간 원자성이 보장되지 않습니다.
 
 그 결과, 정상적인 사용자가 탭 두 개를 열어두었을 뿐인데 뒤늦게 처리된 스레드가 **"이미 사용된 토큰을 다시 보낸 공격자"**로 오인하여 탈취 감지 로직을 발동시키고, 유저의 모든 기기 세션을 한순간에 폭파해 버리는 치명적인 오탐(False Positive)이 발생했습니다.
 
@@ -101,7 +101,7 @@ class RefreshToken(
 
     val userAgent: String?,
     val clientIp: String,
-    val createdAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    val createdAt: Instant = Instant.now(),
     var rotatedAt: Instant? = null,
 
     val tokenVersion: String = "",
@@ -160,7 +160,7 @@ class TokenService(
         }
 
         // Lua Script로 원자적 검증과 rotatedAt 마킹을 단일 연산으로 수행
-        when (redis.execute(ROTATE_SCRIPT, listOf("refreshToken:$tokenHash"), Instant.now(스프링 부트 예제 애플리케이션).toString(스프링 부트 예제 애플리케이션))) {
+        when (redis.execute(ROTATE_SCRIPT, listOf("refreshToken:$tokenHash"), Instant.now().toString())) {
             1L -> Unit // 첫 번째 소비 요청 성공
             2L -> {
                 // 이미 교체된 토큰이 다시 유입됨 -> 탈취 감지 발동
@@ -186,8 +186,8 @@ class TokenService(
     }
 
     private fun hash(token: String): String {
-        val digest = MessageDigest.getInstance("SHA-256").digest(token.toByteArray(스프링 부트 예제 애플리케이션))
-        return Base64.getUrlEncoder(스프링 부트 예제 애플리케이션).withoutPadding(스프링 부트 예제 애플리케이션).encodeToString(digest)
+        val digest = MessageDigest.getInstance("SHA-256").digest(token.toByteArray())
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(digest)
     }
 
     companion object {
@@ -197,7 +197,7 @@ class TokenService(
             if redis.call('HEXISTS', KEYS[1], 'rotatedAt') == 1 then return 2 end
             redis.call('HSET', KEYS[1], 'rotatedAt', ARGV[1])
             return 1
-            """.trimIndent(스프링 부트 예제 애플리케이션),
+            """.trimIndent(),
             Long::class.javaObjectType,
         )
     }
@@ -245,12 +245,12 @@ class TokenVersionStore(
 ) {
     private val ttl = maxOf(properties.refreshTokenTtl, properties.accessTokenTtl) + properties.clockSkew
 
-    fun current(userId: String): String = redis.opsForValue(스프링 부트 예제 애플리케이션).get(key(userId)) ?: ""
+    fun current(userId: String): String = redis.opsForValue().get(key(userId)) ?: ""
 
-    fun forIssue(userId: String): String = redis.opsForValue(스프링 부트 예제 애플리케이션).getAndExpire(key(userId), ttl) ?: ""
+    fun forIssue(userId: String): String = redis.opsForValue().getAndExpire(key(userId), ttl) ?: ""
 
     fun revoke(userId: String) {
-        redis.opsForValue(스프링 부트 예제 애플리케이션).set(key(userId), UUID.randomUUID(스프링 부트 예제 애플리케이션).toString(스프링 부트 예제 애플리케이션), ttl)
+        redis.opsForValue().set(key(userId), UUID.randomUUID().toString(), ttl)
     }
 
     private fun key(userId: String): String = "token:version:$userId"
@@ -287,7 +287,7 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       if (!refreshPromise) {
-        refreshPromise = requestNewTokens(스프링 부트 예제 애플리케이션).finally((스프링 부트 예제 애플리케이션) => {
+        refreshPromise = requestNewTokens().finally(() => {
           refreshPromise = null;
         });
       }
@@ -344,13 +344,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-class RefreshTokenConcurrencyTest : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class RefreshTokenConcurrencyTest : IntegrationTestSupport() {
     @Autowired
     private lateinit var tokenService: TokenService
 
     @Test
-    fun `같은 리프레시 토큰을 동시에 교체해도 최대 한 요청만 성공한다`(스프링 부트 예제 애플리케이션) {
-        val user = createUser(스프링 부트 예제 애플리케이션)
+    fun `같은 리프레시 토큰을 동시에 교체해도 최대 한 요청만 성공한다`() {
+        val user = createUser()
         Executors.newFixedThreadPool(8).use { executor ->
             repeat(10) {
                 val first = tokenService.issue(AuthUser.from(user)).refreshToken
@@ -358,20 +358,20 @@ class RefreshTokenConcurrencyTest : IntegrationTestSupport(스프링 부트 예�
                 val start = CountDownLatch(1)
                 val futures = (1..8).map {
                     executor.submit<Result<TokenResponse>> {
-                        ready.countDown(스프링 부트 예제 애플리케이션)
+                        ready.countDown()
                         check(start.await(5, TimeUnit.SECONDS))
                         runCatching { tokenService.rotate(first) }
                     }
                 }
                 check(ready.await(5, TimeUnit.SECONDS))
-                start.countDown(스프링 부트 예제 애플리케이션) // 8개 스레드가 동시에 rotate 호출 시작
+                start.countDown() // 8개 스레드가 동시에 rotate 호출 시작
 
                 val results = futures.map { it.get(10, TimeUnit.SECONDS) }
                 
                 // 오직 1개 이하의 요청만 성공해야 함
                 assertThat(results.count { it.isSuccess }).isLessThanOrEqualTo(1)
-                assertThat(results.mapNotNull { it.exceptionOrNull(스프링 부트 예제 애플리케이션) }).allMatch { it is BusinessException }
-                tokenService.revokeAll(user.id.toString(스프링 부트 예제 애플리케이션))
+                assertThat(results.mapNotNull { it.exceptionOrNull() }).allMatch { it is BusinessException }
+                tokenService.revokeAll(user.id.toString())
             }
         }
     }

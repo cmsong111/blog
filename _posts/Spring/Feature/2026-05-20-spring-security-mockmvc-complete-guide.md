@@ -97,14 +97,14 @@ abstract class IntegrationTestSupport {
     protected fun createUser(
         password: String? = PASSWORD,
         roles: Set<UserRole> = setOf(UserRole.USER),
-        email: String? = "user-${UUID.randomUUID(스프링 부트 예제 애플리케이션)}@example.com",
+        email: String? = "user-${UUID.randomUUID()}@example.com",
         nickname: String = "테스터",
     ): User = userRepository.save(
         User(
             email = email,
             password = password?.let { passwordEncoder.encode(it) },
             nickname = nickname,
-            roles = roles.toMutableSet(스프링 부트 예제 애플리케이션),
+            roles = roles.toMutableSet(),
         )
     )
 
@@ -113,14 +113,14 @@ abstract class IntegrationTestSupport {
         jwtProvider.createAccessToken(AuthUser.from(user))
 
     /** 응답 헤더에서 유효한 세션 쿠키 추출 */
-    protected fun MvcResult.sessionCookie(스프링 부트 예제 애플리케이션): Cookie? =
-        response.getCookie(SESSION_COOKIE)?.takeIf { it.maxAge != 0 && it.value.isNotEmpty(스프링 부트 예제 애플리케이션) }
+    protected fun MvcResult.sessionCookie(): Cookie? =
+        response.getCookie(SESSION_COOKIE)?.takeIf { it.maxAge != 0 && it.value.isNotEmpty() }
 
     /**
      * 세션 쿠키(Base64 인코딩된 세션 ID)로 Redis 세션 저장소에 직렬화된 SecurityContext를 역추적 조회합니다.
      */
     protected fun securityContextOf(cookie: Cookie): SecurityContext? {
-        val sessionId = String(Base64.getDecoder(스프링 부트 예제 애플리케이션).decode(cookie.value))
+        val sessionId = String(Base64.getDecoder().decode(cookie.value))
         return sessionRepository.findById(sessionId)
             ?.getAttribute<SecurityContext>(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY)
     }
@@ -181,17 +181,17 @@ import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.get
 
 @DisplayName("API 체인 (JWT, 무상태)")
-class ApiSecurityTest : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class ApiSecurityTest : IntegrationTestSupport() {
 
     @Test
-    fun `유효한 JWT로 인증되고 세션을 만들지 않는다`(스프링 부트 예제 애플리케이션) {
-        val user = createUser(스프링 부트 예제 애플리케이션)
+    fun `유효한 JWT로 인증되고 세션을 만들지 않는다`() {
+        val user = createUser()
 
         mockMvc.get("/api/v1/users/me") {
             header(HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenOf(user)}")
         }.andExpect {
-            status { isOk(스프링 부트 예제 애플리케이션) }
-            jsonPath("$.data.id") { value(user.id.toString(스프링 부트 예제 애플리케이션)) }
+            status { isOk() }
+            jsonPath("$.data.id") { value(user.id.toString()) }
             // 세션 쿠키가 응답 헤더에 절대 포함되지 않아야 함
             header { doesNotExist(HttpHeaders.SET_COOKIE) }
             // 요청 컨텍스트 내부에 스프링 시큐리티 세션 속성이 존재하지 않아야 함
@@ -200,9 +200,9 @@ class ApiSecurityTest : IntegrationTestSupport(스프링 부트 예제 애플리
     }
 
     @Test
-    fun `JWT가 없으면 JSON 401을 반환한다`(스프링 부트 예제 애플리케이션) {
+    fun `JWT가 없으면 JSON 401을 반환한다`() {
         mockMvc.get("/api/v1/users/me").andExpect {
-            status { isUnauthorized(스프링 부트 예제 애플리케이션) }
+            status { isUnauthorized() }
             content { contentTypeCompatibleWith("application/json") }
             jsonPath("$.success") { value(false) }
             jsonPath("$.code") { value("AUTH-000") }
@@ -220,32 +220,32 @@ class ApiSecurityTest : IntegrationTestSupport(스프링 부트 예제 애플리
 
 ```kotlin
     @Test
-    fun `서명이 잘못된 JWT는 JSON 401(AUTH-001)을 반환한다`(스프링 부트 예제 애플리케이션) {
-        val token = accessTokenOf(createUser(스프링 부트 예제 애플리케이션))
+    fun `서명이 잘못된 JWT는 JSON 401(AUTH-001)을 반환한다`() {
+        val token = accessTokenOf(createUser())
         // 서명 부호(Signature)의 끝자리 4글자를 임의 조작
         val tampered = token.dropLast(4) + if (token.endsWith("AAAA")) "BBBB" else "AAAA"
 
         mockMvc.get("/api/v1/users/me") {
             header(HttpHeaders.AUTHORIZATION, "Bearer $tampered")
         }.andExpect {
-            status { isUnauthorized(스프링 부트 예제 애플리케이션) }
+            status { isUnauthorized() }
             jsonPath("$.code") { value("AUTH-001") }
         }
     }
 
     @Test
-    fun `만료된 JWT는 JSON 401(AUTH-002)을 반환한다`(스프링 부트 예제 애플리케이션) {
-        val user = createUser(스프링 부트 예제 애플리케이션)
+    fun `만료된 JWT는 JSON 401(AUTH-002)을 반환한다`() {
+        val user = createUser()
         val expired = jwtProvider.createAccessToken(
             userId = user.id!!,
             roles = listOf(UserRole.USER.name),
-            issuedAt = java.time.Instant.now(스프링 부트 예제 애플리케이션).minusSeconds(7200),
+            issuedAt = java.time.Instant.now().minusSeconds(7200),
         )
 
         mockMvc.get("/api/v1/users/me") {
             header(HttpHeaders.AUTHORIZATION, "Bearer $expired")
         }.andExpect {
-            status { isUnauthorized(스프링 부트 예제 애플리케이션) }
+            status { isUnauthorized() }
             jsonPath("$.code") { value("AUTH-002") }
         }
     }
@@ -257,21 +257,21 @@ class ApiSecurityTest : IntegrationTestSupport(스프링 부트 예제 애플리
 
 ```kotlin
     @Test
-    fun `Admin Web 세션 쿠키만으로는 API에 인증되지 않는다`(스프링 부트 예제 애플리케이션) {
+    fun `Admin Web 세션 쿠키만으로는 API에 인증되지 않는다`() {
         val admin = createUser(roles = setOf(UserRole.ADMIN, UserRole.USER))
         
         // 1. 관리자 폼 로그인을 통해 유효한 세션 쿠키 획득
         val sessionCookie = mockMvc.post("/admin/login") {
-            with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf(스프링 부트 예제 애플리케이션))
+            with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf())
             param("username", admin.email!!)
             param("password", PASSWORD)
-        }.andReturn(스프링 부트 예제 애플리케이션).sessionCookie(스프링 부트 예제 애플리케이션)!!
+        }.andReturn().sessionCookie()!!
 
         // 2. 세션 쿠키만 헤더에 담아 API 호출 시도
         mockMvc.get("/api/v1/users/me") {
             cookie(sessionCookie)
         }.andExpect {
-            status { isUnauthorized(스프링 부트 예제 애플리케이션) }
+            status { isUnauthorized() }
             jsonPath("$.code") { value("AUTH-000") } // 토큰 없음 401 에러
         }
     }
@@ -294,7 +294,7 @@ flowchart TD
     CSRF -- "일치" --> AuthCheck{"아이디 / 비밀번호 일치?"}
     
     AuthCheck -- "실패" --> FailRedirect["302 Redirection -> /admin/login?error"]
-    AuthCheck -- "성공" --> Fixation["SessionFixation: changeSessionId(스프링 부트 예제 애플리케이션)"]
+    AuthCheck -- "성공" --> Fixation["SessionFixation: changeSessionId()"]
     
     Fixation --> StoreSession["Redis 세션 저장소에 AuthUser 저장 (비밀번호 null화)"]
     StoreSession --> SuccessRedirect["302 Redirection -> /admin/dashboard"]
@@ -319,56 +319,56 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @DisplayName("Admin Web 체인 (formLogin, 세션)")
-class AdminWebSecurityTest : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class AdminWebSecurityTest : IntegrationTestSupport() {
 
     @Test
-    fun `로그인 성공 시 세션 ID가 바뀌고 인증 정보가 세션에 저장된다`(스프링 부트 예제 애플리케이션) {
+    fun `로그인 성공 시 세션 ID가 바뀌고 인증 정보가 세션에 저장된다`() {
         val admin = createUser(roles = setOf(UserRole.ADMIN, UserRole.USER), nickname = "관리자")
-        val anonymousCookie = mockMvc.get("/admin/login").andReturn(스프링 부트 예제 애플리케이션).sessionCookie(스프링 부트 예제 애플리케이션)!!
+        val anonymousCookie = mockMvc.get("/admin/login").andReturn().sessionCookie()!!
 
         val result = mockMvc.post("/admin/login") {
-            with(csrf(스프링 부트 예제 애플리케이션))
+            with(csrf())
             cookie(anonymousCookie)
             param("username", admin.email!!)
             param("password", PASSWORD)
         }.andExpect {
-            status { is3xxRedirection(스프링 부트 예제 애플리케이션) }
+            status { is3xxRedirection() }
             redirectedUrl("/admin/dashboard")
-        }.andReturn(스프링 부트 예제 애플리케이션)
+        }.andReturn()
 
-        val sessionCookie = result.sessionCookie(스프링 부트 예제 애플리케이션)!!
+        val sessionCookie = result.sessionCookie()!!
         
         // 1. 세션 고정 보호(Session Fixation Protection) 검증: 세션 ID 변경 확인
         assertThat(sessionCookie.value).isNotEqualTo(anonymousCookie.value)
-        assertThat(sessionCookie.isHttpOnly).isTrue(스프링 부트 예제 애플리케이션)
+        assertThat(sessionCookie.isHttpOnly).isTrue()
 
         // 2. Redis 세션 저장소 내부 객체 검증
         val principal = securityContextOf(sessionCookie)?.authentication?.principal
         assertThat(principal).isInstanceOf(AuthUser::class.java)
         assertThat((principal as AuthUser).id).isEqualTo(admin.id)
         // 세션 저장소에 패스워드 원문/해시가 잔류하지 않도록 소거되었는지 확인
-        assertThat(principal.password).isNull(스프링 부트 예제 애플리케이션)
+        assertThat(principal.password).isNull()
     }
 }
 ```
 
 ### 2.2 CSRF 공격 차단 검증
 
-스프링 시큐리티의 `SecurityMockMvcRequestPostProcessors.csrf(스프링 부트 예제 애플리케이션)`를 일부러 누락시켰을 때 올바르게 403 Forbidden으로 차단되는지 확인합니다.
+스프링 시큐리티의 `SecurityMockMvcRequestPostProcessors.csrf()`를 일부러 누락시켰을 때 올바르게 403 Forbidden으로 차단되는지 확인합니다.
 
 ```kotlin
     @Test
-    fun `CSRF 토큰 없이 로그인하면 거부된다`(스프링 부트 예제 애플리케이션) {
+    fun `CSRF 토큰 없이 로그인하면 거부된다`() {
         val admin = createUser(roles = setOf(UserRole.ADMIN, UserRole.USER))
-        val sessionCookie = mockMvc.get("/admin/login").andReturn(스프링 부트 예제 애플리케이션).sessionCookie(스프링 부트 예제 애플리케이션)!!
+        val sessionCookie = mockMvc.get("/admin/login").andReturn().sessionCookie()!!
 
-        // with(csrf(스프링 부트 예제 애플리케이션))를 누락하고 POST 요청
+        // with(csrf())를 누락하고 POST 요청
         mockMvc.post("/admin/login") {
             cookie(sessionCookie)
             param("username", admin.email!!)
             param("password", PASSWORD)
         }.andExpect {
-            status { isForbidden(스프링 부트 예제 애플리케이션) }
+            status { isForbidden() }
         }
     }
 ```
@@ -379,13 +379,13 @@ class AdminWebSecurityTest : IntegrationTestSupport(스프링 부트 예제 애�
 
 ```kotlin
     @Test
-    fun `Bearer 토큰만으로는 Admin Web에 인증되지 않는다`(스프링 부트 예제 애플리케이션) {
+    fun `Bearer 토큰만으로는 Admin Web에 인증되지 않는다`() {
         val admin = createUser(roles = setOf(UserRole.ADMIN, UserRole.USER))
 
         mockMvc.get("/admin/dashboard") {
             header(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer ${accessTokenOf(admin)}")
         }.andExpect {
-            status { is3xxRedirection(스프링 부트 예제 애플리케이션) }
+            status { is3xxRedirection() }
             redirectedUrl("/admin/login")
         }
     }
@@ -421,11 +421,11 @@ JaCoCo 커버리지 측정 결과, `ApiSecurityConfig`, `AdminWebSecurityConfig`
 실무에서 모든 테스트를 무거운 `@SpringBootTest`로만 돌리면 빌드 속도가 저하될 수 있습니다. 상황에 따라 아래와 같은 균형 전략을 추천합니다:
 
 1. **비즈니스 컨트롤러 단위 테스트 (`@WebMvcTest`)**:
-   - 엔드포인트의 입력값 유효성 검증이나 DTO 직렬화 테스트에는 `SecurityMockMvcRequestPostProcessors.jwt(스프링 부트 예제 애플리케이션)`를 사용하는 것이 빠르고 효율적입니다:
+   - 엔드포인트의 입력값 유효성 검증이나 DTO 직렬화 테스트에는 `SecurityMockMvcRequestPostProcessors.jwt()`를 사용하는 것이 빠르고 효율적입니다:
    ```kotlin
    mockMvc.get("/api/v1/articles") {
-       with(jwt(스프링 부트 예제 애플리케이션).jwt { it.claim("roles", listOf("USER")) })
-   }.andExpect { status { isOk(스프링 부트 예제 애플리케이션) } }
+       with(jwt().jwt { it.claim("roles", listOf("USER")) })
+   }.andExpect { status { isOk() } }
    ```
 2. **보안 아키텍처 및 체인 격리 테스트 (`@SpringBootTest` + `@AutoConfigureMockMvc`)**:
    - `SecurityConfig`의 체인 순서(`@Order`), 실제 JWT 파서 동작, CSRF 토큰 검증, 세션 고정 보호, 체인 간 상호 배타성 검증은 반드시 실제 필터가 로드되는 통합 테스트로 단 한 번이라도 완벽하게 검증해야 배포 시 사고를 막을 수 있습니다.

@@ -195,7 +195,7 @@ class JudgmentImportService {
 
         val case = compact(raw.listCaseNumber)
         // 본문이 "4285민상169 내지 177"처럼 범위·병합을 덧붙여도 목록 사건번호를 숫자 경계로 포함하면 같은 사건이다.
-        if (case != null && !Regex("(?<!\\d)${Regex.escape(case)}(?!\\d)").containsMatchIn(compact(parsed.caseNumber).orEmpty(스프링 부트 예제 애플리케이션))) {
+        if (case != null && !Regex("(?<!\\d)${Regex.escape(case)}(?!\\d)").containsMatchIn(compact(parsed.caseNumber).orEmpty())) {
             return "목록 사건번호(${raw.listCaseNumber})와 본문 사건번호(${parsed.caseNumber})가 다릅니다."
         }
 

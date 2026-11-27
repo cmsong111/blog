@@ -136,7 +136,7 @@ class Reaction(
         protected set
 
     @Column(nullable = false, updatable = false)
-    val createdAt: Instant = Instant.now(스프링 부트 예제 애플리케이션)
+    val createdAt: Instant = Instant.now()
 
     @Column(nullable = false)
     var updatedAt: Instant = createdAt
@@ -145,7 +145,7 @@ class Reaction(
     fun change(type: ReactionType) {
         if (this.type == type) return
         this.type = type
-        updatedAt = Instant.now(스프링 부트 예제 애플리케이션)
+        updatedAt = Instant.now()
     }
 }
 ```
@@ -295,7 +295,7 @@ class ReactionService(
      * 게시글별 반응 합계 (목록용).
      */
     fun totals(articleIds: Collection<Long>): Map<Long, Long> =
-        if (articleIds.isEmpty(스프링 부트 예제 애플리케이션)) emptyMap(스프링 부트 예제 애플리케이션)
+        if (articleIds.isEmpty()) emptyMap()
         else reactionRepository.totalsByArticleIds(articleIds).associate { it.articleId to it.total }
 
     private fun requireArticle(articleId: Long) {
@@ -306,10 +306,10 @@ class ReactionService(
 
 ### 2. 세련된 멱등성과 제자리 업데이트(In-place Update)
 
-`react(스프링 부트 예제 애플리케이션)` 메서드는 Kotlin의 엘비스 연산자(`?:`)를 사용하여 우아하게 분기합니다:
+`react()` 메서드는 Kotlin의 엘비스 연산자(`?:`)를 사용하여 우아하게 분기합니다:
 - 기존 반응이 존재하면 `change(type)`를 호출하여 영속성 컨텍스트의 변경 감지(Dirty Checking)를 통해 해당 레코드의 `type`과 `updated_at`만 **In-place UPDATE**합니다. 기존 레코드를 삭제하고 새로 INSERT하는 비효율과 트랜잭션 내 유니크 제약 충돌 위험을 완벽히 방지합니다.
-- 기존 반응이 없으면 `Reaction` 인스턴스를 생성하여 즉시 `save(스프링 부트 예제 애플리케이션)`합니다.
-- 취소(`cancel(스프링 부트 예제 애플리케이션)`)의 경우에도, 설령 이미 삭제되었거나 반응을 남기지 않았더라도 에러를 발생시키지 않고 `0`건 삭제로 정상 처리하여 **완전한 멱등성(Idempotency)**을 유지합니다.
+- 기존 반응이 없으면 `Reaction` 인스턴스를 생성하여 즉시 `save()`합니다.
+- 취소(`cancel()`)의 경우에도, 설령 이미 삭제되었거나 반응을 남기지 않았더라도 에러를 발생시키지 않고 `0`건 삭제로 정상 처리하여 **완전한 멱등성(Idempotency)**을 유지합니다.
 
 ---
 
@@ -358,7 +358,7 @@ data class ReactionSummaryResponse(
             val byType = counts.associate { it.type to it.count }
             return ReactionSummaryResponse(
                 counts = ReactionType.entries.map { Count(it, it.description, byType[it] ?: 0) },
-                total = byType.values.sum(스프링 부트 예제 애플리케이션),
+                total = byType.values.sum(),
                 myReaction = myReaction,
             )
         }
@@ -510,7 +510,7 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.put
 
 @DisplayName("게시글 반응 API")
-class ReactionApiTest : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class ReactionApiTest : IntegrationTestSupport() {
 
     @Autowired
     private lateinit var articleRepository: ArticleJpaRepository
@@ -522,19 +522,19 @@ class ReactionApiTest : IntegrationTestSupport(스프링 부트 예제 애플리
     private lateinit var userService: UserService
 
     @Test
-    fun `반응을 남기고 바꾸고 취소하고 다시 남길 수 있다`(스프링 부트 예제 애플리케이션) {
-        val article = createArticle(스프링 부트 예제 애플리케이션)
-        val token = bearer(스프링 부트 예제 애플리케이션)
+    fun `반응을 남기고 바꾸고 취소하고 다시 남길 수 있다`() {
+        val article = createArticle()
+        val token = bearer()
 
         // 1. 처음 ANGRY 남기기 -> total 1, ANGRY 1
         react(article.id, token, "ANGRY").andExpect {
-            status { isOk(스프링 부트 예제 애플리케이션) }
+            status { isOk() }
             jsonPath("$.data.myReaction") { value("ANGRY") }
             jsonPath("$.data.total") { value(1) }
             jsonPath("$.data.counts[0].type") { value("ANGRY") }
             jsonPath("$.data.counts[0].name") { value("화나요") }
             jsonPath("$.data.counts[0].count") { value(1) }
-            jsonPath("$.data.counts.length(스프링 부트 예제 애플리케이션)") { value(5) } // 누락 없이 5개 항목 모두 반환
+            jsonPath("$.data.counts.length()") { value(5) } // 누락 없이 5개 항목 모두 반환
         }
 
         // 2. RELIEVED 로 바꾸기 -> total 여전히 1, ANGRY 0, RELIEVED 1
@@ -549,32 +549,32 @@ class ReactionApiTest : IntegrationTestSupport(스프링 부트 예제 애플리
         mockMvc.delete("/api/v1/articles/${article.id}/reaction") { 
             header(HttpHeaders.AUTHORIZATION, token) 
         }.andExpect {
-            status { isOk(스프링 부트 예제 애플리케이션) }
-            jsonPath("$.data.myReaction") { value(nullValue(스프링 부트 예제 애플리케이션)) }
+            status { isOk() }
+            jsonPath("$.data.myReaction") { value(nullValue()) }
             jsonPath("$.data.total") { value(0) }
         }
 
         // 4. 취소 후 SAD 다시 남기기 (하드 삭제 덕분에 UK 충돌 없이 재등록 가능)
         react(article.id, token, "SAD").andExpect {
-            status { isOk(스프링 부트 예제 애플리케이션) }
+            status { isOk() }
             jsonPath("$.data.myReaction") { value("SAD") }
             jsonPath("$.data.total") { value(1) }
         }
     }
 
     @Test
-    fun `게시글 상세와 목록에 반응이 집계되고 로그인하면 내 반응이 보인다`(스프링 부트 예제 애플리케이션) {
-        val article = createArticle(스프링 부트 예제 애플리케이션)
-        val me = bearer(스프링 부트 예제 애플리케이션)
+    fun `게시글 상세와 목록에 반응이 집계되고 로그인하면 내 반응이 보인다`() {
+        val article = createArticle()
+        val me = bearer()
         react(article.id, me, "ANGRY")
-        react(article.id, bearer(스프링 부트 예제 애플리케이션), "ANGRY")
-        react(article.id, bearer(스프링 부트 예제 애플리케이션), "EMPATHY")
+        react(article.id, bearer(), "ANGRY")
+        react(article.id, bearer(), "EMPATHY")
 
         // 비로그인 상세 조회 -> total 3, myReaction null
         mockMvc.get("/api/v1/articles/${article.id}").andExpect {
             jsonPath("$.data.reactions.total") { value(3) }
             jsonPath("$.data.reactions.counts[0].count") { value(2) }
-            jsonPath("$.data.reactions.myReaction") { value(nullValue(스프링 부트 예제 애플리케이션)) }
+            jsonPath("$.data.reactions.myReaction") { value(nullValue()) }
         }
 
         // 로그인 상세 조회 -> myReaction ANGRY 노출
@@ -595,9 +595,9 @@ class ReactionApiTest : IntegrationTestSupport(스프링 부트 예제 애플리
     }
 
     @Test
-    fun `회원이 탈퇴해도 남긴 반응은 집계에 남는다`(스프링 부트 예제 애플리케이션) {
-        val article = createArticle(스프링 부트 예제 애플리케이션)
-        val leaver = createUser(스프링 부트 예제 애플리케이션)
+    fun `회원이 탈퇴해도 남긴 반응은 집계에 남는다`() {
+        val article = createArticle()
+        val leaver = createUser()
         react(article.id, "Bearer ${accessTokenOf(leaver)}", "SURPRISED")
 
         // 회원 탈퇴 실행
@@ -610,33 +610,33 @@ class ReactionApiTest : IntegrationTestSupport(스프링 부트 예제 애플리
     }
 
     @Test
-    fun `비로그인은 401, 잘못된 반응 종류와 빈 요청은 400, 없는 게시글은 404다`(스프링 부트 예제 애플리케이션) {
-        val article = createArticle(스프링 부트 예제 애플리케이션)
+    fun `비로그인은 401, 잘못된 반응 종류와 빈 요청은 400, 없는 게시글은 404다`() {
+        val article = createArticle()
 
         // 1. 비로그인 요청 -> 401
         mockMvc.put("/api/v1/articles/${article.id}/reaction") {
             contentType = MediaType.APPLICATION_JSON
             content = """{"type":"ANGRY"}"""
-        }.andExpect { status { isUnauthorized(스프링 부트 예제 애플리케이션) } }
+        }.andExpect { status { isUnauthorized() } }
 
         // 2. 존재하지 않는 enum 값 -> 400
-        react(article.id, bearer(스프링 부트 예제 애플리케이션), "LOVE").andExpect { status { isBadRequest(스프링 부트 예제 애플리케이션) } }
+        react(article.id, bearer(), "LOVE").andExpect { status { isBadRequest() } }
 
         // 3. 필수 필드 누락 -> 400 (validation 에러 필드 반환)
         mockMvc.put("/api/v1/articles/${article.id}/reaction") {
-            header(HttpHeaders.AUTHORIZATION, bearer(스프링 부트 예제 애플리케이션))
+            header(HttpHeaders.AUTHORIZATION, bearer())
             contentType = MediaType.APPLICATION_JSON
             content = "{}"
         }.andExpect {
-            status { isBadRequest(스프링 부트 예제 애플리케이션) }
+            status { isBadRequest() }
             jsonPath("$.errors[0].field") { value("type") }
         }
 
         // 4. 삭제된 게시글에 반응 시도 -> 404 ARTICLE-001
-        article.delete(스프링 부트 예제 애플리케이션)
+        article.delete()
         articleRepository.save(article)
-        react(article.id, bearer(스프링 부트 예제 애플리케이션), "ANGRY").andExpect {
-            status { isNotFound(스프링 부트 예제 애플리케이션) }
+        react(article.id, bearer(), "ANGRY").andExpect {
+            status { isNotFound() }
             jsonPath("$.code") { value("ARTICLE-001") }
         }
     }
@@ -648,14 +648,14 @@ class ReactionApiTest : IntegrationTestSupport(스프링 부트 예제 애플리
             content = """{"type":"$type"}"""
         }
 
-    private fun createArticle(스프링 부트 예제 애플리케이션): Article {
-        val judgment = judgmentRepository.save(Judgment(caseNumber = "2026도${suffix(스프링 부트 예제 애플리케이션)}", verdict = "요지"))
-        return articleRepository.save(Article(title = "게시글-${suffix(스프링 부트 예제 애플리케이션)}", content = "본문", source = judgment))
+    private fun createArticle(): Article {
+        val judgment = judgmentRepository.save(Judgment(caseNumber = "2026도${suffix()}", verdict = "요지"))
+        return articleRepository.save(Article(title = "게시글-${suffix()}", content = "본문", source = judgment))
     }
 
-    private fun suffix(스프링 부트 예제 애플리케이션): String = UUID.randomUUID(스프링 부트 예제 애플리케이션).toString(스프링 부트 예제 애플리케이션).take(8)
+    private fun suffix(): String = UUID.randomUUID().toString().take(8)
 
-    private fun bearer(스프링 부트 예제 애플리케이션): String = "Bearer ${accessTokenOf(createUser(스프링 부트 예제 애플리케이션))}"
+    private fun bearer(): String = "Bearer ${accessTokenOf(createUser())}"
 }
 ```
 

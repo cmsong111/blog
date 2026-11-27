@@ -106,7 +106,7 @@ class SocialAccount(
 
     @Column(nullable = true)
     var providerEmail: String? = null,
-) : BaseEntity(스프링 부트 예제 애플리케이션)
+) : BaseEntity()
 ```
 
 ### `User` 애그리게이트 루트 내 연동/해제 캡슐화
@@ -149,8 +149,8 @@ class User(
     var nickname: String,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val socialAccounts: MutableSet<SocialAccount> = mutableSetOf(스프링 부트 예제 애플리케이션),
-) : BaseEntity(스프링 부트 예제 애플리케이션) {
+    val socialAccounts: MutableSet<SocialAccount> = mutableSetOf(),
+) : BaseEntity() {
 
     fun linkSocialAccount(provider: Provider, providerId: String, providerEmail: String?): SocialAccount {
         if (socialAccounts.any { it.provider == provider }) {
@@ -178,7 +178,7 @@ class User(
     }
 
     override fun onDelete(at: Instant) {
-        socialAccounts.clear(스프링 부트 예제 애플리케이션)
+        socialAccounts.clear()
         email = email?.let { deletedEmail(it, at) }
     }
 }
@@ -204,7 +204,7 @@ sequenceDiagram
     User->>IdP: 계정 로그인 및 정보 제공 동의
     IdP-->>Server: GET /api/v1/auth/social/{provider}/callback?code=...
     Server->>IdP: Access Token 교환 & 사용자 프로필 조회
-    Server->>Server: link_ticket 소비 및 User.linkSocialAccount(스프링 부트 예제 애플리케이션) 수행
+    Server->>Server: link_ticket 소비 및 User.linkSocialAccount() 수행
     Server-->>Client: 302 Redirect: {frontend}/oauth/callback?linked={provider}
     Client->>User: 프로필 화면 연동 완료 배지 갱신
 ```
@@ -245,13 +245,13 @@ class ApiSecurityConfig(
         http
             .securityMatcher(
                 OrRequestMatcher(
-                    PathPatternRequestMatcher.withDefaults(스프링 부트 예제 애플리케이션).matcher(HttpMethod.GET, "/api/v1/auth/social/{provider}"),
-                    PathPatternRequestMatcher.withDefaults(스프링 부트 예제 애플리케이션).matcher(HttpMethod.GET, "/api/v1/auth/social/{provider}/callback"),
+                    PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/auth/social/{provider}"),
+                    PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.GET, "/api/v1/auth/social/{provider}/callback"),
                 )
             )
-            .csrf { it.disable(스프링 부트 예제 애플리케이션) }
+            .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .securityContext { it.securityContextRepository(NullSecurityContextRepository(스프링 부트 예제 애플리케이션)) }
+            .securityContext { it.securityContextRepository(NullSecurityContextRepository()) }
             .oauth2Login { oauth2 ->
                 oauth2.authorizationEndpoint {
                     it.baseUri("/api/v1/auth/social")
@@ -265,7 +265,7 @@ class ApiSecurityConfig(
                 oauth2.successHandler(apiSocialLoginHandler)
                 oauth2.failureHandler(apiSocialLoginHandler)
             }
-        return http.build(스프링 부트 예제 애플리케이션)
+        return http.build()
     }
 }
 ```
@@ -285,8 +285,8 @@ class AdminWebSecurityConfig {
         http
             .securityMatcher("/admin/**")
             .authorizeHttpRequests {
-                it.requestMatchers("/admin/login", "/admin/403").permitAll(스프링 부트 예제 애플리케이션)
-                it.anyRequest(스프링 부트 예제 애플리케이션).hasRole(UserRole.ADMIN.name)
+                it.requestMatchers("/admin/login", "/admin/403").permitAll()
+                it.anyRequest().hasRole(UserRole.ADMIN.name)
             }
             .formLogin {
                 it.loginPage("/admin/login")
@@ -311,9 +311,9 @@ class AdminWebSecurityConfig {
             }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                it.sessionFixation { fixation -> fixation.changeSessionId(스프링 부트 예제 애플리케이션) }
+                it.sessionFixation { fixation -> fixation.changeSessionId() }
             }
-        return http.build(스프링 부트 예제 애플리케이션)
+        return http.build()
     }
 }
 ```
@@ -365,7 +365,7 @@ class ApiSocialLoginHandler(
 
         val builder = UriComponentsBuilder.fromUriString("$frontendUrl$callbackPath")
         params.forEach { (key, value) -> builder.queryParam(key, value) }
-        DefaultRedirectStrategy(스프링 부트 예제 애플리케이션).sendRedirect(request, response, builder.encode(스프링 부트 예제 애플리케이션).build(스프링 부트 예제 애플리케이션).toUriString(스프링 부트 예제 애플리케이션))
+        DefaultRedirectStrategy().sendRedirect(request, response, builder.encode().build().toUriString())
     }
 
     companion object {
@@ -381,7 +381,7 @@ class AdminSocialLoginHandler(
     private val socialAccountService: SocialAccountService,
     private val userRepository: UserRepository,
 ) : AuthenticationSuccessHandler {
-    private val securityContextRepository: SecurityContextRepository = HttpSessionSecurityContextRepository(스프링 부트 예제 애플리케이션)
+    private val securityContextRepository: SecurityContextRepository = HttpSessionSecurityContextRepository()
 
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
@@ -393,19 +393,19 @@ class AdminSocialLoginHandler(
         try {
             // 관리자는 등록된 계정만 허용 (미연동 시 예외 발생)
             val user = socialAccountService.login(principal, allowSignUp = false)
-            val authUser = AuthUser.from(user).also { it.eraseCredentials(스프링 부트 예제 애플리케이션) }
+            val authUser = AuthUser.from(user).also { it.eraseCredentials() }
 
-            val context = SecurityContextHolder.createEmptyContext(스프링 부트 예제 애플리케이션)
+            val context = SecurityContextHolder.createEmptyContext()
             context.authentication = UsernamePasswordAuthenticationToken.authenticated(authUser, null, authUser.authorities)
             SecurityContextHolder.setContext(context)
             securityContextRepository.saveContext(context, request, response)
 
-            DefaultRedirectStrategy(스프링 부트 예제 애플리케이션).sendRedirect(request, response, "/admin/dashboard")
+            DefaultRedirectStrategy().sendRedirect(request, response, "/admin/dashboard")
         } catch (e: BusinessException) {
-            val context = SecurityContextHolder.createEmptyContext(스프링 부트 예제 애플리케이션)
+            val context = SecurityContextHolder.createEmptyContext()
             SecurityContextHolder.setContext(context)
             securityContextRepository.saveContext(context, request, response)
-            DefaultRedirectStrategy(스프링 부트 예제 애플리케이션).sendRedirect(request, response, "/admin/login?error=${(e.errorCode as Enum<*>).name}")
+            DefaultRedirectStrategy().sendRedirect(request, response, "/admin/login?error=${(e.errorCode as Enum<*>).name}")
         }
     }
 }
@@ -423,7 +423,7 @@ class AdminSocialLoginHandler(
 따라서 탈퇴 시점에는 다음 조치를 취해야 합니다:
 
 1. **소셜 계정 물리 삭제(Hard Delete)**:
-   - `user.socialAccounts.clear(스프링 부트 예제 애플리케이션)`를 호출하고 `@OneToMany(orphanRemoval = true)` 설정을 통해 연결된 모든 `SocialAccount` 레코드를 즉시 삭제합니다. 이를 통해 사용자가 탈퇴 후 동일한 카카오/구글 계정으로 다시 서비스를 가입할 수 있습니다.
+   - `user.socialAccounts.clear()`를 호출하고 `@OneToMany(orphanRemoval = true)` 설정을 통해 연결된 모든 `SocialAccount` 레코드를 즉시 삭제합니다. 이를 통해 사용자가 탈퇴 후 동일한 카카오/구글 계정으로 다시 서비스를 가입할 수 있습니다.
 2. **이메일 유니크 제약 회피**:
    - `User.email` 컬럼의 고유 제약 조건을 해제하기 위해 `이메일@deleted_yyyyMMdd-HHmmss` 형태로 접미사를 부여하여 소프트 딜리트 상태로 변경합니다.
 

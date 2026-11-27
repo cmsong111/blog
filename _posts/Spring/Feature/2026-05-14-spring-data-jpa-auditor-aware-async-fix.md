@@ -61,17 +61,17 @@ class AuditorAwareImpl(
     private val request: HttpServletRequest // ⚠️ 싱글톤에 주입된 Request 스코프 프록시
 ) : AuditorAware<String> {
 
-    override fun getCurrentAuditor(스프링 부트 예제 애플리케이션): Optional<String> {
-        val authentication = SecurityContextHolder.getContext(스프링 부트 예제 애플리케이션).authentication
+    override fun getCurrentAuditor(): Optional<String> {
+        val authentication = SecurityContextHolder.getContext().authentication
 
         if (authentication == null || !authentication.isAuthenticated || authentication.name == "anonymousUser") {
-            return Optional.of("SYSTEM (${getClientIp(스프링 부트 예제 애플리케이션)})") // ⚠️ getClientIp(스프링 부트 예제 애플리케이션) 내부에서 프록시 접근
+            return Optional.of("SYSTEM (${getClientIp()})") // ⚠️ getClientIp() 내부에서 프록시 접근
         }
 
-        return Optional.of("${authentication.name} (${getClientIp(스프링 부트 예제 애플리케이션)})")
+        return Optional.of("${authentication.name} (${getClientIp()})")
     }
 
-    private fun getClientIp(스프링 부트 예제 애플리케이션): String {
+    private fun getClientIp(): String {
         val xfHeader: String? = request.getHeader("X-Forwarded-For") // 💥 여기서 터진다!
         return if (xfHeader == null) {
             request.remoteAddr
@@ -86,7 +86,7 @@ class AuditorAwareImpl(
 
 Spring에서 싱글톤 빈(`@Component`)에 `HttpServletRequest`를 생성자 주입받으면, 실제 HTTP 서블릿 요청 객체가 직접 들어오는 것이 아니라 스프링이 생성한 **동적 프록시 객체(`$Proxy...`)**가 주입됩니다.
 
-이 프록시 객체는 메서드가 호출될 때마다 내부적으로 `RequestContextHolder.currentRequestAttributes(스프링 부트 예제 애플리케이션)`를 조회하여, **현재 실행 중인 스레드의 `ThreadLocal`에 바인딩된 실제 요청 객체**로 작업을 위임합니다.
+이 프록시 객체는 메서드가 호출될 때마다 내부적으로 `RequestContextHolder.currentRequestAttributes()`를 조회하여, **현재 실행 중인 스레드의 `ThreadLocal`에 바인딩된 실제 요청 객체**로 작업을 위임합니다.
 
 ```mermaid
 sequenceDiagram
@@ -96,12 +96,12 @@ sequenceDiagram
     participant Holder as RequestContextHolder (ThreadLocal)
     Note over App,Holder: 케이스 1: 톰캣 HTTP 요청 스레드 (http-nio-exec)
     App->>Proxy: request.getHeader("X-Forwarded-For")
-    Proxy->>Holder: currentRequestAttributes(스프링 부트 예제 애플리케이션)
+    Proxy->>Holder: currentRequestAttributes()
     Holder-->>Proxy: ServletRequestAttributes 반환 (성공)
     Proxy-->>App: "192.168.1.15" 반환 (정상 동작)
     Note over App,Holder: 케이스 2: 백그라운드 스케줄러 스레드 (scheduling-1)
     App->>Proxy: request.getHeader("X-Forwarded-For")
-    Proxy->>Holder: currentRequestAttributes(스프링 부트 예제 애플리케이션)
+    Proxy->>Holder: currentRequestAttributes()
     Holder-->>Proxy: null (ThreadLocal에 바인딩된 요청 없음!)
     Proxy-->>App: IllegalStateException / ScopeNotActiveException 투척! 💥
 ```
@@ -146,7 +146,7 @@ object RequestUtils {
      * 비동기 스레드나 스케줄러 환경에서는 null을 반환합니다.
      */
     val currentRequest: HttpServletRequest?
-        get(스프링 부트 예제 애플리케이션) = (RequestContextHolder.getRequestAttributes(스프링 부트 예제 애플리케이션) as? ServletRequestAttributes)?.request
+        get() = (RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes)?.request
 
     /**
      * 프록시 및 로드밸런서(NPM 등)를 고려한 클라이언트 실제 IP를 추출합니다.
@@ -156,17 +156,17 @@ object RequestUtils {
         if (request == null) return "unknown"
 
         val xfHeader = request.getHeader("X-Forwarded-For")
-        return if (xfHeader.isNullOrBlank(스프링 부트 예제 애플리케이션)) {
+        return if (xfHeader.isNullOrBlank()) {
             request.remoteAddr ?: "unknown"
         } else {
             // 여러 프록시를 거쳤을 경우 첫 번째 IP가 실제 클라이언트 IP
-            xfHeader.split(",")[0].trim(스프링 부트 예제 애플리케이션)
+            xfHeader.split(",")[0].trim()
         }
     }
 }
 ```
 
-`RequestContextHolder.getRequestAttributes(스프링 부트 예제 애플리케이션)`를 `ServletRequestAttributes`로 안전한 타입 캐스팅(`as?`)을 거치도록 하여, 요청이 없을 때 스프링의 프록시 예외가 발생하지 않고 자연스럽게 `null`을 반환하도록 유도했습니다.
+`RequestContextHolder.getRequestAttributes()`를 `ServletRequestAttributes`로 안전한 타입 캐스팅(`as?`)을 거치도록 하여, 요청이 없을 때 스프링의 프록시 예외가 발생하지 않고 자연스럽게 `null`을 반환하도록 유도했습니다.
 
 ### Step 2. 방어적 AuditorAware 구현
 
@@ -185,10 +185,10 @@ import org.springframework.stereotype.Component
 @Component
 class AuditorAwareImpl : AuditorAware<String> {
 
-    override fun getCurrentAuditor(스프링 부트 예제 애플리케이션): Optional<String> {
-        val authentication = SecurityContextHolder.getContext(스프링 부트 예제 애플리케이션)?.authentication
+    override fun getCurrentAuditor(): Optional<String> {
+        val authentication = SecurityContextHolder.getContext()?.authentication
         // 웹 요청 밖(배치, 스케줄러, 초기화)에서는 currentRequest가 null이므로 "unknown" 반환
-        val clientIp = RequestUtils.getClientIp(스프링 부트 예제 애플리케이션)
+        val clientIp = RequestUtils.getClientIp()
 
         // 1. 미인증 사용자 또는 비동기/스케줄러 환경 fallback
         if (authentication == null || !authentication.isAuthenticated || authentication.name == "anonymousUser") {
@@ -201,7 +201,7 @@ class AuditorAwareImpl : AuditorAware<String> {
 }
 ```
 
-> `AuditorAware`는 `Optional.empty(스프링 부트 예제 애플리케이션)`를 반환할 수도 있지만, 엔티티의 `@CreatedBy` 컬럼에 `NOT NULL` 제약조건이 걸려 있는 경우 데이터베이스 제약조건 위반(`DataIntegrityViolationException`)이 발생할 수 있습니다. 따라서 백그라운드 환경에서는 `SYSTEM (unknown)`과 같이 명시적인 식별자를 채워주는 편이 안전합니다.
+> `AuditorAware`는 `Optional.empty()`를 반환할 수도 있지만, 엔티티의 `@CreatedBy` 컬럼에 `NOT NULL` 제약조건이 걸려 있는 경우 데이터베이스 제약조건 위반(`DataIntegrityViolationException`)이 발생할 수 있습니다. 따라서 백그라운드 환경에서는 `SYSTEM (unknown)`과 같이 명시적인 식별자를 채워주는 편이 안전합니다.
 {: .prompt-info }
 
 ### Step 3. JPA Auditing 설정 및 공통 BaseEntity
@@ -241,11 +241,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 abstract class BaseEntity(
     @CreatedDate
     @Column(updatable = false, nullable = false)
-    var createdAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    var createdAt: Instant = Instant.now(),
 
     @LastModifiedDate
     @Column(nullable = false)
-    var updatedAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    var updatedAt: Instant = Instant.now(),
 
     @CreatedBy
     @Column(updatable = false, nullable = false, length = 100)
@@ -277,9 +277,9 @@ class AuditorAwareIntegrationTest @Autowired constructor(
 
     @Test
     @DisplayName("웹 요청 밖(비동기 스레드)에서도 예외 없이 시스템 감사자로 안전하게 저장된다")
-    fun persistOutsideWebRequest(스프링 부트 예제 애플리케이션) {
+    fun persistOutsideWebRequest() {
         // Given: SecurityContext와 RequestContext가 비어 있는 비동기 스레드 모사
-        SecurityContextHolder.clearContext(스프링 부트 예제 애플리케이션)
+        SecurityContextHolder.clearContext()
 
         // When
         val auditor = auditorAware.currentAuditor

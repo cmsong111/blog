@@ -56,10 +56,10 @@ sequenceDiagram
     Node2->>Redis: locks.lock("job:judgment-collection-job", lease=10m)
     Note over Node2,Redis: 락 획득 실패 (Optional.empty)
     Node2-->>Scheduler: ALREADY_RUNNING 예외 반환 후 안전 종료
-    Node1->>DB: begin(스프링 부트 예제 애플리케이션) -> JobRun #1042 생성 (leaseUntil = now + 10m)
+    Node1->>DB: begin() -> JobRun #1042 생성 (leaseUntil = now + 10m)
     Node1->>Node1: jobExecutor 풀에 비동기 위임
     loop 각 항목 처리 (1 ~ N건)
-        Node1->>Node1: context.check(스프링 부트 예제 애플리케이션) (중단 플래그 & 리스 만료 검증)
+        Node1->>Node1: context.check() (중단 플래그 & 리스 만료 검증)
         opt 리스 잔여시간 5분 미만 도달 시
             Node1->>Redis: lock.extend(10m, Duration.ZERO)
             Node1->>DB: states.renew(runId, now + 10m)
@@ -67,14 +67,14 @@ sequenceDiagram
         Node1->>DB: states.record(SUCCEEDED, checkpoint) [REQUIRES_NEW]
     end
     Node1->>DB: finish(SUCCEEDED)
-    Node1->>Redis: lock.unlock(스프링 부트 예제 애플리케이션) (락 해제)
+    Node1->>Redis: lock.unlock() (락 해제)
 ```
 
 ### 이중 보호 원리
 1. **초기 선점 (Redis ShedLock)**: 작업 시작 시점에 Redis `SET key value NX PX` 기반의 ShedLock을 통해 10분의 임차 시간(`leaseDuration`)으로 선점합니다. 이미 다른 노드가 작업 중이면 즉시 `ALREADY_RUNNING` 예외를 발생시키고 실행을 건너뜁니다.
 2. **DB Lease 기록**: 선점에 성공한 노드는 DB `job_runs` 테이블에 `lease_until = now + 10분`을 기록합니다.
-3. **심장박동 갱신 (Heartbeat Renewal)**: 작업 루프에서 항목을 처리할 때마다 `context.check(스프링 부트 예제 애플리케이션)`를 호출합니다. 만약 남은 리스 시간이 절반(5분) 이하로 내려가면, Redis 락을 10분 연장하고 DB의 `lease_until`도 함께 갱신합니다.
-4. **장애 격리 및 펜싱 (Fencing)**: 만약 인스턴스가 OOM 등으로 정지되어 심장박동을 갱신하지 못하면, 10초 주기 스케줄러가 `recoverExpired(스프링 부트 예제 애플리케이션)`를 통해 해당 작업을 `FAILED`로 마킹합니다. 지연된 구버전 스레드가 뒤늦게 깨어나 DB에 쓰려 해도 `lease_until` 검증에 걸려 `JobStopped` 예외가 발생하므로 데이터 오염이 원천 차단됩니다.
+3. **심장박동 갱신 (Heartbeat Renewal)**: 작업 루프에서 항목을 처리할 때마다 `context.check()`를 호출합니다. 만약 남은 리스 시간이 절반(5분) 이하로 내려가면, Redis 락을 10분 연장하고 DB의 `lease_until`도 함께 갱신합니다.
+4. **장애 격리 및 펜싱 (Fencing)**: 만약 인스턴스가 OOM 등으로 정지되어 심장박동을 갱신하지 못하면, 10초 주기 스케줄러가 `recoverExpired()`를 통해 해당 작업을 `FAILED`로 마킹합니다. 지연된 구버전 스레드가 뒤늦게 깨어나 DB에 쓰려 해도 `lease_until` 검증에 걸려 `JobStopped` 예외가 발생하므로 데이터 오염이 원천 차단됩니다.
 
 > Redis 락이 모종의 이유로 소실되더라도, DB 테이블에 활성 리스(`lease_until > now`)가 남아있다면 다른 인스턴스는 절대 새로운 실행을 시작할 수 없습니다.
 {: .prompt-info }
@@ -101,7 +101,7 @@ interface JobDefinition {
     val name: String
     val description: String
     val defaultCron: String
-    val leaseDuration: Duration get(스프링 부트 예제 애플리케이션) = Duration.ofMinutes(10)
+    val leaseDuration: Duration get() = Duration.ofMinutes(10)
     fun execute(context: JobContext)
 }
 ```
@@ -132,10 +132,10 @@ class JobConfig {
     ) = RedisLockProvider.Builder(factory)
         .environment("demo-app:$environment")
         .safeUpdate(true)
-        .build(스프링 부트 예제 애플리케이션)
+        .build()
 
     @Bean
-    fun jobExecutor(스프링 부트 예제 애플리케이션) = ThreadPoolTaskExecutor(스프링 부트 예제 애플리케이션).apply {
+    fun jobExecutor() = ThreadPoolTaskExecutor().apply {
         corePoolSize = 2
         maxPoolSize = 2
         queueCapacity = 0 // 작업 큐잉 없이 즉시 포화 감지
@@ -178,10 +178,10 @@ class JobRunner(
     private val locks: RedisLockProvider,
     @Qualifier("jobExecutor") private val executor: TaskExecutor,
 ) {
-    val definitions: List<JobDefinition> = definitions.orderedStream(스프링 부트 예제 애플리케이션).toList(스프링 부트 예제 애플리케이션).also { jobs ->
-        require(jobs.map { it.name }.distinct(스프링 부트 예제 애플리케이션).size == jobs.size) { "작업 이름이 중복됩니다." }
+    val definitions: List<JobDefinition> = definitions.orderedStream().toList().also { jobs ->
+        require(jobs.map { it.name }.distinct().size == jobs.size) { "작업 이름이 중복됩니다." }
     }
-    private val instance = "${System.getenv("HOSTNAME") ?: "local"}-${UUID.randomUUID(스프링 부트 예제 애플리케이션).toString(스프링 부트 예제 애플리케이션).take(8)}"
+    private val instance = "${System.getenv("HOSTNAME") ?: "local"}-${UUID.randomUUID().toString().take(8)}"
     private val logger = LoggerFactory.getLogger(javaClass)
 
     fun definition(name: String): JobDefinition = definitions.find { it.name == name }
@@ -190,10 +190,10 @@ class JobRunner(
     fun start(name: String, trigger: JobTrigger = JobTrigger.MANUAL, mode: JobStartMode = JobStartMode.RESUME): Long? {
         val job = definition(name)
         val setting = states.register(job)
-        if (trigger == JobTrigger.SCHEDULED && (!setting.enabled || setting.nextScheduledAt?.isAfter(Instant.now(스프링 부트 예제 애플리케이션)) != false)) {
+        if (trigger == JobTrigger.SCHEDULED && (!setting.enabled || setting.nextScheduledAt?.isAfter(Instant.now()) != false)) {
             return null
         }
-        val started = Instant.now(스프링 부트 예제 애플리케이션)
+        val started = Instant.now()
         // 1. Redis ShedLock 선점 (중복 실행 즉시 차단)
         val lock = locks.lock(LockConfiguration(started, "job:${job.name}", job.leaseDuration, Duration.ZERO))
             .orElseThrow { BusinessException(JobErrorCode.ALREADY_RUNNING) }
@@ -202,11 +202,11 @@ class JobRunner(
         val run = try {
             states.begin(job, trigger, mode, instance)
         } catch (e: Exception) {
-            lock.unlock(스프링 부트 예제 애플리케이션)
+            lock.unlock()
             throw e
         }
         if (run == null) {
-            lock.unlock(스프링 부트 예제 애플리케이션)
+            lock.unlock()
             return null
         }
 
@@ -218,21 +218,21 @@ class JobRunner(
             states.renew(run.id, leaseUntil)
             executor.execute {
                 try {
-                    context.check(스프링 부트 예제 애플리케이션)
+                    context.check()
                     states.activate(run.id)
                     job.execute(context)
-                    context.check(스프링 부트 예제 애플리케이션)
+                    context.check()
                     states.finish(run.id)
                 } catch (e: Exception) {
                     states.finish(run.id, e.message ?: e.javaClass.simpleName)
                     logger.warn("작업 {} 실행 {} 종료: {}", name, run.id, e.javaClass.simpleName)
                 } finally {
-                    runCatching { context.unlock(스프링 부트 예제 애플리케이션) }.onFailure { logger.warn("작업 {} 락 해제 실패", name, it) }
+                    runCatching { context.unlock() }.onFailure { logger.warn("작업 {} 락 해제 실패", name, it) }
                 }
             }
         } catch (e: Exception) {
             states.finish(run.id, "작업 실행을 시작하지 못했습니다: ${e.javaClass.simpleName}")
-            context.unlock(스프링 부트 예제 애플리케이션)
+            context.unlock()
             if (e is TaskRejectedException) throw BusinessException(JobErrorCode.CAPACITY_EXCEEDED)
             throw e
         }
@@ -268,9 +268,9 @@ class JobScheduler(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @Scheduled(fixedDelayString = "\${app.jobs.poll-delay:10000}", initialDelayString = "\${app.jobs.poll-delay:10000}")
-    fun poll(스프링 부트 예제 애플리케이션) {
+    fun poll() {
         // 비정상 종료된 만료 작업 자동 회수
-        states.recoverExpired(스프링 부트 예제 애플리케이션)
+        states.recoverExpired()
         if (!schedulingEnabled) return
 
         runner.definitions.forEach { job ->
@@ -290,15 +290,15 @@ class JobScheduler(
 
 ### 우아한 중단 (Graceful Cancellation)
 
-강제로 `Thread.interrupt(스프링 부트 예제 애플리케이션)`를 호출하거나 프로세스를 죽이면 진행 중이던 외부 API 응답과 DB 반영이 어정쩡한 상태로 깨질 위험이 있습니다. 
+강제로 `Thread.interrupt()`를 호출하거나 프로세스를 죽이면 진행 중이던 외부 API 응답과 DB 반영이 어정쩡한 상태로 깨질 위험이 있습니다. 
 
-저희 시스템에서는 운영자가 관리자 화면에서 `중단 요청` 버튼을 누르면 DB `JobRun.cancelRequested = true` 플래그만 세팅합니다. 그리고 실행 루프 내의 `context.check(스프링 부트 예제 애플리케이션)`가 다음 항목으로 넘어가기 전 안전한 경계에서 이를 확인하고 `JobStopped` 예외를 던지며 종료합니다:
+저희 시스템에서는 운영자가 관리자 화면에서 `중단 요청` 버튼을 누르면 DB `JobRun.cancelRequested = true` 플래그만 세팅합니다. 그리고 실행 루프 내의 `context.check()`가 다음 항목으로 넘어가기 전 안전한 경계에서 이를 확인하고 `JobStopped` 예외를 던지며 종료합니다:
 
 ```kotlin
 // JobStateStore.kt 중 일부
 private fun validate(run: JobRun) {
     if (run.cancelRequested) throw JobStopped("관리자가 중단을 요청했습니다.")
-    if (run.status != JobStatus.RUNNING || !run.leaseUntil.isAfter(Instant.now(스프링 부트 예제 애플리케이션))) {
+    if (run.status != JobStatus.RUNNING || !run.leaseUntil.isAfter(Instant.now())) {
         throw JobStopped("실행이 종료됐거나 리스가 만료되었습니다.")
     }
 }
@@ -329,12 +329,12 @@ class JobContext internal constructor(
     private val leaseDuration: Duration,
     private var leaseUntil: Instant,
 ) {
-    fun check(스프링 부트 예제 애플리케이션) {
-        if (Thread.currentThread(스프링 부트 예제 애플리케이션).isInterrupted) throw JobStopped("실행 스레드가 중단되었습니다.")
-        if (!leaseUntil.isAfter(Instant.now(스프링 부트 예제 애플리케이션))) throw JobStopped("실행 리스가 만료되었습니다.")
+    fun check() {
+        if (Thread.currentThread().isInterrupted) throw JobStopped("실행 스레드가 중단되었습니다.")
+        if (!leaseUntil.isAfter(Instant.now())) throw JobStopped("실행 리스가 만료되었습니다.")
         // 리스 만료 5분 전 심장박동 연장
-        if (Instant.now(스프링 부트 예제 애플리케이션).plus(leaseDuration.dividedBy(2)).isAfter(leaseUntil)) {
-            val renewedAt = Instant.now(스프링 부트 예제 애플리케이션)
+        if (Instant.now().plus(leaseDuration.dividedBy(2)).isAfter(leaseUntil)) {
+            val renewedAt = Instant.now()
             lock = lock.extend(leaseDuration, Duration.ZERO).orElseThrow { JobStopped("분산 락 소유권을 잃었습니다.") }
             leaseUntil = renewedAt.plus(leaseDuration)
             states.renew(runId, leaseUntil)
@@ -342,10 +342,10 @@ class JobContext internal constructor(
         states.check(runId)
     }
 
-    fun total(count: Long) { check(스프링 부트 예제 애플리케이션); states.total(runId, count) }
+    fun total(count: Long) { check(); states.total(runId, count) }
 
-    fun process(itemKey: String, checkpoint: String? = null, action: (스프링 부트 예제 애플리케이션) -> Unit): Boolean {
-        check(스프링 부트 예제 애플리케이션)
+    fun process(itemKey: String, checkpoint: String? = null, action: () -> Unit): Boolean {
+        check()
         return try {
             states.record(runId, JobItemResult.SUCCEEDED, checkpoint, action)
             true
@@ -357,9 +357,9 @@ class JobContext internal constructor(
         }
     }
 
-    fun skip(checkpoint: String? = null) { check(스프링 부트 예제 애플리케이션); states.record(runId, JobItemResult.SKIPPED, checkpoint) }
-    fun failure(itemKey: String, message: String) { check(스프링 부트 예제 애플리케이션); states.recordError(runId, itemKey, message) }
-    internal fun unlock(스프링 부트 예제 애플리케이션) = lock.unlock(스프링 부트 예제 애플리케이션)
+    fun skip(checkpoint: String? = null) { check(); states.record(runId, JobItemResult.SKIPPED, checkpoint) }
+    fun failure(itemKey: String, message: String) { check(); states.recordError(runId, itemKey, message) }
+    internal fun unlock() = lock.unlock()
 }
 ```
 
@@ -383,12 +383,12 @@ _그림 2. DataGrip을 통해 조회한 PostgreSQL `job_runs` 테이블 이력. 
 ```kotlin
 // src/test/kotlin/com/example/server/job/JobRunnerTest.kt
 @Test
-fun `독립적인 두 실행기의 동시 수동 요청도 한 번만 실행한다`(스프링 부트 예제 애플리케이션) {
+fun `독립적인 두 실행기의 동시 수동 요청도 한 번만 실행한다`() {
     val ready = CountDownLatch(1)
     val release = CountDownLatch(1)
-    val counter = AtomicInteger(스프링 부트 예제 애플리케이션)
-    fixture.action = { counter.incrementAndGet(스프링 부트 예제 애플리케이션); ready.countDown(스프링 부트 예제 애플리케이션); check(release.await(5, TimeUnit.SECONDS)) }
-    val second = anotherRunner(스프링 부트 예제 애플리케이션)
+    val counter = AtomicInteger()
+    fixture.action = { counter.incrementAndGet(); ready.countDown(); check(release.await(5, TimeUnit.SECONDS)) }
+    val second = anotherRunner()
     
     val ids = try {
         Executors.newFixedThreadPool(8).use { pool ->
@@ -399,23 +399,23 @@ fun `독립적인 두 실행기의 동시 수동 요청도 한 번만 실행한�
                     runCatching { (if (index % 2 == 0) runner else second).start(fixture.name) }
                 }
             }
-            start.countDown(스프링 부트 예제 애플리케이션)
+            start.countDown()
             check(ready.await(5, TimeUnit.SECONDS))
             val results = requests.map { it.get(5, TimeUnit.SECONDS) }
             
             // 8개의 동시 요청 중 정확히 1개만 성공
             assertThat(results.count { it.isSuccess }).isEqualTo(1)
             // 나머지 7개는 ALREADY_RUNNING 예외로 안전하게 튕겨냄
-            results.mapNotNull { it.exceptionOrNull(스프링 부트 예제 애플리케이션) }.forEach {
+            results.mapNotNull { it.exceptionOrNull() }.forEach {
                 assertThat(it).isInstanceOf(BusinessException::class.java)
                 assertThat((it as BusinessException).errorCode).isEqualTo(JobErrorCode.ALREADY_RUNNING)
             }
-            results.mapNotNull { it.getOrNull(스프링 부트 예제 애플리케이션) }
+            results.mapNotNull { it.getOrNull() }
         }
-    } finally { release.countDown(스프링 부트 예제 애플리케이션) }
+    } finally { release.countDown() }
     
-    completed(ids.single(스프링 부트 예제 애플리케이션))
-    assertThat(counter.get(스프링 부트 예제 애플리케이션)).isEqualTo(1) // 실제 배치 본문은 단 1회만 수행됨
+    completed(ids.single())
+    assertThat(counter.get()).isEqualTo(1) // 실제 배치 본문은 단 1회만 수행됨
 }
 ```
 

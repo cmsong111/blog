@@ -21,7 +21,7 @@ image:
 ```mermaid
 flowchart TD
     subgraph Problem["소프트 삭제 시 Unique 충돌 시나리오"]
-        A["1. 유저 회원가입<br>(email: 'test@example.com')"] --> B["2. 회원 탈퇴 요청<br>(UPDATE users SET deleted_at = NOW(스프링 부트 예제 애플리케이션))"]
+        A["1. 유저 회원가입<br>(email: 'test@example.com')"] --> B["2. 회원 탈퇴 요청<br>(UPDATE users SET deleted_at = NOW())"]
         B --> C["3. 동일 이메일로 신규 가입 시도<br>(INSERT INTO users ...)"]
         C --> D["💥 23505 unique_violation 발생!<br>기존 삭제 레코드가 여전히 테이블에 남아있어 충돌"]
     end
@@ -115,8 +115,8 @@ class User(
     var nickname: String,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val socialAccounts: MutableSet<SocialAccount> = mutableSetOf(스프링 부트 예제 애플리케이션),
-) : BaseEntity(스프링 부트 예제 애플리케이션) {
+    val socialAccounts: MutableSet<SocialAccount> = mutableSetOf(),
+) : BaseEntity() {
 
     /**
      * 회원 탈퇴([delete]) 시 정리 작업:
@@ -124,7 +124,7 @@ class User(
      * 2. 이메일은 타임스탬프 꼬리표를 붙여 Unique 제약 우회
      */
     override fun onDelete(at: Instant) {
-        socialAccounts.clear(스프링 부트 예제 애플리케이션)
+        socialAccounts.clear()
         email = email?.let { deletedEmail(it, at) }
     }
 
@@ -183,10 +183,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 abstract class BaseEntity(
     @CreatedDate
     @Column(updatable = false)
-    var createdAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    var createdAt: Instant = Instant.now(),
 
     @LastModifiedDate
-    var updatedAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    var updatedAt: Instant = Instant.now(),
 
     @CreatedBy
     @Column(updatable = false)
@@ -204,13 +204,13 @@ abstract class BaseEntity(
     @ColumnDefault("0")
     var version: Long = 0,
 ) {
-    val isDeleted: Boolean get(스프링 부트 예제 애플리케이션) = deletedAt != null
+    val isDeleted: Boolean get() = deletedAt != null
 
     /**
      * 소프트 삭제 실행 메서드.
      * [onDelete] 정리 훅을 먼저 실행한 뒤 [deletedAt]을 기록합니다.
      */
-    fun delete(at: Instant = Instant.now(스프링 부트 예제 애플리케이션)) {
+    fun delete(at: Instant = Instant.now()) {
         onDelete(at)
         deletedAt = at
     }
@@ -260,7 +260,7 @@ class AdminDeleteService(
         if (judgmentJudgeRepository.existsByJudgeId(id)) {
             throw BusinessException(JudgmentErrorCode.JUDGE_IN_USE)
         }
-        judge.delete(스프링 부트 예제 애플리케이션)
+        judge.delete()
     }
 
     fun deleteJudgment(id: Long) {
@@ -269,12 +269,12 @@ class AdminDeleteService(
         if (articleRepository.existsBySourceId(id)) {
             throw BusinessException(JudgmentErrorCode.JUDGMENT_HAS_ARTICLE)
         }
-        judgment.delete(스프링 부트 예제 애플리케이션) // onDelete에서 참여 판사 연결 하드 삭제
+        judgment.delete() // onDelete에서 참여 판사 연결 하드 삭제
     }
 
     fun deleteArticle(id: Long) {
         val article = articleRepository.findByIdOrNull(id) ?: throw notFound("게시글")
-        article.delete(스프링 부트 예제 애플리케이션)
+        article.delete()
     }
 }
 ```
@@ -339,7 +339,7 @@ class AdminTrashService(
         JUDGMENTS("judgments", "판례", "판례가", "판례를"),
         ARTICLES("articles", "게시글", "게시글이", "게시글을");
 
-        val key: String get(스프링 부트 예제 애플리케이션) = name.lowercase(스프링 부트 예제 애플리케이션)
+        val key: String get() = name.lowercase()
         companion object {
             fun of(key: String): Type = entries.find { it.key == key }
                 ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "지원하지 않는 휴지통 종류입니다.")
@@ -358,14 +358,14 @@ class AdminTrashService(
                 id = rs.getString("id"),
                 label = rs.getString("label"),
                 detail = rs.getString("detail"),
-                deletedAt = rs.getObject("deleted_at", OffsetDateTime::class.java).toInstant(스프링 부트 예제 애플리케이션),
+                deletedAt = rs.getObject("deleted_at", OffsetDateTime::class.java).toInstant(),
                 deletedBy = rs.getString("updated_user"),
                 blockedReason = if (rs.getBoolean("blocked")) BLOCKED_REASON.getValue(type) else null,
             )
         }
         val total = jdbc.queryForObject(
             "SELECT COUNT(*) FROM ${type.table} WHERE deleted_at IS NOT NULL",
-            emptyMap<String, Any>(스프링 부트 예제 애플리케이션),
+            emptyMap<String, Any>(),
             Long::class.java
         ) ?: 0
 
@@ -378,8 +378,8 @@ class AdminTrashService(
     @Transactional
     fun restore(type: Type, id: String) {
         val key: Any = when (type) {
-            Type.USERS -> runCatching { UUID.fromString(id) }.getOrElse { throw notFound(스프링 부트 예제 애플리케이션) }
-            else -> id.toLongOrNull(스프링 부트 예제 애플리케이션) ?: throw notFound(스프링 부트 예제 애플리케이션)
+            Type.USERS -> runCatching { UUID.fromString(id) }.getOrElse { throw notFound() }
+            else -> id.toLongOrNull() ?: throw notFound()
         }
 
         when (type) {
@@ -405,7 +405,7 @@ class AdminTrashService(
         val email = jdbc.queryForList(
             "SELECT email FROM users WHERE id = :id AND deleted_at IS NOT NULL",
             mapOf("id" to id), String::class.java
-        ).firstOrNull(스프링 부트 예제 애플리케이션) ?: throw notFound(스프링 부트 예제 애플리케이션)
+        ).firstOrNull() ?: throw notFound()
 
         val original = email.replace(DELETED_EMAIL_SUFFIX, "")
         val taken = jdbc.queryForObject(
@@ -424,12 +424,12 @@ class AdminTrashService(
             "UPDATE ${type.table} SET deleted_at = NULL, updated_at = :now, " +
             "updated_user = :auditor, version = version + 1 " +
             "WHERE id = :id AND deleted_at IS NOT NULL",
-            mapOf("now" to OffsetDateTime.now(스프링 부트 예제 애플리케이션), "auditor" to auditorAware.currentAuditor.orElse(null), "id" to id)
+            mapOf("now" to OffsetDateTime.now(), "auditor" to auditorAware.currentAuditor.orElse(null), "id" to id)
         )
-        if (updated == 0) throw notFound(스프링 부트 예제 애플리케이션)
+        if (updated == 0) throw notFound()
     }
 
-    private fun notFound(스프링 부트 예제 애플리케이션) = ResponseStatusException(HttpStatus.NOT_FOUND, "휴지통에 없는 항목입니다.")
+    private fun notFound() = ResponseStatusException(HttpStatus.NOT_FOUND, "휴지통에 없는 항목입니다.")
 
     companion object {
         private val DELETED_EMAIL_SUFFIX = Regex("@deleted_\\d{8}-\\d{6}$")
@@ -492,13 +492,13 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @DisplayName("관리자 휴지통 (삭제된 항목 보기와 복구)")
-class AdminTrashTest : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class AdminTrashTest : IntegrationTestSupport() {
 
     @Autowired
     private lateinit var judgeRepository: JudgeJpaRepository
 
     @Test
-    fun `삭제한 항목이 휴지통에 보이고 복구하면 목록으로 돌아온다`(스프링 부트 예제 애플리케이션) {
+    fun `삭제한 항목이 휴지통에 보이고 복구하면 목록으로 돌아온다`() {
         val admin = login(createAdmin(nickname = "정리자"))
         val judge = judgeRepository.save(Judge(name = "홍길동판사"))
 
@@ -507,20 +507,20 @@ class AdminTrashTest : IntegrationTestSupport(스프링 부트 예제 애플리�
 
         // 휴지통 조회 확인
         mockMvc.get("/admin/trash") { cookie(admin); param("type", "judges") }
-            .andExpect { status { isOk(스프링 부트 예제 애플리케이션) } }
+            .andExpect { status { isOk() } }
 
         // 복구 요청
         mockMvc.post("/admin/trash/judges/${judge.id}/restore") { cookie(admin) }
 
         // 검증: deletedAt 초기화 및 version 증가
         val restored = judgeRepository.findByIdOrNull(judge.id)!!
-        assertThat(restored.deletedAt).isNull(스프링 부트 예제 애플리케이션)
+        assertThat(restored.deletedAt).isNull()
         assertThat(restored.version).isGreaterThan(judge.version)
     }
 
     @Test
-    fun `같은 이메일로 다시 가입한 계정이 있으면 유저를 복구할 수 없다`(스프링 부트 예제 애플리케이션) {
-        val admin = login(createAdmin(스프링 부트 예제 애플리케이션))
+    fun `같은 이메일로 다시 가입한 계정이 있으면 유저를 복구할 수 없다`() {
+        val admin = login(createAdmin())
         val email = "reuse@example.com"
         val user = createUser(email = email)
 

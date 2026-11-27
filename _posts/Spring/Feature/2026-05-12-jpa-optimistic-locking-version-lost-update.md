@@ -123,10 +123,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 abstract class BaseEntity(
     @CreatedDate
     @Column(updatable = false)
-    var createdAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    var createdAt: Instant = Instant.now(),
 
     @LastModifiedDate
-    var updatedAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    var updatedAt: Instant = Instant.now(),
 
     @CreatedBy
     @Column(updatable = false)
@@ -145,9 +145,9 @@ abstract class BaseEntity(
     @ColumnDefault("0")
     var version: Long = 0,
 ) {
-    val isDeleted: Boolean get(스프링 부트 예제 애플리케이션) = deletedAt != null
+    val isDeleted: Boolean get() = deletedAt != null
 
-    fun delete(at: Instant = Instant.now(스프링 부트 예제 애플리케이션)) {
+    fun delete(at: Instant = Instant.now()) {
         onDelete(at)
         deletedAt = at
     }
@@ -194,10 +194,10 @@ class AdminArticleForm {
     /** 등록할 때만 사용합니다. */
     var judgmentId: Long? = null
 
-    fun tagList(스프링 부트 예제 애플리케이션): List<String> = tags.split(",").map { it.trim(스프링 부트 예제 애플리케이션) }.filter { it.isNotEmpty(스프링 부트 예제 애플리케이션) }.distinct(스프링 부트 예제 애플리케이션)
+    fun tagList(): List<String> = tags.split(",").map { it.trim() }.filter { it.isNotEmpty() }.distinct()
 
     companion object {
-        fun from(article: Article): AdminArticleForm = AdminArticleForm(스프링 부트 예제 애플리케이션).apply {
+        fun from(article: Article): AdminArticleForm = AdminArticleForm().apply {
             version = article.version
             title = article.title
             content = article.content
@@ -227,7 +227,7 @@ HTML 폼에는 `version` 값을 담는 `<input type="hidden">`을 배치하고, 
 
         <form class="form-panel" th:action="${id == null} ? @{/admin/articles/new} : @{/admin/articles/{id}/edit(id=${id})}" th:object="${form}" method="post" novalidate>
             <!-- 동시 수정 충돌 또는 도메인 검증 실패 시 상단 경고 배너 노출 -->
-            <div th:each="err : ${#fields.globalErrors(스프링 부트 예제 애플리케이션)}" class="message error" role="alert" th:text="${err}">오류</div>
+            <div th:each="err : ${#fields.globalErrors()}" class="message error" role="alert" th:text="${err}">오류</div>
 
             <!-- 낙관적 락 버전 히든 필드: 폼을 조회했던 시점의 버전을 서버로 전송 -->
             <input type="hidden" th:field="*{version}" th:if="${id != null}">
@@ -302,9 +302,9 @@ class AdminEditService(
     @Transactional
     fun updateArticle(id: Long, form: AdminArticleForm) {
         findArticle(id).checkVersion(form.version).update(
-            title = form.title.trim(스프링 부트 예제 애플리케이션),
-            content = form.content.trim(스프링 부트 예제 애플리케이션),
-            tags = form.tagList(스프링 부트 예제 애플리케이션),
+            title = form.title.trim(),
+            content = form.content.trim(),
+            tags = form.tagList(),
         )
     }
 
@@ -414,25 +414,25 @@ class AdminEditController(
         redirect: RedirectAttributes,
         listPath: String,
         message: String,
-        save: (스프링 부트 예제 애플리케이션) -> Unit,
-        formView: (스프링 부트 예제 애플리케이션) -> String,
+        save: () -> Unit,
+        formView: () -> String,
     ): String {
-        if (bindingResult.hasErrors(스프링 부트 예제 애플리케이션)) return formView(스프링 부트 예제 애플리케이션)
+        if (bindingResult.hasErrors()) return formView()
 
         try {
-            save(스프링 부트 예제 애플리케이션)
+            save()
         } catch (e: BusinessException) {
             // 1단계: 서비스의 사전 버전 불일치 감지
             bindingResult.reject(e.errorCode.code, e.errorCode.message)
-            return formView(스프링 부트 예제 애플리케이션)
+            return formView()
         } catch (e: OptimisticLockingFailureException) {
             // 2단계: 완전히 같은 순간 두 요청이 커밋 경합을 벌인 경우 (DB 레벨 @Version 감지)
             bindingResult.reject(AdminErrorCode.STALE_UPDATE.code, AdminErrorCode.STALE_UPDATE.message)
-            return formView(스프링 부트 예제 애플리케이션)
+            return formView()
         } catch (e: DataIntegrityViolationException) {
             // 사전 검증 뒤 동시에 유니크 제약이 충돌한 경우
             bindingResult.reject(AdminErrorCode.DATA_CONFLICT.code, AdminErrorCode.DATA_CONFLICT.message)
-            return formView(스프링 부트 예제 애플리케이션)
+            return formView()
         }
 
         redirect.addFlashAttribute("message", message)
@@ -478,7 +478,7 @@ Spring Boot 서버의 실행 로그에서도 충돌 감지와 핸들러 매핑 �
 ![OptimisticLockingFailureException 발생 시 HTTP 409 및 안내 화면으로 매핑되는 핸들러 로그](/assets/images/2026-05-12/optimistic-locking-exception-409-log.png)
 _그림 3. Spring Boot 실행 로그. Hibernate의 StaleObjectStateException이 Spring의 ObjectOptimisticLockingFailureException으로 변환되고, 컨트롤러에서 글로벌 에러로 포착되어 폼 뷰로 복귀합니다._
 
-0건의 행이 갱신되는 순간 Hibernate 엔진이 `StaleObjectStateException`을 던지고, Spring의 `JpaTransactionManager`가 이를 `ObjectOptimisticLockingFailureException`으로 번역합니다. 컨트롤러의 공통 `save(스프링 부트 예제 애플리케이션)` 헬퍼가 이 예외를 안전하게 낚아채어 뷰 렌더링으로 연결합니다.
+0건의 행이 갱신되는 순간 Hibernate 엔진이 `StaleObjectStateException`을 던지고, Spring의 `JpaTransactionManager`가 이를 `ObjectOptimisticLockingFailureException`으로 번역합니다. 컨트롤러의 공통 `save()` 헬퍼가 이 예외를 안전하게 낚아채어 뷰 렌더링으로 연결합니다.
 
 ---
 

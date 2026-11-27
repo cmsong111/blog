@@ -51,7 +51,7 @@ flowchart LR
 flowchart TD
     subgraph Phase1["1단계: 수집 및 원문 불변 보존 (Collection Phase)"]
         API["외부 Open API"] -->|호출| Client["LawPrecedentClient"]
-        Client -->|"원본 JSON"| Import["JudgmentImportService.collect(스프링 부트 예제 애플리케이션)"]
+        Client -->|"원본 JSON"| Import["JudgmentImportService.collect()"]
         Import -->|"원본 그대로 INSERT/UPDATE"| RawDB[("raw_judgments 테이블\n(rawJson 불변 보존)")]
         RawDB -->|"1차 파싱 시도"| Parser["JudgmentParser\n(parserVersion: law-prec-v4)"]
         Parser -->|"성공 시 도메인 저장"| MainDB[("judgments 도메인 테이블")]
@@ -107,7 +107,7 @@ class RawJudgment(
     var rawJson: String,
 
     @Column(nullable = false) 
-    var collectedAt: Instant = Instant.now(스프링 부트 예제 애플리케이션),
+    var collectedAt: Instant = Instant.now(),
 
     var parserVersion: String? = null,
     var parsedAt: Instant? = null,
@@ -124,7 +124,7 @@ class RawJudgment(
 
     @Column(length = 20) 
     var listSentenceDate: String? = null,
-) : BaseEntity(스프링 부트 예제 애플리케이션)
+) : BaseEntity()
 ```
 
 > [!NOTE]
@@ -156,7 +156,7 @@ class Judgment(
     var parserVersion: String? = null,
     var parsedAt: Instant? = null,
     var judgeReviewNotes: String? = null,
-) : BaseEntity(스프링 부트 예제 애플리케이션)
+) : BaseEntity()
 ```
 
 ---
@@ -212,7 +212,7 @@ class JudgmentParser(private val mapper: JsonMapper) {
         }
 
         val node = root?.path("PrecService") ?: throw JudgmentParseException("판례 본문이 없습니다.")
-        if (!node.isObject || value(node, "판례정보일련번호")?.toLongOrNull(스프링 부트 예제 애플리케이션) != precSerial || precSerial <= 0) {
+        if (!node.isObject || value(node, "판례정보일련번호")?.toLongOrNull() != precSerial || precSerial <= 0) {
             throw JudgmentParseException("원문의 판례일련번호가 일치하지 않습니다.")
         }
 
@@ -228,7 +228,7 @@ class JudgmentParser(private val mapper: JsonMapper) {
             sentenceDate = date(value(node, "선고일자")),
             caseType = short(node, "사건종류명"),
             judgmentType = short(node, "판결유형"),
-            verdict = value(node, "판결요지").orEmpty(스프링 부트 예제 애플리케이션),
+            verdict = value(node, "판결요지").orEmpty(),
             issues = value(node, "판시사항"),
             referenceProvisions = value(node, "참조조문"),
             referenceJudgments = value(node, "참조판례"),
@@ -264,29 +264,29 @@ class JudgmentParser(private val mapper: JsonMapper) {
 
     /** 판례 본문 끝 서명부에서 판사 역할 및 주심 여부 추출 */
     private fun signature(fullText: String?): Pair<List<ParsedJudge>, String?> {
-        if (fullText == null) return emptyList<ParsedJudge>(스프링 부트 예제 애플리케이션) to null
-        val lines = fullText.lines(스프링 부트 예제 애플리케이션).map(String::trim).filter(String::isNotEmpty)
+        if (fullText == null) return emptyList<ParsedJudge>() to null
+        val lines = fullText.lines().map(String::trim).filter(String::isNotEmpty)
         var start = lines.indexOfLast { PREFIX.containsMatchIn(it) }
-        if (start < 0 || start < lines.size - 12) return emptyList<ParsedJudge>(스프링 부트 예제 애플리케이션) to null
+        if (start < 0 || start < lines.size - 12) return emptyList<ParsedJudge>() to null
         while (start > 0 && PREFIX.containsMatchIn(lines[start - 1])) start--
 
-        val candidates = mutableListOf<Pair<String, Set<String>>>(스프링 부트 예제 애플리케이션)
+        val candidates = mutableListOf<Pair<String, Set<String>>>()
         for (line in lines.drop(start)) {
             val prefix = PREFIX.find(line)
             val content = if (prefix == null) line else line.substring(prefix.range.last + 1)
-            val names = NAME.findAll(content).toList(스프링 부트 예제 애플리케이션)
+            val names = NAME.findAll(content).toList()
             var cursor = 0
-            if (names.isEmpty(스프링 부트 예제 애플리케이션)) return unrecognized(스프링 부트 예제 애플리케이션)
+            if (names.isEmpty()) return unrecognized()
             names.forEachIndexed { index, match ->
-                if (!content.substring(cursor, match.range.first).matches(SEPARATOR)) return unrecognized(스프링 부트 예제 애플리케이션)
+                if (!content.substring(cursor, match.range.first).matches(SEPARATOR)) return unrecognized()
                 val labels = match.groupValues[2].replace(Regex("\\s+"), "").split(Regex("[,·ㆍ/]"))
-                    .filter(String::isNotEmpty).toMutableSet(스프링 부트 예제 애플리케이션)
+                    .filter(String::isNotEmpty).toMutableSet()
                 if (index == 0) prefix?.groupValues?.get(1)?.takeIf(String::isNotBlank)?.let(labels::add)
-                if (!setOf("재판장", "주심", "단독").containsAll(labels)) return unrecognized(스프링 부트 예제 애플리케이션)
+                if (!setOf("재판장", "주심", "단독").containsAll(labels)) return unrecognized()
                 candidates.add(match.groupValues[1] to labels)
                 cursor = match.range.last + 1
             }
-            if (!content.substring(cursor).matches(SEPARATOR)) return unrecognized(스프링 부트 예제 애플리케이션)
+            if (!content.substring(cursor).matches(SEPARATOR)) return unrecognized()
         }
 
         val hasPresiding = candidates.any { "재판장" in it.second }
@@ -310,7 +310,7 @@ class JudgmentParser(private val mapper: JsonMapper) {
         const val UNKNOWN_DATE = "00010101"
         const val UNAVAILABLE = "공식 API가 이 자료의 JSON 본문을 제공하지 않습니다."
         private val PREFIX = Regex("^(?:(재판장|주심|단독)\\s*)?(?:대법원장|대법관|판사)\\s+")
-        private val NAME = Regex("([가-힣]{2,5})(?:\\s*\\(([^(스프링 부트 예제 애플리케이션)]*)\\))?")
+        private val NAME = Regex("([가-힣]{2,5})(?:\\s*\\(([^()]*)\\))?")
         private val SEPARATOR = Regex("[\\s,·ㆍ]*")
     }
 }
@@ -321,8 +321,8 @@ class JudgmentParser(private val mapper: JsonMapper) {
 ## 수집과 재파싱 서비스 구현: `JudgmentImportService`
 
 `JudgmentImportService`는 두 개의 진입점을 가집니다:
-1. `collect(스프링 부트 예제 애플리케이션)`: 외부 API 호출 결과를 받아 원문을 영구 저장하고 1차 파싱을 수행합니다.
-2. `reparse(스프링 부트 예제 애플리케이션)`: 외부 호출 없이 이미 저장된 원문만을 가져와 최신 파서로 재해석합니다.
+1. `collect()`: 외부 API 호출 결과를 받아 원문을 영구 저장하고 1차 파싱을 수행합니다.
+2. `reparse()`: 외부 호출 없이 이미 저장된 원문만을 가져와 최신 파서로 재해석합니다.
 
 ```kotlin
 // src/main/kotlin/com/example/server/judgment/application/JudgmentImportService.kt
@@ -348,7 +348,7 @@ class JudgmentImportService(
     fun collect(
         precSerial: Long, 
         rawJson: String, 
-        collectedAt: Instant = Instant.now(스프링 부트 예제 애플리케이션), 
+        collectedAt: Instant = Instant.now(), 
         listing: JudgmentListing? = null, 
         dataSourceName: String? = null
     ): JudgmentImportResult {
@@ -407,10 +407,10 @@ class JudgmentImportService(
 
         // 4. 판사 매칭 및 동명이인 안전장치
         val judgment = existing ?: Judgment(caseNumber = parsed.caseNumber, verdict = parsed.verdict)
-        val review = mutableListOf<String>(스프링 부트 예제 애플리케이션)
+        val review = mutableListOf<String>()
         parsed.judgeReviewNotes?.let(review::add)
 
-        val matches = if (parsed.courtName == null || parsed.judges.isEmpty(스프링 부트 예제 애플리케이션)) emptyMap(스프링 부트 예제 애플리케이션) else
+        val matches = if (parsed.courtName == null || parsed.judges.isEmpty()) emptyMap() else
             judgeRepository.findAllByNameInAndCourt(parsed.judges.map { it.name }, parsed.courtName).groupBy { it.name }
 
         val assignments = parsed.judges.mapNotNull { person ->
@@ -418,10 +418,10 @@ class JudgmentImportService(
                 review.add("법원 미확인: ${person.name} 자동 연결 보류")
                 return@mapNotNull null
             }
-            val candidates = matches[person.name].orEmpty(스프링 부트 예제 애플리케이션)
+            val candidates = matches[person.name].orEmpty()
             val judge = when (candidates.size) {
                 0 -> judgeRepository.save(Judge(name = person.name, court = parsed.courtName))
-                1 -> candidates.single(스프링 부트 예제 애플리케이션)
+                1 -> candidates.single()
                 else -> { 
                     review.add("동명이인 복수 후보: ${person.name} 자동 연결 보류")
                     return@mapNotNull null 
@@ -438,8 +438,8 @@ class JudgmentImportService(
         judgment.sentenceDate = parsed.sentenceDate
         judgment.fullText = parsed.fullText
         judgment.parserVersion = JudgmentParser.VERSION
-        judgment.parsedAt = Instant.now(스프링 부트 예제 애플리케이션)
-        judgment.judgeReviewNotes = review.distinct(스프링 부트 예제 애플리케이션).joinToString("\n").ifEmpty { null }
+        judgment.parsedAt = Instant.now()
+        judgment.judgeReviewNotes = review.distinct().joinToString("\n").ifEmpty { null }
         judgment.replaceJudges(assignments)
         
         judgmentRepository.save(judgment)
@@ -459,7 +459,7 @@ class JudgmentImportService(
 ```
 
 > [!TIP]
-> `reject(스프링 부트 예제 애플리케이션)` 메서드는 파싱에 실패했을 때 트랜잭션을 롤백시켜 원문까지 지워버리는 것이 아니라, `raw.parsedAt = null`과 `raw.parseError = error`를 정상 커밋합니다. 실패한 원문이 DB에 그대로 남아있어야 개발자가 관리자 화면에서 원인을 확인하고 파서를 수정할 수 있기 때문입니다.
+> `reject()` 메서드는 파싱에 실패했을 때 트랜잭션을 롤백시켜 원문까지 지워버리는 것이 아니라, `raw.parsedAt = null`과 `raw.parseError = error`를 정상 커밋합니다. 실패한 원문이 DB에 그대로 남아있어야 개발자가 관리자 화면에서 원인을 확인하고 파서를 수정할 수 있기 때문입니다.
 
 ---
 
@@ -470,7 +470,7 @@ class JudgmentImportService(
 ```kotlin
 // src/main/kotlin/com/example/server/judgment/application/JudgmentCollectionJobs.kt
 @Bean
-fun judgmentReparseJob(스프링 부트 예제 애플리케이션): JobDefinition = object : JobDefinition {
+fun judgmentReparseJob(): JobDefinition = object : JobDefinition {
     override val name = "judgment-reparse"
     override val description = "이전 파서·적용 실패 원문 재파싱 · 외부 호출 없음 · 실행당 100건"
     override val defaultCron = "0 0 5 * * *"
@@ -479,7 +479,7 @@ fun judgmentReparseJob(스프링 부트 예제 애플리케이션): JobDefinitio
 
 private fun reparse(context: JobContext) {
     var cursor = context.checkpoint?.let { decode(it, JudgmentReparseCursor::class.java) }?.takeUnless { it.done }
-        ?: JudgmentReparseCursor(upper = rawRepository.maximumId(스프링 부트 예제 애플리케이션))
+        ?: JudgmentReparseCursor(upper = rawRepository.maximumId())
 
     val candidates = rawRepository.reparseCandidates(
         after = cursor.after,
@@ -488,9 +488,9 @@ private fun reparse(context: JobContext) {
         pageable = PageRequest.of(0, properties.maxItemsPerRun)
     )
 
-    context.total(candidates.size.toLong(스프링 부트 예제 애플리케이션))
+    context.total(candidates.size.toLong())
     for (serial in candidates) {
-        context.check(스프링 부트 예제 애플리케이션)
+        context.check()
         val raw = rawRepository.findByPrecSerial(serial) ?: error("재파싱 원문이 삭제되었습니다.")
         val next = cursor.copy(after = raw.id)
         
@@ -571,14 +571,14 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
 
-class JudgmentImportTest : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class JudgmentImportTest : IntegrationTestSupport() {
 
     @Autowired lateinit var importer: JudgmentImportService
     @Autowired lateinit var raws: RawJudgmentJpaRepository
     @Autowired lateinit var judgments: JudgmentJpaRepository
 
     @Test
-    fun `수집과 재파싱은 같은 판례를 갱신하고 원문과 파서 버전을 보존한다`(스프링 부트 예제 애플리케이션) {
+    fun `수집과 재파싱은 같은 판례를 갱신하고 원문과 파서 버전을 보존한다`() {
         val serial = 219842L
         val rawPayload = """
             {
@@ -591,11 +591,11 @@ class JudgmentImportTest : IntegrationTestSupport(스프링 부트 예제 애플
                 "판례내용": "주문과 같이 판결한다.<br/>대법관 김재형(재판장) 안철상 노정희(주심)"
               }
             }
-        """.trimIndent(스프링 부트 예제 애플리케이션)
+        """.trimIndent()
 
         // 1. 초기 수집 실행
-        val firstResult = importer.collect(serial, rawPayload, Instant.now(스프링 부트 예제 애플리케이션))
-        assertThat(firstResult.error).isNull(스프링 부트 예제 애플리케이션)
+        val firstResult = importer.collect(serial, rawPayload, Instant.now())
+        assertThat(firstResult.error).isNull()
         
         val rawEntity = raws.findByPrecSerial(serial)!!
         assertThat(rawEntity.rawJson).isEqualTo(rawPayload)
@@ -603,7 +603,7 @@ class JudgmentImportTest : IntegrationTestSupport(스프링 부트 예제 애플
 
         // 2. 외부 호출 없는 멱등 재파싱 실행
         val reparseResult = importer.reparse(serial)
-        assertThat(reparseResult.error).isNull(스프링 부트 예제 애플리케이션)
+        assertThat(reparseResult.error).isNull()
         assertThat(reparseResult.judgmentId).isEqualTo(firstResult.judgmentId)
 
         // 3. 도메인 엔티티 검증
@@ -611,11 +611,11 @@ class JudgmentImportTest : IntegrationTestSupport(스프링 부트 예제 애플
         assertThat(domain.caseNumber).isEqualTo("2021도3451")
         assertThat(domain.judges).hasSize(3)
         assertThat(domain.judges.find { it.judge.name == "김재형" }?.role).isEqualTo(JudgeRole.PRESIDING)
-        assertThat(domain.judges.find { it.judge.name == "노정희" }?.rapporteur).isTrue(스프링 부트 예제 애플리케이션)
+        assertThat(domain.judges.find { it.judge.name == "노정희" }?.rapporteur).isTrue()
     }
 
     @Test
-    fun `비정상적인 원문이 유입되어도 기존 정상 판례를 덮어쓰지 않고 원문 에러만 남긴다`(스프링 부트 예제 애플리케이션) {
+    fun `비정상적인 원문이 유입되어도 기존 정상 판례를 덮어쓰지 않고 원문 에러만 남긴다`() {
         val serial = 219843L
         val validPayload = """{"PrecService":{"판례정보일련번호":"$serial","사건번호":"2023도100","선고일자":"20231001"}}"""
         importer.collect(serial, validPayload)
@@ -625,7 +625,7 @@ class JudgmentImportTest : IntegrationTestSupport(스프링 부트 예제 애플
         val failedResult = importer.collect(serial, corruptPayload)
 
         assertThat(failedResult.error).contains("날짜")
-        assertThat(raws.findByPrecSerial(serial)!!.parseError).isNotNull(스프링 부트 예제 애플리케이션)
+        assertThat(raws.findByPrecSerial(serial)!!.parseError).isNotNull()
         // 기존 도메인 데이터의 선고일자는 여전히 2023-10-01로 안전하게 유지됨
         assertThat(judgments.findByPrecSerial(serial)!!.sentenceDate).isEqualTo(java.time.LocalDate.of(2023, 10, 1))
     }

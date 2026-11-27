@@ -56,17 +56,17 @@ data class JudgmentCollectionCursor(
     val from: String,                      // 수집 시작일 (YYYY-MM-DD)
     val to: String,                        // 수집 종료일 (YYYY-MM-DD)
     val page: Int = 1,                     // 현재 탐색 중인 외부 API 페이지 번호
-    val pending: List<Long> = emptyList(스프링 부트 예제 애플리케이션), // 현재 페이지에서 아직 본문을 수집하지 않은 판례 일련번호 목록
+    val pending: List<Long> = emptyList(), // 현재 페이지에서 아직 본문을 수집하지 않은 판례 일련번호 목록
     val lastPage: Boolean = false,         // 외부 목록 API의 마지막 페이지 도달 여부
     val done: Boolean = false,             // 전체 수집 기간의 모든 판례 수집 완료 여부
-    val listing: List<JudgmentListing> = emptyList(스프링 부트 예제 애플리케이션) // 목록 API에서 수신한 메타데이터 (선고일자, 법원명 등)
+    val listing: List<JudgmentListing> = emptyList() // 목록 API에서 수신한 메타데이터 (선고일자, 법원명 등)
 )
 ```
 
 이 커서 모델의 동작 원리는 다음과 같습니다:
 
 1. **페이지 진입**: `pending`이 비어 있으면 외부 목록 API(`client.list(cursor.page, 100)`)를 호출하여 100개의 판례 일련번호를 `pending`에 채우고 `page`를 1 증가시킵니다.
-2. **항목 소비**: `pending.first(스프링 부트 예제 애플리케이션)`를 꺼내 본문 상세 API를 호출하고 비즈니스 엔티티를 저장합니다.
+2. **항목 소비**: `pending.first()`를 꺼내 본문 상세 API를 호출하고 비즈니스 엔티티를 저장합니다.
 3. **커서 전진**: 성공하거나 격리 실패한 항목을 `pending.drop(1)`로 제거한 새로운 불변 커서를 생성하고, 이를 DB에 JSON 문자열로 즉시 커밋합니다.
 4. **완료 상태 전이**: 마지막 페이지(`lastPage == true`)이면서 `pending`의 크기가 1개인 마지막 항목을 처리하면 `done = true`로 상태를 마킹합니다.
 
@@ -75,7 +75,7 @@ stateDiagram-v2
     [*] --> Idle: 작업 대기
     Idle --> FetchPage: pending 목록이 비어 있음
     FetchPage --> FetchPage: 100건 수신 후 pending 채움 & page++
-    FetchPage --> ConsumeItem: pending.first(스프링 부트 예제 애플리케이션) 추출
+    FetchPage --> ConsumeItem: pending.first() 추출
     ConsumeItem --> SaveAndCommit: 개별 트랜잭션(REQUIRES_NEW) 성공
     SaveAndCommit --> ConsumeItem: pending.drop(1) 반영 후 체크포인트 갱신
     ConsumeItem --> RollbackAndSkip: 파싱/DB 오류 발생
@@ -110,7 +110,7 @@ class JobSetting(
     var enabled: Boolean = false,
     @Column(length = Length.LONG32)
     var checkpoint: String? = null, // 전역 최신 커서 (Single Source of Truth)
-) : BaseEntity(스프링 부트 예제 애플리케이션) {
+) : BaseEntity() {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 }
@@ -138,7 +138,7 @@ class JobRun(
     var leaseUntil: Instant,
     @Column(length = Length.LONG32)
     var checkpoint: String? = null, // 해당 실행 회차의 최종 진행 지점 스냅샷
-) : BaseEntity(스프링 부트 예제 애플리케이션) {
+) : BaseEntity() {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
     @Enumerated(EnumType.STRING)
@@ -190,9 +190,9 @@ class JobContext internal constructor(
      * 실행 스레드의 취소 요청 및 분산 리스 유효성을 검증합니다.
      * 외부 HTTP 호출 직전/직후에 호출하여 불필요한 작업을 즉시 중단합니다.
      */
-    fun check(스프링 부트 예제 애플리케이션) {
-        if (Thread.currentThread(스프링 부트 예제 애플리케이션).isInterrupted) throw JobStopped("실행 스레드가 중단되었습니다.")
-        if (!leaseUntil.isAfter(Instant.now(스프링 부트 예제 애플리케이션))) throw JobStopped("실행 리스가 만료되었습니다.")
+    fun check() {
+        if (Thread.currentThread().isInterrupted) throw JobStopped("실행 스레드가 중단되었습니다.")
+        if (!leaseUntil.isAfter(Instant.now())) throw JobStopped("실행 리스가 만료되었습니다.")
         states.check(runId)
     }
 
@@ -200,8 +200,8 @@ class JobContext internal constructor(
      * 개별 항목의 비즈니스 저장 액션을 실행하고, 오류 메시지 유무에 따라 체크포인트를 확정합니다.
      * 비즈니스 예외 발생 시 엔티티 저장은 롤백되며, 오류 이력과 체크포인트는 독립 저장됩니다.
      */
-    fun processResult(itemKey: String, checkpoint: String, action: (스프링 부트 예제 애플리케이션) -> String?): Boolean {
-        check(스프링 부트 예제 애플리케이션)
+    fun processResult(itemKey: String, checkpoint: String, action: () -> String?): Boolean {
+        check()
         return try {
             states.recordResult(runId, itemKey, checkpoint, action)
         } catch (e: JobStopped) {
@@ -213,10 +213,10 @@ class JobContext internal constructor(
         }
     }
 
-    fun checkpoint(value: String) { check(스프링 부트 예제 애플리케이션); states.checkpoint(runId, value) }
-    fun failure(itemKey: String, message: String) { check(스프링 부트 예제 애플리케이션); states.recordError(runId, itemKey, message) }
-    fun total(count: Long) { check(스프링 부트 예제 애플리케이션); states.total(runId, count) }
-    internal fun unlock(스프링 부트 예제 애플리케이션) = lock.unlock(스프링 부트 예제 애플리케이션)
+    fun checkpoint(value: String) { check(); states.checkpoint(runId, value) }
+    fun failure(itemKey: String, message: String) { check(); states.recordError(runId, itemKey, message) }
+    fun total(count: Long) { check(); states.total(runId, count) }
+    internal fun unlock() = lock.unlock()
 }
 ```
 
@@ -243,13 +243,13 @@ class JobStateStore(
      * 외부 API 조회가 끝난 뒤 순수 DB 쓰기 작업에만 트랜잭션을 적용하여 커넥션 점유를 최소화합니다.
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun recordResult(id: Long, itemKey: String, checkpoint: String, action: (스프링 부트 예제 애플리케이션) -> String?): Boolean {
+    fun recordResult(id: Long, itemKey: String, checkpoint: String, action: () -> String?): Boolean {
         val original = runs.findById(id).orElseThrow { BusinessException(JobErrorCode.NOT_FOUND) }
         val setting = settings.lockByName(original.jobName) ?: throw BusinessException(JobErrorCode.NOT_FOUND)
         val run = guarded(id)
 
         // 1. 실제 비즈니스 엔티티 저장 실행 (오류 발생 시 에러 문자열 반환)
-        val error = action(스프링 부트 예제 애플리케이션)
+        val error = action()
 
         // 2. 관리자 취소 요청 또는 리스 만료 검증 (중단된 스레드의 덮어쓰기 방어)
         validate(run)
@@ -295,12 +295,12 @@ sequenceDiagram
     participant Importer as JudgmentImportService
     participant DB as PostgreSQL (Business & Meta)
     Batch->>Context: processResult("prec:214589", nextJsonCursor, action)
-    Context->>Context: check(스프링 부트 예제 애플리케이션) (리스 만료 & 취소 요청 검증)
+    Context->>Context: check() (리스 만료 & 취소 요청 검증)
     Context->>Store: recordResult(runId, itemKey, nextCursor)
     
     activate Store
     Note over Store,DB: 새 트랜잭션 Tx-Item 시작
-    Store->>Importer: action(스프링 부트 예제 애플리케이션) 실행 (판례 파싱 및 엔티티 저장 시도)
+    Store->>Importer: action() 실행 (판례 파싱 및 엔티티 저장 시도)
     
     alt 파싱 또는 비즈니스 로직 에러 발생
         Importer-->>Store: error = "MalformedXmlException: 닫는 태그 누락"
@@ -329,7 +329,7 @@ _그림 3. 실제 스프링 부트 배치 실행 콘솔. 판례 `prec:214589` �
 
 ---
 
-## 4. 실제 배치 작업 루프 구현: `collect(스프링 부트 예제 애플리케이션)` 메서드
+## 4. 실제 배치 작업 루프 구현: `collect()` 메서드
 
 이제 `JobContext`의 체크포인트를 활용하여 실제로 외부 데이터를 수집하는 배치 로직을 살펴보겠습니다.
 
@@ -362,7 +362,7 @@ class JudgmentCollectionJobs(
 
         // 이전 체크포인트가 완료되었거나 없으면 시작일부터 새로 생성
         var cursor = previous?.takeUnless { it.done && kind == "incremental" }
-            ?: JudgmentCollectionCursor(kind, start.toString(스프링 부트 예제 애플리케이션), today.toString(스프링 부트 예제 애플리케이션))
+            ?: JudgmentCollectionCursor(kind, start.toString(), today.toString())
 
         context.checkpoint(mapper.writeValueAsString(cursor))
         if (cursor.done) return
@@ -370,14 +370,14 @@ class JudgmentCollectionJobs(
         var processed = 0
         // 1회 배치 실행당 최대 처리 건수(예: 100건) 제한
         while (processed < properties.maxItemsPerRun) {
-            context.check(스프링 부트 예제 애플리케이션)
+            context.check()
 
             // 2. 현재 페이지의 대기 목록(pending)이 소진되면 다음 페이지 API 호출
-            if (cursor.pending.isEmpty(스프링 부트 예제 애플리케이션)) {
+            if (cursor.pending.isEmpty()) {
                 val page = client.list(cursor.page, 100, LocalDate.parse(cursor.from), LocalDate.parse(cursor.to), source)
-                if (page.items.isEmpty(스프링 부트 예제 애플리케이션)) {
+                if (page.items.isEmpty()) {
                     context.checkpoint(mapper.writeValueAsString(cursor.copy(done = true)))
-                    context.total(processed.toLong(스프링 부트 예제 애플리케이션))
+                    context.total(processed.toLong())
                     return
                 }
 
@@ -390,19 +390,19 @@ class JudgmentCollectionJobs(
 
                 // JSON 크기가 9,500자를 넘으면 메타데이터 목록을 비워 DB 컬럼 한도 방어
                 if (mapper.writeValueAsString(cursor).length > 9500) {
-                    cursor = cursor.copy(listing = emptyList(스프링 부트 예제 애플리케이션))
+                    cursor = cursor.copy(listing = emptyList())
                 }
                 context.checkpoint(mapper.writeValueAsString(cursor))
             }
 
             // 3. pending 목록의 첫 번째 판례 일련번호 추출
-            val serial = cursor.pending.first(스프링 부트 예제 애플리케이션)
+            val serial = cursor.pending.first()
 
             // 4. 판례 본문 외부 API 호출 (네트워크 장애 시 위치 보존 후 중단)
             val detail = client.detail(serial, context)
                 ?: throw LawPrecedentException("판례 본문 호출 실패로 수집을 멈춥니다. 이어 실행으로 재시도해 주세요.")
 
-            val listing = cursor.listing.firstOrNull(스프링 부트 예제 애플리케이션)?.takeIf { it.precSerial == serial }
+            val listing = cursor.listing.firstOrNull()?.takeIf { it.precSerial == serial }
             val nextCursor = cursor.copy(
                 pending = cursor.pending.drop(1),
                 listing = cursor.listing.drop(1),
@@ -419,7 +419,7 @@ class JudgmentCollectionJobs(
             if (cursor.done) break
         }
 
-        context.total(processed.toLong(스프링 부트 예제 애플리케이션))
+        context.total(processed.toLong())
     }
 
     private fun <T> decode(value: String, type: Class<T>): T = try {
@@ -441,7 +441,7 @@ class JudgmentCollectionJobs(
 위 코드의 라인 48~51을 보면:
 ```kotlin
 if (mapper.writeValueAsString(cursor).length > 9500) {
-    cursor = cursor.copy(listing = emptyList(스프링 부트 예제 애플리케이션))
+    cursor = cursor.copy(listing = emptyList())
 }
 ```
 체크포인트 JSON 문자열이 9,500바이트를 초과하면 부가 정보인 `listing`을 비우고 필수적인 식별자인 `pending` 일련번호만 남기도록 안전장치를 두었습니다. 이렇게 하면 DB 쓰기 오류로 배치가 중단되는 사태를 사전에 예방할 수 있습니다.
@@ -464,7 +464,7 @@ if (mapper.writeValueAsString(cursor).length > 9500) {
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 fun begin(job: JobDefinition, trigger: JobTrigger, mode: JobStartMode, instance: String): JobRun? {
     val setting = settings.lockByName(job.name) ?: throw BusinessException(JobErrorCode.NOT_FOUND)
-    val now = Instant.now(스프링 부트 예제 애플리케이션)
+    val now = Instant.now()
 
     // ... 기존 활성 리스 및 실행 중 작업 검증 ...
 
@@ -492,7 +492,7 @@ fun activate(id: Long) {
 
 배치가 도는 도중 관리자가 [중단 요청] 버튼을 누르면 즉시 스레드를 `kill`하지 않습니다. 대신 DB의 `JobRun.cancelRequested`를 `true`로 변경합니다.
 
-작업 루프에서 현재 처리 중인 판례의 DB 저장이 끝나고 다음 항목으로 넘어가기 전 `context.check(스프링 부트 예제 애플리케이션)`를 호출할 때, `cancelRequested` 플래그가 확인되면 `JobStopped` 예외가 발생합니다.
+작업 루프에서 현재 처리 중인 판례의 DB 저장이 끝나고 다음 항목으로 넘어가기 전 `context.check()`를 호출할 때, `cancelRequested` 플래그가 확인되면 `JobStopped` 예외가 발생합니다.
 
 결과적으로 **현재 항목의 DB 저장은 안전하게 완료되고, 체크포인트도 해당 지점까지 완벽히 커밋된 상태에서 작업이 종료(`JobStatus.CANCELLED`)**됩니다. 데이터 정합성이 훼손될 틈이 전혀 없습니다.
 
@@ -505,7 +505,7 @@ Spring Batch의 거대한 청크 트랜잭션 프레임워크 없이도, Kotlin�
 실무에서 이 패턴을 적용할 때 다음 원칙을 반드시 기억하시기 바랍니다:
 
 1. **외부 I/O와 DB 트랜잭션의 엄격한 분리**:
-   외부 HTTP 호출(`client.detail(...)`)은 절대 `@Transactional` 안에서 수행하지 마세요. 외부 호출이 끝난 뒤 순수 DB 쓰기 단계(`action(스프링 부트 예제 애플리케이션)`)에만 짧은 독립 트랜잭션을 적용해야 커넥션 풀 고갈을 방지할 수 있습니다.
+   외부 HTTP 호출(`client.detail(...)`)은 절대 `@Transactional` 안에서 수행하지 마세요. 외부 호출이 끝난 뒤 순수 DB 쓰기 단계(`action()`)에만 짧은 독립 트랜잭션을 적용해야 커넥션 풀 고갈을 방지할 수 있습니다.
 2. **비즈니스 저장 로직의 멱등성(Idempotency) 보장**:
    체크포인트를 통해 중복 실행을 최소화하더라도, 분산 환경에서는 동일 데이터가 재전송될 가능성이 언제나 존재합니다. DB 저장 로직은 항상 `ON CONFLICT DO UPDATE` 또는 유니크 인덱스 기반의 멱등한 저장을 보장해야 합니다.
 3. **체크포인트 크기 모니터링**:

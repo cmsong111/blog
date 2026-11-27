@@ -43,7 +43,7 @@ Google Gemini API는 `GenerateContentConfig` 설정을 통해 공식적으로 **
 ```mermaid
 flowchart LR
     subgraph SpringBoot["Spring Boot Backend"]
-        P["DiscoveryPrompts.structure(스프링 부트 예제 애플리케이션)"]
+        P["DiscoveryPrompts.structure()"]
         S["JSON Schema Map\n(DiscoveryPrompts.schema)"]
         J["Jackson JsonMapper\n(Zero-Retry Parsing)"]
     end
@@ -136,25 +136,25 @@ class GeminiDiscoveryModel(
 ) : DiscoveryModel {
 
     override fun structure(prompt: String, schema: Map<String, Any>): DiscoveryStructureResult {
-        val config = GenerateContentConfig.builder(스프링 부트 예제 애플리케이션)
+        val config = GenerateContentConfig.builder()
             .responseMimeType("application/json")
             .responseJsonSchema(schema)
             .maxOutputTokens(properties.maxOutputTokens)
-            .build(스프링 부트 예제 애플리케이션)
+            .build()
         val response = call { client.models.generateContent(properties.model, prompt, config) }
         return DiscoveryStructureResult(text(response), usage(response))
     }
 
     private fun text(response: GenerateContentResponse): String {
-        val candidate = response.candidates(스프링 부트 예제 애플리케이션).orElse(emptyList(스프링 부트 예제 애플리케이션)).firstOrNull(스프링 부트 예제 애플리케이션)
-        val finish = candidate?.finishReason(스프링 부트 예제 애플리케이션)?.orElse(null)?.toString(스프링 부트 예제 애플리케이션)
-        val text = candidate?.content(스프링 부트 예제 애플리케이션)?.orElse(null)?.parts(스프링 부트 예제 애플리케이션)?.orElse(emptyList(스프링 부트 예제 애플리케이션)).orEmpty(스프링 부트 예제 애플리케이션)
-            .filter { it.thought(스프링 부트 예제 애플리케이션).orElse(false) != true }
-            .mapNotNull { it.text(스프링 부트 예제 애플리케이션).orElse(null) }
-            .joinToString("").trim(스프링 부트 예제 애플리케이션)
+        val candidate = response.candidates().orElse(emptyList()).firstOrNull()
+        val finish = candidate?.finishReason()?.orElse(null)?.toString()
+        val text = candidate?.content()?.orElse(null)?.parts()?.orElse(emptyList()).orEmpty()
+            .filter { it.thought().orElse(false) != true }
+            .mapNotNull { it.text().orElse(null) }
+            .joinToString("").trim()
 
         if (finish != null && finish != "STOP") throw DiscoveryModelException("Gemini 응답이 완료되지 않았습니다: $finish")
-        if (text.isEmpty(스프링 부트 예제 애플리케이션)) throw DiscoveryModelException("Gemini 응답 본문이 비어 있습니다.")
+        if (text.isEmpty()) throw DiscoveryModelException("Gemini 응답 본문이 비어 있습니다.")
         return text
     }
 }
@@ -179,7 +179,7 @@ val (structured, record) = call(context.runId, DiscoveryCallStage.STRUCTURE, { i
 
 // 스키마가 보장되므로 정규식 트리밍 없이 직결 파싱
 val nodes = try {
-    mapper.readTree(structured.json)?.path("candidates")?.takeIf { it.isArray }?.toList(스프링 부트 예제 애플리케이션)
+    mapper.readTree(structured.json)?.path("candidates")?.takeIf { it.isArray }?.toList()
 } catch (e: tools.jackson.core.JacksonException) { 
     null 
 }
@@ -195,7 +195,7 @@ if (nodes == null) {
 for (node in nodes.take(properties.maxCandidates)) {
     when (val result = DiscoveryRules.check(node, search, from, to)) {
         is CandidateCheck.Accepted -> service.upsert(result.candidate, context.runId, model.modelName, DiscoveryPrompts.VERSION)
-        is CandidateCheck.PreJudgment -> context.skip(스프링 부트 예제 애플리케이션)
+        is CandidateCheck.PreJudgment -> context.skip()
         is CandidateCheck.Rejected -> context.failure("discovery:${result.title.take(80)}", result.reason)
     }
 }
@@ -246,12 +246,12 @@ object DiscoveryRules {
         if (text(node, "stage") != "JUDGMENT") return CandidateCheck.Rejected(title, "판결 단계 값이 올바르지 않습니다.")
 
         // 출처 검증: 검색 응답의 grounding 목록에 실제 존재하는 출처 ID(S1..)만 인정
-        val sources = node.path("sources").takeIf { it.isArray }?.toList(스프링 부트 예제 애플리케이션).orEmpty(스프링 부트 예제 애플리케이션).mapNotNull { item ->
-            val index = SOURCE_ID.matchEntire(text(item, "id").orEmpty(스프링 부트 예제 애플리케이션))?.groupValues?.get(1)?.toInt(스프링 부트 예제 애플리케이션)
+        val sources = node.path("sources").takeIf { it.isArray }?.toList().orEmpty().mapNotNull { item ->
+            val index = SOURCE_ID.matchEntire(text(item, "id").orEmpty())?.groupValues?.get(1)?.toInt()
             index?.let { search.sources.getOrNull(it - 1) }?.let { SourceInput(it, domain(it), date(text(item, "reportedDate"))) }
         }.distinctBy { it.source.url }
 
-        if (sources.isEmpty(스프링 부트 예제 애플리케이션)) return CandidateCheck.Rejected(title, "검색 응답에 있는 출처가 없는 후보입니다.")
+        if (sources.isEmpty()) return CandidateCheck.Rejected(title, "검색 응답에 있는 출처가 없는 후보입니다.")
 
         // 사건번호 검증: 정규식 통과 및 검색 원문에 실제 언급되었는지 교차 대조
         val caseNumber = text(node, "caseNumber")?.let(::compact)?.takeIf { 
@@ -272,7 +272,7 @@ object DiscoveryRules {
                 instance = DiscoveryInstance.valueOf(text(node, "instance") ?: "UNKNOWN"),
                 recency = DiscoveryRecency.RECENT_SENTENCE,
                 sources = sources,
-                notes = emptyList(스프링 부트 예제 애플리케이션)
+                notes = emptyList()
             )
         )
     }

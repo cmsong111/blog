@@ -104,11 +104,11 @@ object DiscoveryRules {
         if (text(node, "stage") != "JUDGMENT") return CandidateCheck.Rejected(title, "판결 단계 값이 올바르지 않습니다.")
         val summary = text(node, "issueSummary")?.take(2000) ?: return CandidateCheck.Rejected(title, "쟁점 요약이 없습니다.")
         
-        val notes = mutableListOf<String>(스프링 부트 예제 애플리케이션)
+        val notes = mutableListOf<String>()
 
         // 1. 출처 화이트리스트 검증: Google Search grounding 메타데이터에 있는 인덱스만 수용
-        val sources = node.path("sources").takeIf { it.isArray }?.toList(스프링 부트 예제 애플리케이션).orEmpty(스프링 부트 예제 애플리케이션).mapNotNull { item ->
-            val index = SOURCE_ID.matchEntire(text(item, "id").orEmpty(스프링 부트 예제 애플리케이션))?.groupValues?.get(1)?.toInt(스프링 부트 예제 애플리케이션)
+        val sources = node.path("sources").takeIf { it.isArray }?.toList().orEmpty().mapNotNull { item ->
+            val index = SOURCE_ID.matchEntire(text(item, "id").orEmpty())?.groupValues?.get(1)?.toInt()
             val source = index?.let { search.sources.getOrNull(it - 1) }
             if (source == null) { 
                 notes += "검색 응답에 없는 출처를 제외했습니다."
@@ -117,7 +117,7 @@ object DiscoveryRules {
             SourceInput(source, domain(source), date(text(item, "reportedDate"))?.takeIf { it <= to })
         }.distinctBy { it.source.url }
 
-        if (sources.isEmpty(스프링 부트 예제 애플리케이션)) return CandidateCheck.Rejected(title, "검색 응답에 있는 출처가 없는 후보입니다.")
+        if (sources.isEmpty()) return CandidateCheck.Rejected(title, "검색 응답에 있는 출처가 없는 후보입니다.")
 
         val body = compact(search.text)
 
@@ -146,7 +146,7 @@ object DiscoveryRules {
             }
         }
 
-        val modelInstance = runCatching { DiscoveryInstance.valueOf(text(node, "instance").orEmpty(스프링 부트 예제 애플리케이션)) }.getOrDefault(DiscoveryInstance.UNKNOWN)
+        val modelInstance = runCatching { DiscoveryInstance.valueOf(text(node, "instance").orEmpty()) }.getOrDefault(DiscoveryInstance.UNKNOWN)
         val recency = when {
             sentenceDate == null -> DiscoveryRecency.UNKNOWN
             sentenceDate < from -> DiscoveryRecency.RESURFACED
@@ -164,7 +164,7 @@ object DiscoveryRules {
                 instance = instanceOf(caseNumber) ?: modelInstance,
                 recency = recency,
                 sources = sources,
-                notes = notes.distinct(스프링 부트 예제 애플리케이션)
+                notes = notes.distinct()
             )
         )
     }
@@ -199,7 +199,7 @@ object DiscoveryRules {
      * 예: 2026고합1 ⊄ 2026고합123, 2026.3.1 ⊄ 2026.3.15
      */
     private fun bounded(value: String, text: String) =
-        Regex("(?<!\\d)" + value.map { Regex.escape(it.toString(스프링 부트 예제 애플리케이션)) }.joinToString("\\s*") + "(?!\\d)").containsMatchIn(text)
+        Regex("(?<!\\d)" + value.map { Regex.escape(it.toString()) }.joinToString("\\s*") + "(?!\\d)").containsMatchIn(text)
 
     fun mentioned(date: LocalDate, text: String): Boolean {
         val y = date.year; val m = date.monthValue; val d = date.dayOfMonth
@@ -244,17 +244,17 @@ import org.springframework.stereotype.Component
 @Component
 class DiscoveryVerifier(private val client: LawPrecedentClient) {
 
-    fun verify(target: VerificationTarget, check: (스프링 부트 예제 애플리케이션) -> Unit = {}): VerificationOutcome {
+    fun verify(target: VerificationTarget, check: () -> Unit = {}): VerificationOutcome {
         val caseNumber = target.caseNumber
             ?: return VerificationOutcome.Review("사건번호 미확인: 보도에서 사건번호·법원·선고일을 확인해 보정해 주세요.")
 
         // nb(사건번호) 파라미터는 부분 일치 검색이므로 결과가 여러 페이지일 수 있음
-        val items = mutableListOf<LawPrecedentSummary>(스프링 부트 예제 애플리케이션)
+        val items = mutableListOf<LawPrecedentSummary>()
         var page = 1
         while (true) {
             val result = client.list(page, 100, caseNumber = caseNumber, check = check)
             items += result.items
-            if (result.items.isEmpty(스프링 부트 예제 애플리케이션) || page.toLong(스프링 부트 예제 애플리케이션) * 100 >= result.totalCount) break
+            if (result.items.isEmpty() || page.toLong() * 100 >= result.totalCount) break
             if (page == MAX_PAGES) {
                 if (items.none { compact(it.caseNumber) == caseNumber }) {
                     return VerificationOutcome.Review(
@@ -272,7 +272,7 @@ class DiscoveryVerifier(private val client: LawPrecedentClient) {
     fun evaluate(target: VerificationTarget, items: List<LawPrecedentSummary>): VerificationOutcome {
         // 1. 공백 제거 후 사건번호 정확 일치 필터링
         val exact = items.filter { compact(it.caseNumber) == target.caseNumber }
-        if (exact.isEmpty(스프링 부트 예제 애플리케이션)) {
+        if (exact.isEmpty()) {
             return VerificationOutcome.Awaiting("공식 목록에 사건번호 ${target.caseNumber} 자료가 아직 없습니다.")
         }
 
@@ -287,7 +287,7 @@ class DiscoveryVerifier(private val client: LawPrecedentClient) {
 
         return when (matches.size) {
             0 -> VerificationOutcome.Review("사건번호는 같지만 법원·선고일이 다른 공식 자료만 있습니다. 심급·법원을 확인해 주세요: ${describe(exact)}")
-            1 -> matches.single(스프링 부트 예제 애플리케이션).let {
+            1 -> matches.single().let {
                 // 3. JSON 전문 API를 제공하는 지원 출처인지 검증
                 if (it.dataSourceName != null && it.dataSourceName !in SUPPORTED_SOURCES) {
                     VerificationOutcome.Review("JSON 본문을 제공하지 않는 출처(${it.dataSourceName})입니다. 공식 API 본문이 없어 가져오지 않습니다(#61).")
@@ -306,7 +306,7 @@ class DiscoveryVerifier(private val client: LawPrecedentClient) {
     private fun compact(value: String?) = value?.replace(Regex("\\s+"), "")
 
     private fun date(value: String?): LocalDate? = value?.replace(Regex("\\D"), "")?.takeIf { it.length == 8 }
-        ?.let { runCatching { LocalDate.parse(it, DateTimeFormatter.BASIC_ISO_DATE) }.getOrNull(스프링 부트 예제 애플리케이션) }
+        ?.let { runCatching { LocalDate.parse(it, DateTimeFormatter.BASIC_ISO_DATE) }.getOrNull() }
 
     companion object {
         /** JSON 본문을 안정적으로 제공하는 공식 출처만 허용한다. */
@@ -361,7 +361,7 @@ enum class DiscoveryStatus(val label: String) {
 }
 
 // ...
-fun applyVerification(id: Long, outcome: VerificationOutcome, now: Instant = Instant.now(스프링 부트 예제 애플리케이션)) {
+fun applyVerification(id: Long, outcome: VerificationOutcome, now: Instant = Instant.now()) {
     val discovery = find(id)
     if (discovery.status == DiscoveryStatus.IMPORTED || !discovery.open) return
 
@@ -379,7 +379,7 @@ fun applyVerification(id: Long, outcome: VerificationOutcome, now: Instant = Ins
         }
         is VerificationOutcome.Review -> discovery.needsReview(outcome.reason, now)
         is VerificationOutcome.Awaiting -> {
-            val deadline = discovery.firstDiscoveredAt.plus(Duration.ofDays(properties.sourceWaitDays.toLong(스프링 부트 예제 애플리케이션)))
+            val deadline = discovery.firstDiscoveredAt.plus(Duration.ofDays(properties.sourceWaitDays.toLong()))
             if (now.isAfter(deadline)) {
                 discovery.needsReview(
                     "${properties.sourceWaitDays}일 동안 공식 원문을 확인하지 못했습니다. " +
@@ -419,21 +419,21 @@ import java.time.LocalDate
 class DiscoveryRulesTest {
 
     @Test
-    fun `기사 본문 숫자 경계에서 정확히 일치하는 날짜만 선고일로 인정한다`(스프링 부트 예제 애플리케이션) {
+    fun `기사 본문 숫자 경계에서 정확히 일치하는 날짜만 선고일로 인정한다`() {
         val date = LocalDate.of(2026, 10, 2)
         // 정상적인 기사 표기 패턴
         listOf("지난 10월 2일 선고", "2026. 10. 2. 선고", "2026.10.02 선고", "2026-10-02", "2026년 10월 2일").forEach {
-            assertThat(DiscoveryRules.mentioned(date, it)).describedAs(it).isTrue(스프링 부트 예제 애플리케이션)
+            assertThat(DiscoveryRules.mentioned(date, it)).describedAs(it).isTrue()
         }
 
         // 숫자 경계가 다른 환각 케이스 방어
-        assertThat(DiscoveryRules.mentioned(date, "10월 20일 선고")).isFalse(스프링 부트 예제 애플리케이션)
-        assertThat(DiscoveryRules.mentioned(LocalDate.of(2026, 3, 1), "2026.3.15 선고")).isFalse(스프링 부트 예제 애플리케이션)
-        assertThat(DiscoveryRules.mentioned(LocalDate.of(2026, 1, 2), "11월 2일 선고")).isFalse(스프링 부트 예제 애플리케이션)
+        assertThat(DiscoveryRules.mentioned(date, "10월 20일 선고")).isFalse()
+        assertThat(DiscoveryRules.mentioned(LocalDate.of(2026, 3, 1), "2026.3.15 선고")).isFalse()
+        assertThat(DiscoveryRules.mentioned(LocalDate.of(2026, 1, 2), "11월 2일 선고")).isFalse()
     }
 
     @Test
-    fun `언론사의 다양한 법원 약칭을 공식 명칭으로 정규화하고 본문 존재를 확인한다`(스프링 부트 예제 애플리케이션) {
+    fun `언론사의 다양한 법원 약칭을 공식 명칭으로 정규화하고 본문 존재를 확인한다`() {
         val body = "서울고법형사1부는10일…수원지법안산지원은…대법원2부는".replace(" ", "")
 
         // 재판부 제거 및 고법 -> 고등법원 확장
@@ -445,12 +445,12 @@ class DiscoveryRulesTest {
         assertThat(DiscoveryRules.court("대법원 2부", body)).isEqualTo("대법원")
 
         // 기사 본문에 없는 법원은 환각으로 판정하여 null 반환
-        assertThat(DiscoveryRules.court("부산지방법원", body)).isNull(스프링 부트 예제 애플리케이션)
-        assertThat(DiscoveryRules.court("형사1부", body)).isNull(스프링 부트 예제 애플리케이션)
+        assertThat(DiscoveryRules.court("부산지방법원", body)).isNull()
+        assertThat(DiscoveryRules.court("형사1부", body)).isNull()
     }
 
     @Test
-    fun `사건번호의 사건부호로 심급을 자동 판별한다`(스프링 부트 예제 애플리케이션) {
+    fun `사건번호의 사건부호로 심급을 자동 판별한다`() {
         assertThat(DiscoveryRules.instanceOf("2026고합123")).isEqualTo(DiscoveryInstance.FIRST)
         assertThat(DiscoveryRules.instanceOf("2026노45")).isEqualTo(DiscoveryInstance.APPEAL)
         assertThat(DiscoveryRules.instanceOf("2026도678")).isEqualTo(DiscoveryInstance.SUPREME)

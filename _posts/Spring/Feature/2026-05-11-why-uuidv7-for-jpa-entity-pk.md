@@ -39,7 +39,7 @@ flowchart LR
 3. **애플리케이션 계층 선발급 불가**: JPA에서 `GenerationType.IDENTITY` 전략을 사용하면, 실제 DB에 `INSERT` 쿼리가 실행되어야만 PK를 알 수 있습니다. 이로 인해 영속성 컨텍스트의 쓰기 지연(Transactional Write-Behind)과 일괄 삽입(Batch Insert) 최적화가 비활성화되며, 도메인 이벤트를 발행하거나 연관 엔티티를 영속화하기 전에 식별자를 활용하기 어렵습니다.
 
 ### 2. `UUIDv4` (Random UUID)의 치명적인 인덱스 파편화
-이러한 분산 채번과 보안 문제를 해결하기 위해 많은 팀이 `UUIDv4`(`java.util.UUID.randomUUID(스프링 부트 예제 애플리케이션)`)를 도입합니다. 하지만 RDB(PostgreSQL, MySQL InnoDB 등)에 대량의 데이터를 적재하기 시작하면 성능 절벽을 마주하게 됩니다.
+이러한 분산 채번과 보안 문제를 해결하기 위해 많은 팀이 `UUIDv4`(`java.util.UUID.randomUUID()`)를 도입합니다. 하지만 RDB(PostgreSQL, MySQL InnoDB 등)에 대량의 데이터를 적재하기 시작하면 성능 절벽을 마주하게 됩니다.
 
 UUIDv4는 128비트 전체가 무작위 난수로 구성됩니다. 데이터베이스의 기본 인덱스 구조인 **B-Tree는 키의 대소 관계에 따라 정렬된 상태를 유지**해야 합니다. 무작위 값이 지속적으로 유입되면 B-Tree의 임의의 리프 노드 페이지 중간에 강제로 끼어들기 삽입이 발생합니다.
 
@@ -126,8 +126,8 @@ class User(
     var profileImageUrl: String = "https://api.dicebear.com/7.x/lorelei/svg?seed=${email ?: nickname}",
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val socialAccounts: MutableSet<SocialAccount> = mutableSetOf(스프링 부트 예제 애플리케이션)
-) : BaseEntity(스프링 부트 예제 애플리케이션)
+    val socialAccounts: MutableSet<SocialAccount> = mutableSetOf()
+) : BaseEntity()
 ```
 
 > **PostgreSQL 매핑 주의사항**: `@Column(columnDefinition = "UUID", updatable = false)` 설정을 지정하면 PostgreSQL 17의 16바이트 네이티브 `uuid` 타입으로 최적화되어 저장됩니다. 문자열 `VARCHAR(36)` 대신 네이티브 `uuid`를 사용해야 인덱스 크기를 절반 이하로 줄일 수 있습니다.
@@ -157,14 +157,14 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.UUID
 
-class UserUuidV7Test : IntegrationTestSupport(스프링 부트 예제 애플리케이션) {
+class UserUuidV7Test : IntegrationTestSupport() {
 
     @Autowired
     private lateinit var userRepository: UserRepository
 
     @Test
     @DisplayName("엔티티 persist 시 @UuidGenerator(VERSION_7)에 의해 128비트 UUID가 자동 채번된다")
-    fun shouldGenerateUuidV7OnPersist(스프링 부트 예제 애플리케이션) {
+    fun shouldGenerateUuidV7OnPersist() {
         // given
         val user = User(nickname = "남주", email = "dev@namju.kim")
 
@@ -176,17 +176,17 @@ class UserUuidV7Test : IntegrationTestSupport(스프링 부트 예제 애플리�
         val id = saved.id!!
         
         // RFC 9562 규격 검증: 13번째 16진수 문자는 '7', 17번째 문자는 variant [8, 9, a, b] 중 하나
-        val hexString = id.toString(스프링 부트 예제 애플리케이션).replace("-", "")
+        val hexString = id.toString().replace("-", "")
         val versionNibble = hexString[12].digitToInt(16)
         val variantNibble = hexString[16].digitToInt(16)
         
         assertThat(versionNibble).isEqualTo(7)
-        assertThat(variantNibble in 8..11).isTrue(스프링 부트 예제 애플리케이션)
+        assertThat(variantNibble in 8..11).isTrue()
     }
 
     @Test
     @DisplayName("순차 생성된 UUIDv7의 id 정렬 순서와 createdAt 생성 시각 순서가 100% 일치한다")
-    fun shouldPreserveMonotonicTimeOrdering(스프링 부트 예제 애플리케이션) {
+    fun shouldPreserveMonotonicTimeOrdering() {
         // given & when
         val users = (1..50).map { i ->
             userRepository.save(User(nickname = "유저_$i", email = "user$i@namju.kim"))

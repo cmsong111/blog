@@ -46,9 +46,9 @@ flowchart LR
 // Spring AI를 통한 호출 시도 예시
 val prompt = Prompt(
     "최근 7일간 선고된 법원 주요 판결 보도를 검색하고 요약해 줘.",
-    GoogleGenAiChatOptions.builder(스프링 부트 예제 애플리케이션)
+    GoogleGenAiChatOptions.builder()
         .model("gemini-3.5-flash-lite")
-        .build(스프링 부트 예제 애플리케이션)
+        .build()
 )
 val chatResponse: ChatResponse = chatModel.call(prompt)
 ```
@@ -141,16 +141,16 @@ class JudgmentDiscoveryConfig {
         @Value("\${spring.ai.google.genai.api-key}") apiKey: String,
         properties: JudgmentDiscoveryProperties
     ): DiscoveryModel {
-        val client = Client.builder(스프링 부트 예제 애플리케이션)
+        val client = Client.builder()
             .apiKey(apiKey)
             .vertexAI(false)
             .httpOptions(
-                HttpOptions.builder(스프링 부트 예제 애플리케이션)
-                    .timeout(properties.timeout.toMillis(스프링 부트 예제 애플리케이션).toInt(스프링 부트 예제 애플리케이션))
-                    .retryOptions(HttpRetryOptions.builder(스프링 부트 예제 애플리케이션).attempts(1).build(스프링 부트 예제 애플리케이션))
-                    .build(스프링 부트 예제 애플리케이션)
+                HttpOptions.builder()
+                    .timeout(properties.timeout.toMillis().toInt())
+                    .retryOptions(HttpRetryOptions.builder().attempts(1).build())
+                    .build()
             )
-            .build(스프링 부트 예제 애플리케이션)
+            .build()
         return GeminiDiscoveryModel(client, properties)
     }
 }
@@ -241,81 +241,81 @@ class GeminiDiscoveryModel(
     private val properties: JudgmentDiscoveryProperties
 ) : DiscoveryModel {
 
-    override val modelName: String get(스프링 부트 예제 애플리케이션) = properties.model
+    override val modelName: String get() = properties.model
 
     override fun search(prompt: String): DiscoverySearchResult {
-        val config = GenerateContentConfig.builder(스프링 부트 예제 애플리케이션)
-            .tools(Tool.builder(스프링 부트 예제 애플리케이션).googleSearch(GoogleSearch.builder(스프링 부트 예제 애플리케이션).build(스프링 부트 예제 애플리케이션)).build(스프링 부트 예제 애플리케이션))
+        val config = GenerateContentConfig.builder()
+            .tools(Tool.builder().googleSearch(GoogleSearch.builder().build()).build())
             .maxOutputTokens(properties.maxOutputTokens)
-            .build(스프링 부트 예제 애플리케이션)
+            .build()
 
         val response = call { client.models.generateContent(properties.model, prompt, config) }
-        val candidate = response.candidates(스프링 부트 예제 애플리케이션).orElse(emptyList(스프링 부트 예제 애플리케이션)).firstOrNull(스프링 부트 예제 애플리케이션)
+        val candidate = response.candidates().orElse(emptyList()).firstOrNull()
             ?: throw DiscoveryModelException("검색 응답에 후보가 없습니다.")
 
         val text = text(response)
-        val metadata = candidate.groundingMetadata(스프링 부트 예제 애플리케이션).orElse(null)
+        val metadata = candidate.groundingMetadata().orElse(null)
 
         // 구글 검색 엔진이 입증한 실제 웹 출처 청크만 추출
-        val sources = metadata?.groundingChunks(스프링 부트 예제 애플리케이션)?.orElse(emptyList(스프링 부트 예제 애플리케이션)).orEmpty(스프링 부트 예제 애플리케이션).mapNotNull { chunk ->
-            val web = chunk.web(스프링 부트 예제 애플리케이션).orElse(null) ?: return@mapNotNull null
-            val url = web.uri(스프링 부트 예제 애플리케이션).orElse(null)?.takeIf { it.startsWith("https://") || it.startsWith("http://") }
+        val sources = metadata?.groundingChunks()?.orElse(emptyList()).orEmpty().mapNotNull { chunk ->
+            val web = chunk.web().orElse(null) ?: return@mapNotNull null
+            val url = web.uri().orElse(null)?.takeIf { it.startsWith("https://") || it.startsWith("http://") }
                 ?: return@mapNotNull null
-            GroundedSource(url, web.title(스프링 부트 예제 애플리케이션).orElse(null), web.domain(스프링 부트 예제 애플리케이션).orElse(null))
+            GroundedSource(url, web.title().orElse(null), web.domain().orElse(null))
         }
 
-        val queries = metadata?.webSearchQueries(스프링 부트 예제 애플리케이션)?.orElse(emptyList(스프링 부트 예제 애플리케이션)).orEmpty(스프링 부트 예제 애플리케이션)
+        val queries = metadata?.webSearchQueries()?.orElse(emptyList()).orEmpty()
         return DiscoverySearchResult(text, sources, queries, usage(response))
     }
 
     override fun structure(prompt: String, schema: Map<String, Any>): DiscoveryStructureResult {
-        val config = GenerateContentConfig.builder(스프링 부트 예제 애플리케이션)
+        val config = GenerateContentConfig.builder()
             .responseMimeType("application/json")
             .responseJsonSchema(schema)
             .maxOutputTokens(properties.maxOutputTokens)
-            .build(스프링 부트 예제 애플리케이션)
+            .build()
 
         val response = call { client.models.generateContent(properties.model, prompt, config) }
         return DiscoveryStructureResult(text(response), usage(response))
     }
 
-    private fun call(action: (스프링 부트 예제 애플리케이션) -> GenerateContentResponse): GenerateContentResponse = try {
-        action(스프링 부트 예제 애플리케이션)
+    private fun call(action: () -> GenerateContentResponse): GenerateContentResponse = try {
+        action()
     } catch (e: ApiException) {
-        throw DiscoveryModelException("Gemini 호출 실패: HTTP ${e.code(스프링 부트 예제 애플리케이션)} ${e.status(스프링 부트 예제 애플리케이션)}")
+        throw DiscoveryModelException("Gemini 호출 실패: HTTP ${e.code()} ${e.status()}")
     } catch (e: GenAiIOException) {
-        if (Thread.currentThread(스프링 부트 예제 애플리케이션).isInterrupted) throw InterruptedException("Gemini 호출이 중단되었습니다.")
+        if (Thread.currentThread().isInterrupted) throw InterruptedException("Gemini 호출이 중단되었습니다.")
         throw DiscoveryModelException("Gemini 네트워크 호출에 실패했습니다.")
     }
 
     private fun text(response: GenerateContentResponse): String {
-        val candidate = response.candidates(스프링 부트 예제 애플리케이션).orElse(emptyList(스프링 부트 예제 애플리케이션)).firstOrNull(스프링 부트 예제 애플리케이션)
-        val finish = candidate?.finishReason(스프링 부트 예제 애플리케이션)?.orElse(null)?.toString(스프링 부트 예제 애플리케이션)
+        val candidate = response.candidates().orElse(emptyList()).firstOrNull()
+        val finish = candidate?.finishReason()?.orElse(null)?.toString()
 
         // 사고 과정 파트(thought == true)를 제외하고 실제 모델 답변 텍스트만 결합
-        val text = candidate?.content(스프링 부트 예제 애플리케이션)?.orElse(null)?.parts(스프링 부트 예제 애플리케이션)?.orElse(emptyList(스프링 부트 예제 애플리케이션)).orEmpty(스프링 부트 예제 애플리케이션)
-            .filter { it.thought(스프링 부트 예제 애플리케이션).orElse(false) != true }
-            .mapNotNull { it.text(스프링 부트 예제 애플리케이션).orElse(null) }
+        val text = candidate?.content()?.orElse(null)?.parts()?.orElse(emptyList()).orEmpty()
+            .filter { it.thought().orElse(false) != true }
+            .mapNotNull { it.text().orElse(null) }
             .joinToString("")
-            .trim(스프링 부트 예제 애플리케이션)
+            .trim()
 
         if (finish != null && finish != "STOP") {
             throw DiscoveryModelException("Gemini 응답이 정상 완료되지 않았습니다: $finish")
         }
-        if (text.isEmpty(스프링 부트 예제 애플리케이션)) {
+        if (text.isEmpty()) {
             throw DiscoveryModelException("Gemini 응답 본문이 비어 있습니다.")
         }
         return text
     }
 
     private fun usage(response: GenerateContentResponse): DiscoveryUsage? =
-        response.usageMetadata(스프링 부트 예제 애플리케이션).orElse(null)?.let {
+        response.usageMetadata().orElse(null)?.let {
             DiscoveryUsage(
-                promptTokens = it.promptTokenCount(스프링 부트 예제 애플리케이션).orElse(null),
-                outputTokens = it.candidatesTokenCount(스프링 부트 예제 애플리케이션).orElse(null),
-                thoughtTokens = it.thoughtsTokenCount(스프링 부트 예제 애플리케이션).orElse(null),
-                toolTokens = it.toolUsePromptTokenCount(스프링 부트 예제 애플리케이션).orElse(null),
-                totalTokens = it.totalTokenCount(스프링 부트 예제 애플리케이션).orElse(null)
+                promptTokens = it.promptTokenCount().orElse(null),
+                outputTokens = it.candidatesTokenCount().orElse(null),
+                thoughtTokens = it.thoughtsTokenCount().orElse(null),
+                toolTokens = it.toolUsePromptTokenCount().orElse(null),
+                totalTokens = it.totalTokenCount().orElse(null)
             )
         }
 }
