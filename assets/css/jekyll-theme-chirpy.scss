@@ -239,3 +239,132 @@ html[data-mode='dark'] .skip-to-content {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* =========================================================
+ * Chirpy 네이티브 스타일 조건부 Chart.js 카드 (`chart: true` + `{: .chart-js }`)
+ * ========================================================= */
+.chart-card {
+  margin: 1.75rem 0;
+  border-radius: 0.625rem;
+  background-color: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.chart-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1.15rem;
+  border-bottom: 1px solid var(--tb-border-color);
+  background-color: var(--card-header-bg, var(--highlight-bg-color));
+}
+
+.chart-card-title {
+  color: var(--heading-color);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.chart-card-badge {
+  flex-shrink: 0;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--btn-border-color);
+  background-color: var(--card-bg);
+  color: var(--text-muted-color);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  user-select: none;
+}
+
+.chart-card-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.chart-card-toggle {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--btn-border-color);
+  background-color: transparent;
+  color: var(--text-muted-color);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover,
+  &[aria-expanded='true'] {
+    color: var(--heading-color);
+    border-color: var(--link-color);
+    background-color: var(--card-bg);
+  }
+}
+
+.chart-card-body {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  padding: 1.15rem 1.25rem 0.9rem;
+}
+
+.chart-card-body-tall {
+  height: 360px;
+}
+
+.chart-card-source {
+  border-top: 1px solid var(--tb-border-color);
+  background-color: var(--highlight-bg-color);
+
+  pre {
+    margin: 0;
+    padding: 0.95rem 1.15rem;
+    max-height: 280px;
+    overflow: auto;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--text-color);
+    background: transparent;
+  }
+
+  code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .chart-card {
+    margin: 1.35rem 0;
+  }
+
+  .chart-card-header {
+    padding: 0.65rem 0.95rem;
+  }
+
+  .chart-card-title {
+    font-size: 0.86rem;
+  }
+
+  .chart-card-body {
+    height: 260px;
+    padding: 0.9rem 0.75rem 0.65rem;
+  }
+
+  .chart-card-body-tall {
+    height: 310px;
+  }
+}

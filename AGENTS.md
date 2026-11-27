@@ -21,7 +21,7 @@
 | `_drafts/` | 미완성 초안 포스트 보관소 (프로덕션 빌드 제외) |
 | `assets/images/YYYY-MM-DD/` | 포스트 이미지 자산 저장소 (`/` 경로 사용 시 프로덕션 jsDelivr CDN 자동 적용) |
 | `.agents/skills/blog-writing/` | 글쓰기·페르소나·QA 표준 스킬 (SSOT, `.claude/skills`에서 심볼릭 링크) |
-| `_includes/metadata-hook.html` | **Chirpy 공식 확장 훅** (네이버 서치어드바이저, 애드센스, linkpreview CSS, `noindex`, `BreadcrumbList` JSON-LD, 접근성 스크립트 주입용). **절대 `_includes/head.html`을 통째로 덮어쓰지 말 것!** |
+| `_includes/metadata-hook.html` | **Chirpy 공식 확장 훅** (네이버 서치어드바이저, 애드센스, linkpreview CSS, `noindex`, `BreadcrumbList` JSON-LD, 접근성·조건부 Chart.js 스크립트 주입용). **절대 `_includes/head.html`을 통째로 덮어쓰지 말 것!** |
 | `_includes/linkpreview.html` | `jekyll-linkpreview` OG 지원 사이트용 미리보기 카드 템플릿 |
 | `_includes/linkpreview_nog.html` | OpenGraph가 없는 사이트용 fallback 템플릿 |
 | `_plugins/category-folder-hook.rb` | `_posts/{대분류}/{중분류}/` 폴더 경로 기반 카테고리 자동 주입 훅 (Front Matter에 `categories` 생략) |

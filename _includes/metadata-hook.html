@@ -59,6 +59,12 @@
 <!-- Accessibility enhancements (Skip-to-Content link) -->
 <script defer src="{{ '/assets/js/a11y-enhancements.js' | relative_url }}"></script>
 
+{% if page.chart %}
+  <!-- Conditional Chart.js loader (only loaded on posts with `chart: true`) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script defer src="{{ '/assets/js/chart-renderer.js' | relative_url }}"></script>
+{% endif %}
+
 <!-- Google AdSense -->
 <script
   async
