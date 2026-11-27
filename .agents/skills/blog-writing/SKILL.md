@@ -64,7 +64,9 @@ description: >-
   - `Java > Swing`: `_posts/Java/Swing/`
   - `Kotlin > Practice`: `_posts/Kotlin/Practice/`
   - `Spring > Feature`: `_posts/Spring/Feature/`
+  - `Spring > JPA`: `_posts/Spring/JPA/`
   - `Spring > Observability`: `_posts/Spring/Observability/`
+  - `Spring > Redis`: `_posts/Spring/Redis/`
   - `Spring > Spring-AI`: `_posts/Spring/Spring-AI/`
   - `Spring > Testing`: `_posts/Spring/Testing/`
   - `Spring > Wanted-Challenge`: `_posts/Spring/Wanted-Challenge/`
