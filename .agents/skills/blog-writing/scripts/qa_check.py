@@ -280,7 +280,7 @@ def main():
             for fn in files:
                 if fn == ".DS_Store":
                     continue
-                fp = os.path.join(root, fn)
+                fp = os.path.join(root, fn).replace("\\", "/")
                 if fp not in all_img_refs and fp not in extra_refs:
                     warnings["orphan_image"].append(fp)
                 sz = os.path.getsize(fp)

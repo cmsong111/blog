@@ -29,6 +29,8 @@ latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so tha
 
 Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
 
+> **Linkpreview OpenGraph 캐시 초기화**: GitHub Actions의 `jekyll-linkpreview` 캐시(`linkpreview-*`)를 수동으로 갱신하려면 저장소의 **Actions → Management → Caches**에서 해당 캐시를 삭제한 뒤 워크플로우를 다시 실행하면 됩니다.
+
 ## Contributing
 
 This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.

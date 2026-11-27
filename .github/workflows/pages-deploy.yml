@@ -48,8 +48,18 @@ jobs:
           ruby-version: 3.4
           bundler-cache: true
 
+      - name: Cache linkpreview
+        uses: actions/cache@v5
+        with:
+          path: _cache
+          key: linkpreview-${{ hashFiles('_posts/**') }}
+          restore-keys: |
+            linkpreview-
+
       - name: Build site
-        run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}" --config _config.yml,_config_prod.yml
+        run: |
+          mkdir -p _cache
+          bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}" --config _config.yml,_config_prod.yml
         env:
           JEKYLL_ENV: "production"
 
