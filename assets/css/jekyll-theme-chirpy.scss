@@ -364,3 +364,259 @@ html[data-mode='dark'] .skip-to-content {
     height: 310px;
   }
 }
+
+/* =========================================================
+ * Chirpy 네이티브 스타일 Mermaid 다이어그램 카드 & 확대 모달 (`mermaid: true`)
+ * (.chart-card 디자인 언어와 통일)
+ * ========================================================= */
+.mermaid-card {
+  margin: 1.75rem 0;
+  border-radius: 0.625rem;
+  background-color: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.mermaid-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1.15rem;
+  border-bottom: 1px solid var(--tb-border-color);
+  background-color: var(--card-header-bg, var(--highlight-bg-color));
+}
+
+.mermaid-card-title {
+  color: var(--heading-color);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.mermaid-card-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.mermaid-card-badge {
+  flex-shrink: 0;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--btn-border-color);
+  background-color: var(--card-bg);
+  color: var(--label-color, var(--text-color));
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  user-select: none;
+}
+
+.mermaid-card-btn {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--btn-border-color);
+  background-color: transparent;
+  color: var(--label-color, var(--text-color));
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover,
+  &[aria-expanded='true'] {
+    color: var(--heading-color);
+    border-color: var(--link-color);
+    background-color: var(--card-bg);
+  }
+}
+
+.mermaid-card-body {
+  padding: 1.25rem 1.25rem 1.1rem;
+  overflow-x: auto;
+  background-color: var(--card-bg);
+}
+
+.mermaid-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  cursor: zoom-in;
+
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.mermaid-fallback {
+  width: 100%;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  background-color: var(--highlight-bg-color);
+  border-radius: 0.5rem;
+}
+
+.mermaid-card-source {
+  border-top: 1px solid var(--tb-border-color);
+  background-color: var(--highlight-bg-color);
+
+  pre {
+    margin: 0;
+    padding: 0.85rem 1.15rem 1rem;
+    max-height: 280px;
+    overflow: auto;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--text-color);
+    background: transparent;
+  }
+
+  code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+  }
+}
+
+.mermaid-source-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 1.15rem;
+  border-bottom: 1px solid var(--tb-border-color);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-muted-color);
+}
+
+/* Mermaid 확대 라이트박스 모달 */
+.mermaid-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background-color: rgb(15 23 42 / 76%);
+  backdrop-filter: blur(4px);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.mermaid-lightbox-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(1240px, 96vw);
+  height: min(860px, 90vh);
+  border-radius: 0.75rem;
+  background-color: var(--card-bg);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 45%);
+  border: 1px solid var(--tb-border-color);
+  overflow: hidden;
+}
+
+.mermaid-lightbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1.15rem;
+  border-bottom: 1px solid var(--tb-border-color);
+  background-color: var(--card-header-bg, var(--highlight-bg-color));
+}
+
+.mermaid-lightbox-title {
+  color: var(--heading-color);
+  font-size: 0.92rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mermaid-lightbox-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.mermaid-lightbox-zoom {
+  min-width: 3rem;
+  text-align: center;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-muted-color);
+  user-select: none;
+}
+
+.mermaid-lightbox-viewport {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  cursor: grab;
+  user-select: none;
+
+  &.is-dragging {
+    cursor: grabbing;
+  }
+}
+
+.mermaid-lightbox-canvas {
+  transform-origin: center center;
+  transition: transform 0.06s ease-out;
+  will-change: transform;
+}
+
+@media (max-width: 767.98px) {
+  .mermaid-card {
+    margin: 1.35rem 0;
+  }
+
+  .mermaid-card-header {
+    padding: 0.65rem 0.95rem;
+    flex-wrap: wrap;
+  }
+
+  .mermaid-card-title {
+    font-size: 0.86rem;
+  }
+
+  .mermaid-card-body {
+    padding: 0.9rem 0.75rem;
+  }
+
+  .mermaid-lightbox {
+    padding: 0.5rem;
+  }
+
+  .mermaid-lightbox-dialog {
+    width: 100%;
+    height: 92vh;
+  }
+
+  .mermaid-lightbox-header {
+    padding: 0.65rem 0.85rem;
+    flex-wrap: wrap;
+  }
+}
