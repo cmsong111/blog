@@ -51,7 +51,7 @@ description: >-
 - **표준 카테고리 폴더**:
   - `AI > Concept`: `_posts/AI/Concept/`
   - `Blog > Jekyll`: `_posts/Blog/Jekyll/`
-  - `Book`: `_posts/Book/`
+  - `Book > DDD`: `_posts/Book/DDD/`
   - `Dev`: `_posts/Dev/`
   - `Docker > Compose / Container / Image / Network`: `_posts/Docker/{중분류}/`
   - `Home Server > Containers`: `_posts/Home Server/Containers/`
