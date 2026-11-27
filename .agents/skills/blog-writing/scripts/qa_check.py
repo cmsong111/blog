@@ -5,7 +5,7 @@
 검사 항목:
 1. Front Matter 필수 필드 (title, description, date, tags) 및 categories 생략 여부
 2. 제목 금지어 (어그로/과장 표현) 검사
-3. 파일명 규칙, 미래 날짜, 퍼머링크·태그 슬러그 중복 검사
+3. 파일명 규칙, 미래 날짜, 퍼머링크·태그·중분류 카테고리 슬러그 중복 검사
 4. 본문 분량 (코드·Mermaid 제외 순수 본문 < 600자 Thin Content 경고)
 5. Mermaid 문법 (노드/엣지 특수문자 따옴표, 스타일링 HTML 태그, mermaid: true 일치)
 6. 이미지 무결성 (깨진 로컬 이미지, 이중 슬래시 /assets//, 외부 핫링크, >1MB 대용량, 고아 이미지)
@@ -103,8 +103,15 @@ def main():
     valid_slugs = set()
     all_img_refs = set()
     tag_slug_variants = defaultdict(lambda: defaultdict(list))
+    subcat_parents = defaultdict(set)
 
     for p in posts:
+        rel_dir = os.path.relpath(os.path.dirname(p), "_posts").replace("\\", "/")
+        parts = rel_dir.split("/") if rel_dir != "." else []
+        for depth in range(1, len(parts)):
+            subcat_parents[slugify_tag(parts[depth])].add(
+                "/".join(parts[: depth + 1])
+            )
         fname = os.path.basename(p)
         m_fn = re.match(r"^(\d{4}-\d{2}-\d{2})-(.+)\.md$", fname)
         if not m_fn:
@@ -257,6 +264,12 @@ def main():
                 errors["unescaped_liquid_tag_in_code"].append(
                     f"{p} (본문 {line_no}행): {line.strip()[:80]}"
                 )
+
+    for slug, paths in sorted(subcat_parents.items()):
+        if len(paths) > 1:
+            errors["duplicate_subcategory_name"].append(
+                f"/categories/{slug}/ -> {', '.join(sorted(paths))}"
+            )
 
     for slug, variants in sorted(tag_slug_variants.items()):
         if len(variants) > 1:

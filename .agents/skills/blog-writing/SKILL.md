@@ -32,7 +32,7 @@ description: >-
    - **코드 블록·Mermaid 제외 순수 본문 1,500 ~ 3,500자 내외** (5분 읽기 분량)
    - `Why / Trade-off` + 내부 동작 원리(One Layer Deeper) + 복붙 가능한 최소 재현 코드 + 운영 함정(Edge Case) 포함
    - 600자 미만의 메모/링크 1줄 초안은 절대 `_posts/`에 두지 않고 `_drafts/`에 보관 (Thin Content 방지)
-6. **QA 실행 및 보고**: `python3 .agents/skills/blog-writing/scripts/qa_check.py` 실행 후 한글 커밋 명령어만 제시 (`git commit`/`push` 금지)
+6. **QA 실행 및 보고**: `python3 .agents/skills/blog-writing/scripts/qa_check.py` 실행 후 `AGENTS.md` 커밋 컨벤션(`post:` / `edit:` 등 영문 접두사 + 한글 요약)으로 커밋 명령어만 제시 (`git commit`/`push` 금지)
 
 ### B. 시리즈 연재 작성 (3편 이상)
 1. **스캐폴딩 선행**: 비어 있는 과거/현재 날짜 구간을 확인해 모든 편의 파일명·슬러그·Front Matter를 먼저 생성
@@ -52,6 +52,7 @@ description: >-
   - `AI > Concept`: `_posts/AI/Concept/`
   - `Blog > Jekyll`: `_posts/Blog/Jekyll/`
   - `Book > DDD`: `_posts/Book/DDD/`
+  - `CS > JVM / Web-Network`: `_posts/CS/{중분류}/`
   - `Dev`: `_posts/Dev/`
   - `Docker > Compose / Container / Image / Network`: `_posts/Docker/{중분류}/`
   - `Home Server > Containers`: `_posts/Home Server/Containers/`
