@@ -175,7 +175,7 @@ curl -s "localhost:8080/actuator/metrics/resilience4j.circuitbreaker.state?tag=n
 curl -s "localhost:8080/actuator/metrics/resilience4j.bulkhead.available.concurrent.calls?tag=name:noticeApi"
 ```
 
-이전 글의 `go-httpbin` 목 서버를 내리고 `/api/notices`를 15번 호출하면, Retry가 요청마다 두 번씩 호출하므로 다섯 번째 요청 무렵 최소 호출 수 10건이 채워지고 회로가 OPEN으로 바뀌는 이벤트가 찍힙니다. 이후 요청은 외부 호출 없이 수 밀리초 안에 캐시된 공지를 돌려줍니다. 30초 뒤 목 서버를 다시 올리면 HALF_OPEN 시험 호출 3건이 성공하며 CLOSED로 돌아옵니다.
+[RestClient 타임아웃·커넥션 풀 구성 글](/posts/restclient-timeout-connection-pool/)의 `go-httpbin` 목 서버를 내리고 `/api/notices`를 15번 호출하면, Retry가 요청마다 두 번씩 호출하므로 다섯 번째 요청 무렵 최소 호출 수 10건이 채워지고 회로가 OPEN으로 바뀌는 이벤트가 찍힙니다. 이후 요청은 외부 호출 없이 수 밀리초 안에 캐시된 공지를 돌려줍니다. 30초 뒤 목 서버를 다시 올리면 HALF_OPEN 시험 호출 3건이 성공하며 CLOSED로 돌아옵니다.
 
 ## 운영 함정 및 정리
 

@@ -29,7 +29,7 @@ Fixture Monkey를 쓰지 말아야 할 경우도 있습니다. 필드가 몇 개
 
 ## 프로젝트 설정
 
-이전 글처럼 `java-test-fixtures` 플러그인으로 픽스처를 분리하고, Jqwik과 Kotlin 모듈을 함께 추가했습니다. `fixture-monkey-starter-kotlin`에는 Jakarta Validation 플러그인이 이미 포함되어 있습니다.
+[Jqwik 속성 기반 테스트 글](/posts/jqwik-property-based-testing/)과 마찬가지로 `java-test-fixtures` 플러그인으로 픽스처를 분리하고, Jqwik과 Kotlin 모듈을 함께 추가했습니다. `fixture-monkey-starter-kotlin`에는 Jakarta Validation 플러그인이 이미 포함되어 있습니다.
 
 ```kotlin
 // build.gradle.kts
