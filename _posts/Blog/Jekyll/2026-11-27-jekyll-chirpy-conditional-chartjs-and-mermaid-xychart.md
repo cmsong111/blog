@@ -77,14 +77,19 @@ flowchart TD
 
 ### 3. `assets/js/chart-renderer.js` 다크모드 동기화 렌더러
 
-렌더러는 DOM 로드 직후 `.chart-js` 블록의 텍스트를 `JSON.parse()`로 읽어 `<canvas>`로 교체합니다. Chirpy는 테마 토글 시 `document.documentElement`의 `data-mode` 속성을 바꾸므로, `MutationObserver`와 `prefers-color-scheme` 리스너를 연결해 사용자가 다크/라이트 모드를 전환하는 즉시 축·격자·범례 색상을 `chart.update('none')`으로 깜빡임 없이 재적용합니다.
+렌더러는 DOM 로드 직후 `.chart-js` 블록의 텍스트를 `JSON.parse()`로 읽어 `<canvas>`로 교체합니다. Chirpy v7.6은 테마 토글 시 `document.documentElement`의 `data-bs-theme` 속성을 변경하고 `theme-updated` 메시지를 발행하므로, `MutationObserver`와 `message`·`prefers-color-scheme` 리스너를 연결해 사용자가 다크/라이트 모드를 전환하는 즉시 축·격자·범례·방사형 축 색상을 `chart.update('none')`으로 깜빡임 없이 재적용합니다.
 
 ```javascript
 // assets/js/chart-renderer.js (핵심 발췌)
 function isDarkMode() {
-  var mode = document.documentElement.getAttribute('data-mode');
-  if (mode === 'dark') return true;
-  if (mode === 'light') return false;
+  var attr =
+    document.documentElement.getAttribute('data-bs-theme') ||
+    document.documentElement.getAttribute('data-mode');
+  if (attr === 'dark') return true;
+  if (attr === 'light') return false;
+  if (window.Theme && typeof window.Theme.isDark === 'boolean') {
+    return window.Theme.isDark;
+  }
   return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 

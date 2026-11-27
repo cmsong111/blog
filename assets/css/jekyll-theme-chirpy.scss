@@ -77,12 +77,13 @@ samp {
 }
 
 /* 다크 모드에서 밝은 --link-color 배경 위 텍스트 대비 확보 */
+html[data-bs-theme='dark'] .skip-to-content,
 html[data-mode='dark'] .skip-to-content {
   color: #111111 !important;
 }
 
 @media (prefers-color-scheme: dark) {
-  html:not([data-mode='light']) .skip-to-content {
+  html:not([data-bs-theme='light']):not([data-mode='light']) .skip-to-content {
     color: #111111 !important;
   }
 }
@@ -276,7 +277,7 @@ html[data-mode='dark'] .skip-to-content {
   border-radius: 999px;
   border: 1px solid var(--btn-border-color);
   background-color: var(--card-bg);
-  color: var(--text-muted-color);
+  color: var(--label-color, var(--text-color));
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -295,7 +296,7 @@ html[data-mode='dark'] .skip-to-content {
   border-radius: 999px;
   border: 1px solid var(--btn-border-color);
   background-color: transparent;
-  color: var(--text-muted-color);
+  color: var(--label-color, var(--text-color));
   font-size: 0.72rem;
   font-weight: 500;
   line-height: 1.4;
@@ -328,21 +329,16 @@ html[data-mode='dark'] .skip-to-content {
   border-top: 1px solid var(--tb-border-color);
   background-color: var(--highlight-bg-color);
 
-  pre {
-    margin: 0;
-    padding: 0.95rem 1.15rem;
-    max-height: 280px;
-    overflow: auto;
-    font-size: 0.78rem;
-    line-height: 1.55;
-    color: var(--text-color);
-    background: transparent;
+  > div[class^='language-'] {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
-  code {
-    padding: 0;
-    background: transparent;
-    color: inherit;
+  .highlight {
+    max-height: 320px;
+    overflow: auto;
+    padding-bottom: 0.75rem;
   }
 }
 

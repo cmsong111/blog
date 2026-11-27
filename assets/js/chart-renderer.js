@@ -4,7 +4,7 @@
  * - Markdown에서 ```json ... ``` 직후 `{: .chart-js }`를 붙인 블록을
  *   Chirpy 카드 디자인과 어우러지는 반응형 Chart.js 차트(bar/line/doughnut/scatter/bubble/radar/polarArea)로 변환합니다.
  * - 카드 헤더의 `JSON 보기` 토글 버튼으로 원본 설정 JSON을 즉시 펼쳐 볼 수 있습니다.
- * - Chirpy 다크/라이트 모드(`data-mode`) 전환 시 CSS 변수를 다시 읽어 실시간 동기화합니다.
+ * - Chirpy 다크/라이트 모드(`data-bs-theme` / `theme-updated`) 전환 시 색상을 실시간 동기화합니다.
  */
 (function () {
   'use strict';
@@ -37,9 +37,14 @@
   var instances = [];
 
   function isDarkMode() {
-    var mode = document.documentElement.getAttribute('data-mode');
-    if (mode === 'dark') return true;
-    if (mode === 'light') return false;
+    var attr =
+      document.documentElement.getAttribute('data-bs-theme') ||
+      document.documentElement.getAttribute('data-mode');
+    if (attr === 'dark') return true;
+    if (attr === 'light') return false;
+    if (window.Theme && typeof window.Theme.isDark === 'boolean') {
+      return window.Theme.isDark;
+    }
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
@@ -62,14 +67,21 @@
     return {
       dark: dark,
       cardBg: readCssVar('--card-bg', dark ? '#1e1e1e' : '#ffffff'),
-      heading: readCssVar('--heading-color', dark ? '#cccccc' : '#2a2a2a'),
-      text: readCssVar('--text-color', dark ? '#afb0b1' : '#34343c'),
-      muted: readCssVar('--text-muted-color', dark ? '#868686' : '#757575'),
-      grid: dark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 23, 42, 0.08)',
-      tooltipBg: dark ? 'rgba(24, 24, 27, 0.94)' : 'rgba(30, 41, 59, 0.94)',
-      tooltipBorder: dark ? 'rgba(255, 255, 255, 0.14)' : 'rgba(255, 255, 255, 0.12)',
+      heading: dark ? '#f1f5f9' : readCssVar('--heading-color', '#2a2a2a'),
+      text: dark ? '#e2e8f0' : readCssVar('--text-color', '#34343c'),
+      muted: dark ? '#cbd5e1' : '#525866',
+      grid: dark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(15, 23, 42, 0.08)',
+      tooltipBg: dark ? 'rgba(15, 23, 42, 0.96)' : 'rgba(30, 41, 59, 0.94)',
+      tooltipBorder: dark ? 'rgba(255, 255, 255, 0.16)' : 'rgba(255, 255, 255, 0.12)',
       palette: dark ? PALETTE_DARK : PALETTE_LIGHT
     };
+  }
+
+  function syncGlobalDefaults(tokens) {
+    if (window.Chart && window.Chart.defaults) {
+      window.Chart.defaults.color = tokens.text;
+      window.Chart.defaults.borderColor = tokens.grid;
+    }
   }
 
   function applyDatasetDefaults(config, tokens) {
@@ -241,7 +253,11 @@
     if (!nonCartesian) {
       var isHorizontal = config.options.indexAxis === 'y';
       config.options.scales = config.options.scales || { x: {}, y: {} };
-      ['x', 'y'].forEach(function (axis) {
+      var axes = ['x', 'y'];
+      Object.keys(config.options.scales).forEach(function (k) {
+        if (axes.indexOf(k) === -1) axes.push(k);
+      });
+      axes.forEach(function (axis) {
         var scale = config.options.scales[axis] || {};
         var isCategoryAxis = isHorizontal ? axis === 'y' : axis === 'x';
         scale.border = Object.assign({ display: false }, scale.border || {});
@@ -278,11 +294,15 @@
 
   function updateAllThemes() {
     var tokens = themeTokens();
+    syncGlobalDefaults(tokens);
     instances.forEach(function (chart) {
-      var legendLabels = chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels;
+      var plugins = chart.options.plugins || {};
+      var legendLabels = plugins.legend && plugins.legend.labels;
       if (legendLabels) legendLabels.color = tokens.text;
+      if (plugins.title) plugins.title.color = tokens.heading;
+      if (plugins.subtitle) plugins.subtitle.color = tokens.muted;
 
-      var tooltip = chart.options.plugins && chart.options.plugins.tooltip;
+      var tooltip = plugins.tooltip;
       if (tooltip) {
         tooltip.backgroundColor = tokens.tooltipBg;
         tooltip.borderColor = tokens.tooltipBorder;
@@ -354,6 +374,7 @@
     }
 
     var tokens = themeTokens();
+    syncGlobalDefaults(tokens);
     var blocks = document.querySelectorAll('.chart-js');
     blocks.forEach(function (block, idx) {
       var codeEl =
@@ -369,7 +390,6 @@
         return;
       }
 
-      var rawJson = JSON.stringify(config, null, 2);
       var titleText = extractTitle(config);
       var chartType = (config.type || 'chart').toUpperCase();
       var sourceId = 'chart-source-' + idx;
@@ -421,13 +441,6 @@
       sourceWrap.className = 'chart-card-source';
       sourceWrap.hidden = true;
 
-      var pre = document.createElement('pre');
-      var code = document.createElement('code');
-      code.textContent = rawJson;
-      pre.appendChild(code);
-      sourceWrap.appendChild(pre);
-      figure.appendChild(sourceWrap);
-
       toggleBtn.addEventListener('click', function () {
         var nextHidden = !sourceWrap.hidden;
         sourceWrap.hidden = nextHidden;
@@ -435,7 +448,12 @@
         toggleBtn.textContent = nextHidden ? 'JSON 보기' : 'JSON 닫기';
       });
 
-      block.parentNode.replaceChild(figure, block);
+      block.parentNode.insertBefore(figure, block);
+      block.classList.remove('chart-js');
+      block.classList.add('chart-source-block');
+      sourceWrap.appendChild(block);
+      figure.appendChild(sourceWrap);
+
       var chart = new window.Chart(canvas.getContext('2d'), applyTheme(config, tokens));
       instances.push(chart);
     });
@@ -444,7 +462,12 @@
       var observer = new MutationObserver(updateAllThemes);
       observer.observe(document.documentElement, {
         attributes: true,
-        attributeFilter: ['data-mode']
+        attributeFilter: ['data-bs-theme', 'data-mode']
+      });
+      window.addEventListener('message', function (event) {
+        if (event.data && event.data.id === 'theme-updated') {
+          updateAllThemes();
+        }
       });
       if (window.matchMedia) {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateAllThemes);
