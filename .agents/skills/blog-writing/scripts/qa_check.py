@@ -268,26 +268,36 @@ def main():
         if re.search(r"ghp_[0-9A-Za-z]{36}", content):
             errors["potential_ghp_token"].append(p)
 
-        # 8. Unescaped Liquid syntax outside {% raw %}...{% endraw %}
+        # 8. Unescaped Liquid syntax in prose outside code blocks/inline code and {% raw %}...{% endraw %}
+        #    (Fenced code blocks and inline code spans are automatically escaped by _plugins/code-raw-escape-hook.rb)
         body_no_raw = re.sub(
-            r"\{%\s*raw\s*%\}.*?\{%\s*endraw\s*%\}",
+            r"\{%-?\s*raw\s*-?%\}.*?\{%-?\s*endraw\s*-?%\}",
             lambda m: "\n" * m.group(0).count("\n"),
             body,
             flags=re.DOTALL,
         )
         in_fence = False
+        fence_char = ""
+        fence_len = 0
         for line_no, line in enumerate(body_no_raw.splitlines(), 1):
-            if re.match(r"^\s*```", line):
-                in_fence = not in_fence
-                continue
-            if "{{" in line:
-                errors["unescaped_liquid_expression"].append(
-                    f"{p} (본문 {line_no}행): {line.strip()[:80]}"
-                )
-            elif in_fence and "{%" in line:
-                errors["unescaped_liquid_tag_in_code"].append(
-                    f"{p} (본문 {line_no}행): {line.strip()[:80]}"
-                )
+            if not in_fence:
+                fm_open = re.match(r"^(?:[ \t]*>[ \t]?)*[ \t]{0,3}(`{3,}|~{3,})([^\r\n]*)$", line)
+                if fm_open and (fm_open.group(1)[0] == "~" or "`" not in fm_open.group(2)):
+                    in_fence = True
+                    fence_char = fm_open.group(1)[0]
+                    fence_len = len(fm_open.group(1))
+                    continue
+                prose_line = re.sub(r"(`+)(?!`).+?(?<!`)\1(?!`)", "", line)
+                if "{{" in prose_line:
+                    errors["unescaped_liquid_expression"].append(
+                        f"{p} (본문 {line_no}행): {line.strip()[:80]}"
+                    )
+            else:
+                stripped = re.sub(r"^(?:[ \t]*>[ \t]?)*", "", line)
+                if re.match(rf"^[ \t]{{0,3}}{re.escape(fence_char)}{{{fence_len},}}[ \t]*$", stripped):
+                    in_fence = False
+                    fence_char = ""
+                    fence_len = 0
 
     for slug, paths in sorted(subcat_parents.items()):
         if len(paths) > 1:

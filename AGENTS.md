@@ -29,6 +29,7 @@
 | `_plugins/seo-sitemap-hook.rb` | 얇은 태그 아카이브(`/tags/*/`)·페이지네이션(`/page2+/`) `sitemap.xml` 제외 및 `noindex` 자동 주입 훅 |
 | `_plugins/image-dimensions-hook.rb` | 로컬 이미지의 고유 `width`/`height` 자동 주입 훅 (CLS 방지, `fastimage` 활용) |
 | `_plugins/locale-override-hook.rb` | Chirpy 테마 로케일 라벨(`post.relate_posts` 등) 인메모리 오버라이드 훅 |
+| `_plugins/code-raw-escape-hook.rb` | 마크다운 코드 블록(`` ``` ``/`` ~~~ ``) 및 인라인 코드(`` `...` ``) 내부의 Liquid 구문(`{{`, `{%`) 자동 `raw` 이스케이프 훅 |
 
 ---
 
