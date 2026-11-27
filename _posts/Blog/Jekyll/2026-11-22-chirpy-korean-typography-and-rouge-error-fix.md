@@ -141,6 +141,7 @@ samp {
 
 Chirpy 7.x는 Dart Sass의 `@use` 규칙과 프로덕션 번들 분기를 파일 최상단에 둡니다.
 
+{% raw %}
 ```scss
 ---
 ---
@@ -153,6 +154,7 @@ Chirpy 7.x는 Dart Sass의 `@use` 규칙과 프로덕션 번들 분기를 파일
 
 /* append your custom style below */
 ```
+{% endraw %}
 
 > 주의: `@use` 위에 스타일을 작성하면 Sass 컴파일 에러가 발생하며, Liquid 분기를 지우면 프로덕션 빌드에서 번들 최적화가 빠집니다. 상단 8줄은 그대로 두고 아래에 커스텀 규칙을 추가해야 합니다.
 {: .prompt-warning }

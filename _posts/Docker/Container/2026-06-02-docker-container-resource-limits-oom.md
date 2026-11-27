@@ -193,9 +193,11 @@ $$\text{Exit Code } 137 = 128 + 9 \ (\text{SIGKILL})$$
 
 ### 1단계: `docker inspect`로 OOM 여부 확인
 
+{% raw %}
 ```bash
 docker inspect <컨테이너_이름_또는_ID> --format '{{json .State}}' | jq
 ```
+{% endraw %}
 
 출력 결과 중 `OOMKilled` 필드를 확인합니다:
 ```json

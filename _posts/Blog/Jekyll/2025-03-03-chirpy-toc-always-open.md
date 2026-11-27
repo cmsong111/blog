@@ -88,6 +88,7 @@ Chirpy 공식 문서에서 권장하는 커스텀 CSS 엔트리포인트는 **`a
 #### 1) 파일 생성 및 기본 구조 확인
 프로젝트 루트에 `assets/css/jekyll-theme-chirpy.scss` 파일을 생성하고 아래 기본 헤더를 유지합니다:
 
+{% raw %}
 ```scss
 ---
 ---
@@ -100,6 +101,7 @@ Chirpy 공식 문서에서 권장하는 커스텀 CSS 엔트리포인트는 **`a
 
 /* append your custom style below */
 ```
+{% endraw %}
 
 > ⚠️ **주의사항**: 파일 상단의 프론트매터 구분선(`---`)과 `@use 'main...'` 구문은 Jekyll Sass 컴파일러가 Chirpy 테마 코어 번들을 불러오는 필수 선언문이므로 절대 삭제하거나 수정해서는 안 됩니다.
 

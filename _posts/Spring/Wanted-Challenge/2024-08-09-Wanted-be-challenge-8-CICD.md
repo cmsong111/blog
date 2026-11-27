@@ -31,6 +31,7 @@ flowchart TD
 
 연속 푸시 시 이전 실행을 자동 취소하도록 `concurrency`를 설정하고, `permissions`는 테스트 리포트와 PR 코멘트에 필요한 최소 권한만 부여했습니다.
 
+{% raw %}
 ```yaml
 # .github/workflows/ci-cd.yaml (트리거 및 동시성 제어)
 name: CI/CD Pipeline
@@ -53,11 +54,13 @@ permissions:
   checks: write
   pull-requests: write
 ```
+{% endraw %}
 
 ## Lint, 통합 테스트와 SonarCloud 연동
 
 `test` 잡에서는 `services`로 `redis:8-alpine` 컨테이너와 헬스체크를 함께 띄워 테스트 환경을 격리합니다. `ktlintCheck`로 코드 스타일을 검사한 뒤 `test jacocoTestReport`로 테스트와 커버리지 XML을 생성하고, `outputs`에 추출한 `VERSION`과 `SHORT_SHA`를 후속 배포 잡으로 전달합니다.
 
+{% raw %}
 ```yaml
 # .github/workflows/ci-cd.yaml (test 잡)
 jobs:
@@ -125,8 +128,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 ```
+{% endraw %}
 
-테스트가 실패해도 실패 원인을 GitHub Checks에서 바로 볼 수 있도록 리포트 발행에 `if: ${{ always() }}`를 지정했고, `SONAR_TOKEN`이 없는 포크 PR에서는 SonarCloud 단계를 안전하게 건너뜁니다. Gradle에서는 JaCoCo XML 출력과 SonarCloud 분석 경로를 함께 맞춥니다.
+테스트가 실패해도 실패 원인을 GitHub Checks에서 바로 볼 수 있도록 리포트 발행에 `if: {% raw %}${{ always() }}{% endraw %}`를 지정했고, `SONAR_TOKEN`이 없는 포크 PR에서는 SonarCloud 단계를 안전하게 건너뜁니다. Gradle에서는 JaCoCo XML 출력과 SonarCloud 분석 경로를 함께 맞춥니다.
 
 ```kotlin
 // build.gradle.kts (JaCoCo 및 SonarCloud 설정)
@@ -180,6 +184,7 @@ tasks.withType<BootBuildImage>().configureEach {
 
 `build-image` 잡은 각 아키텍처 이미지를 고정 중간 태그(`build-amd64`, `build-arm64`)로 덮어쓰며 푸시합니다. 커밋마다 임시 태그를 만들지 않아 Docker Hub 태그 오염을 막을 수 있으며, 마지막 `publish-manifest` 잡이 `docker buildx imagetools create`로 두 이미지를 하나의 OCI Image Index로 묶어 `latest`, `VERSION`, `SHORT_SHA` 3개 태그로 발행합니다.
 
+{% raw %}
 ```yaml
 # .github/workflows/ci-cd.yaml (멀티아치 빌드 및 매니페스트 발행)
   build-image:
@@ -250,6 +255,7 @@ tasks.withType<BootBuildImage>().configureEach {
             "cmsong111/portfolio-server:build-amd64" \
             "cmsong111/portfolio-server:build-arm64"
 ```
+{% endraw %}
 
 ## 운영 중 겪은 트러블슈팅과 주의사항
 

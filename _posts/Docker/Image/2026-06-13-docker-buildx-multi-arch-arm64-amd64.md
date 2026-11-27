@@ -195,6 +195,7 @@ ENTRYPOINT ["/app/server"]
 
 로컬에서 매번 멀티 아키텍처를 빌드하기보다는 CI 파이프라인(GitHub Actions)에 위임하고, 원격 캐시를 적극 활용하는 구성을 권장합니다.
 
+{% raw %}
 ```yaml
 name: Build and Push Multi-Arch Image
 
@@ -232,6 +233,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 ```
+{% endraw %}
 
 {: .prompt-tip }
 > `cache-to: type=gha,mode=max`를 지정하면 최종 산출물 레이어뿐 아니라 멀티스테이지의 중간 캐시 레이어까지 GitHub Actions 캐시 스토리지에 보관되어 이후 빌드 시간을 대폭 줄일 수 있습니다.

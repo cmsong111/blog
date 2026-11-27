@@ -367,6 +367,7 @@ order-service       Up About a minute (unhealthy)
 
 재시작된 `order-service`는 `--start-period` 동안 `(health: starting)` 상태를 거쳐 다시 깨끗한 `(healthy)` 상태로 스스로 복구됩니다. 사람이 새벽에 알람을 받고 개입하지 않아도 시스템이 스스로 좀비 컨테이너를 처단하고 살아난 것입니다.
 
+{% raw %}
 ```markdown
 {: .prompt-tip }
 > **실무 디버깅 팁: 헬스체크 실패 상세 로그 확인**  
@@ -376,6 +377,7 @@ order-service       Up About a minute (unhealthy)
 > ```
 > 최근 5회의 헬스체크 실행 시각, 종료 코드, 그리고 `Output` 문자열이 고스란히 남아 있어 타임아웃인지 엔드포인트 에러인지 정확하게 분석할 수 있습니다.
 ```
+{% endraw %}
 
 ---
 

@@ -94,6 +94,7 @@ tags: [jekyll, chirpy, ruby, plugin]
 
 GitHub Pages 기본 브랜치 배포는 보안상 `--safe` 모드로 동작해 `_plugins/`의 커스텀 Ruby 코드를 실행하지 않습니다. 따라서 배포 소스를 **GitHub Actions**로 전환하고 `.github/workflows/pages-deploy.yml`에서 직접 빌드한 `_site`를 배포해야 합니다.
 
+{% raw %}
 ```yaml
 # .github/workflows/pages-deploy.yml (핵심 빌드 단계)
 jobs:
@@ -120,6 +121,7 @@ jobs:
         env:
           JEKYLL_ENV: "production"
 ```
+{% endraw %}
 
 > `fetch-depth: 0`을 함께 지정하면 Git 히스토리 기반의 `last_modified_at` 훅도 정상 동작합니다.
 {: .prompt-tip }

@@ -49,6 +49,7 @@ flowchart TD
 
 Chirpy `<head>` 끝에 자동 포함되는 훅에 애드센스 스크립트와 프로덕션 전용 배치 스크립트를 추가합니다.
 
+{% raw %}
 ```html
 <!-- _includes/metadata-hook.html -->
 <script
@@ -60,6 +61,7 @@ Chirpy `<head>` 끝에 자동 포함되는 훅에 애드센스 스크립트와 �
   <script defer src="{{ '/assets/js/adsense-layout.js' | relative_url }}"></script>
 {% endif %}
 ```
+{% endraw %}
 
 ### 2. `assets/js/adsense-layout.js` 핵심 로직
 

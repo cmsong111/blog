@@ -107,6 +107,7 @@ plugins:
 
 `_includes/linkpreview.html` 파일을 생성하고, 문제가 되었던 `<h2>` 태그를 일반 **`<div class="jekyll-linkpreview-title">`** 태그로 교체합니다:
 
+{% raw %}
 ```html
 <!-- _includes/linkpreview.html -->
 <div class="jekyll-linkpreview-wrapper">
@@ -131,6 +132,7 @@ plugins:
   {% endif %}
 </div>
 ```
+{% endraw %}
 
 ### Step 2. 반응형 CSS 스타일링 (`assets/css/linkpreview.css`)
 
@@ -181,6 +183,7 @@ plugins:
 
 이를 방지하기 위해 OpenGraph가 없는 경우를 위한 전용 템플릿인 **`_includes/linkpreview_nog.html`**도 함께 마련해 두면 어떤 외부 링크를 첨부하더라도 빌드가 안전하게 유지됩니다:
 
+{% raw %}
 ```html
 <!-- _includes/linkpreview_nog.html -->
 <div class="jekyll-linkpreview-wrapper">
@@ -198,6 +201,7 @@ plugins:
   </div>
 </div>
 ```
+{% endraw %}
 
 ---
 

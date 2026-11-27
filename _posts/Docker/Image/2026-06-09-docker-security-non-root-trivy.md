@@ -250,6 +250,7 @@ Total: 2 (HIGH: 1, CRITICAL: 1)
 
 취약점이 포함된 이미지가 레지스트리에 푸시되거나 운영 환경에 배포되지 않도록 차단하는 GitHub Actions 워크플로 예제입니다.
 
+{% raw %}
 ```yaml
 name: "Build and Security Scan"
 
@@ -296,6 +297,7 @@ jobs:
           echo "취약점 검증 통과 완료. 프로덕션 이미지 푸시 진행..."
           # docker push myorg/backend-service:${{ github.sha }}
 ```
+{% endraw %}
 
 ```mermaid
 sequenceDiagram

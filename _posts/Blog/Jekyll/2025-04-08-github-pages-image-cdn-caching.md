@@ -114,6 +114,7 @@ cdn: 'https://cdn.jsdelivr.net/gh/cmsong111/blog@main'
 
 `.github/workflows/pages-deploy.yml` 파일에서 Jekyll 빌드 명령어를 찾아 `--config _config.yml,_config_prod.yml` 옵션을 추가합니다:
 
+{% raw %}
 ```yaml
 # .github/workflows/pages-deploy.yml
       - name: Build site
@@ -123,6 +124,7 @@ cdn: 'https://cdn.jsdelivr.net/gh/cmsong111/blog@main'
         env:
           JEKYLL_ENV: "production"
 ```
+{% endraw %}
 
 ![GitHub Actions Runner의 Multi-Config 빌드 로그](/assets/images/2025-04-08/jekyll-multi-config-build.png)
 

@@ -10,7 +10,7 @@
 5. Mermaid 문법 (노드/엣지 특수문자 따옴표, 스타일링 HTML 태그, mermaid: true 일치)
 6. 이미지 무결성 (깨진 로컬 이미지, 이중 슬래시 /assets//, 외부 핫링크, >1MB 대용량, 고아 이미지)
 7. 내부 포스트 링크 (/posts/<slug>/) 깨짐 검사
-8. 보안 (API 키 / 토큰 패턴 노출 검사)
+8. 보안 (API 키 / 토큰 패턴 노출 검사) 및 미이스케이프 Liquid 구문({{ }}, 코드 블록 내 {% %}) 검사
 9. 설정 검증 (_config.yml / workflow에 AGENTS.md 제외 여부)
 
 사용법:
@@ -225,6 +225,27 @@ def main():
             errors["potential_sk_key"].append(p)
         if re.search(r"ghp_[0-9A-Za-z]{36}", content):
             errors["potential_ghp_token"].append(p)
+
+        # 8. Unescaped Liquid syntax outside {% raw %}...{% endraw %}
+        body_no_raw = re.sub(
+            r"\{%\s*raw\s*%\}.*?\{%\s*endraw\s*%\}",
+            lambda m: "\n" * m.group(0).count("\n"),
+            body,
+            flags=re.DOTALL,
+        )
+        in_fence = False
+        for line_no, line in enumerate(body_no_raw.splitlines(), 1):
+            if re.match(r"^\s*```", line):
+                in_fence = not in_fence
+                continue
+            if "{{" in line:
+                errors["unescaped_liquid_expression"].append(
+                    f"{p} (본문 {line_no}행): {line.strip()[:80]}"
+                )
+            elif in_fence and "{%" in line:
+                errors["unescaped_liquid_tag_in_code"].append(
+                    f"{p} (본문 {line_no}행): {line.strip()[:80]}"
+                )
 
     for slug, variants in sorted(tag_slug_variants.items()):
         if len(variants) > 1:

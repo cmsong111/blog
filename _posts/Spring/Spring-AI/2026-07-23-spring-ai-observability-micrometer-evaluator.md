@@ -203,6 +203,7 @@ _그림 2. 정상 문맥 답변은 pass: true (1.0), 거짓 주장(교육비 500
 
 ### .github/workflows/ai-quality.yml
 
+{% raw %}
 ```yaml
 name: AI Quality Regression
 
@@ -235,6 +236,7 @@ jobs:
           name: evaluation-report
           path: observability-evaluation/build/reports/tests/test
 ```
+{% endraw %}
 
 ---
 
