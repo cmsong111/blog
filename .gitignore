@@ -28,3 +28,5 @@ _sass/vendors
 assets/js/dist
 
 *.DS_Store
+# CI-generated config (jsDelivr commit-pinned CDN)
+_config_ci.yml

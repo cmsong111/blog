@@ -4,4 +4,9 @@
 # 전역 이미지 CDN 엔드포인트 (jsDelivr 오픈소스 Multi-CDN)
 # '/'로 시작하는 모든 미디어 리소스(포스트 이미지, 아바타 등)에 자동으로 접두어로 추가됩니다.
 # 로컬 개발 환경(_config.yml)에서는 빈 값으로 유지되어 로컬 상대 경로가 그대로 사용됩니다.
+#
+# 아래 @main 값은 수동 프로덕션 빌드용 fallback입니다.
+# GitHub Actions 배포 시에는 빌드 직전에 `_config_ci.yml`이 생성되어 커밋 SHA 고정 URL
+# (`@<commit-sha>`)로 덮어씁니다. jsDelivr는 브랜치(@main) 참조를 최대 7일 캐시하지만,
+# 커밋 SHA 참조는 불변(immutable)으로 취급하므로 같은 파일명의 이미지를 교체해도 즉시 반영됩니다.
 cdn: 'https://cdn.jsdelivr.net/gh/cmsong111/blog@main'

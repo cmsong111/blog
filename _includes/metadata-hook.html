@@ -66,16 +66,22 @@
 
 {% if page.chart %}
   <!-- Conditional Chart.js loader (only loaded on posts with `chart: true`) -->
-  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <!-- Pinned exact version + SRI. When upgrading, recompute: curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A -->
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.6.1/dist/chart.umd.min.js"
+    integrity="sha384-Emf5ZVIUiarAdhkgtqK+5/Z5qIvM6QoVrS+qAVtfyZVuD5lIHrac0me485+Antp0"
+    crossorigin="anonymous"
+  ></script>
   <script defer src="{{ '/assets/js/chart-renderer.js' | relative_url }}"></script>
 {% endif %}
 
-<!-- Google AdSense -->
-<script
-  async
-  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9883771255224638"
-  crossorigin="anonymous"
-></script>
+<!-- Google AdSense (production only: avoid invalid ad requests from local previews) -->
 {% if jekyll.environment == 'production' %}
+  <script
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9883771255224638"
+    crossorigin="anonymous"
+  ></script>
   <script defer src="{{ '/assets/js/adsense-layout.js' | relative_url }}"></script>
 {% endif %}

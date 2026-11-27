@@ -59,7 +59,9 @@ jobs:
       - name: Build site
         run: |
           mkdir -p _cache
-          bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}" --config _config.yml,_config_prod.yml
+          # Pin the jsDelivr CDN to this exact commit (immutable cache) instead of @main
+          echo "cdn: 'https://cdn.jsdelivr.net/gh/${{ github.repository }}@${{ github.sha }}'" > _config_ci.yml
+          bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}" --config _config.yml,_config_prod.yml,_config_ci.yml
         env:
           JEKYLL_ENV: "production"
 
