@@ -3,9 +3,8 @@
 - type: github
   icon: "fab fa-github"
 
-- type: linkedin
-  icon: "fab fa-linkedin" # icons powered by <https://fontawesome.com/>
-  url: "https://www.linkedin.com/in/kimnamju/" # Fill with your Linkedin homepage
+- type: language
+  icon: "fas fa-globe"
 
 - type: email
   icon: "fas fa-envelope"

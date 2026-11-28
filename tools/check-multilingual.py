@@ -18,6 +18,8 @@ class Page(HTMLParser):
     def __init__(self, file):
         super().__init__()
         self.in_head = False
+        self.in_sidebar = False
+        self.has_sidebar = False
         self.lang = ""
         self.locale = ""
         self.canonical = []
@@ -37,6 +39,9 @@ class Page(HTMLParser):
             self.in_head = True
         elif tag == "body":
             self.in_head = False
+        elif tag == "aside" and attrs.get("id") == "sidebar":
+            self.in_sidebar = True
+            self.has_sidebar = True
         elif tag == "link" and self.in_head:
             if attrs.get("rel") == "canonical":
                 self.canonical.append(attrs.get("href"))
@@ -49,7 +54,7 @@ class Page(HTMLParser):
                 self.noindex |= "noindex" in attrs.get("content", "").lower()
         elif tag == "a":
             if attrs.get("id") == "language-switcher":
-                self.switch.append((attrs.get("hreflang"), attrs.get("href")))
+                self.switch.append((attrs.get("hreflang"), attrs.get("href"), self.in_sidebar))
             if "nav-link" in attrs.get("class", "").split():
                 self.nav_links.add(attrs.get("href"))
         elif tag == "script" and "src" in attrs:
@@ -58,6 +63,8 @@ class Page(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "head":
             self.in_head = False
+        elif tag == "aside":
+            self.in_sidebar = False
 
 
 def require(condition, message):
@@ -83,7 +90,7 @@ def check_site(root):
             require(dict(pages[path].alternates) == alternates, f"Wrong language pair: {path}")
 
     for route, page in pages.items():
-        if not page.switch and not page.alternates:
+        if not (page.has_sidebar or page.switch or page.alternates):
             continue
 
         english = route.startswith("/en/")
@@ -107,8 +114,8 @@ def check_site(root):
             require(other_url == ORIGIN + target and other_page and other_page.lang == other_lang
                     and dict(other_page.alternates) == alternates,
                     f"Missing or non-reciprocal hreflang target: {route} -> {other_url}")
-        require(page.switch == [(other_lang, target)] and target in pages,
-                f"Invalid language switch: {route} -> {target}")
+        require(page.switch == [(other_lang, target, True)] and target in pages,
+                f"Invalid sidebar language switch: {route} -> {target}")
 
     for prefix in ("", "/en"):
         require({prefix + path for path in CORE_ROUTES[1:]} <= pages[prefix + "/"].nav_links,

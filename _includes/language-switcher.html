@@ -1,0 +1,24 @@
+{%- capture alternate_path -%}{% include alternate-language-url.html %}{%- endcapture -%}
+{%- liquid
+  if site.lang == 'en'
+    assign alternate_lang = 'ko'
+    assign switch_label = 'Korean'
+    assign home_suffix = ' home'
+  else
+    assign alternate_lang = 'en'
+    assign switch_label = '영어'
+    assign home_suffix = ' 홈'
+  endif
+  if alternate_path == empty
+    assign switch_label = switch_label | append: home_suffix
+  endif
+-%}
+<a
+  id="language-switcher"
+  href="{{ alternate_path | default: site.alternate_language_home | escape }}"
+  hreflang="{{ alternate_lang }}"
+  aria-label="{{ switch_label | escape }}"
+  title="{{ switch_label | escape }}"
+>
+  <i class="{{ include.icon | escape }}" aria-hidden="true"></i>
+</a>
