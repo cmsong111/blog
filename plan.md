@@ -16,7 +16,7 @@ Jekyll과 Chirpy Gem으로 한국어와 영어 사이트를 각각 빌드하고,
 ### Phase 1. 영어 설정과 컬렉션
 
 - `_config_en.yml`에 `lang: en`, `locale: en_US`, `baseurl: /en`, `collections_dir: en`, `pwa.enabled: false`를 설정합니다. 영어 `title`, `tagline`, `description`, `social.name`, `author.name`을 지정하고, `author.url`은 `https://namju.kim/en/about/`로 설정합니다.
-- `_config.yml`의 `exclude`에 `en`을 추가합니다. Jekyll은 설정 파일 간 `exclude` 배열을 교체하므로, 영어 오버라이드에는 기존 공통 제외 목록 전체와 영어 빌드에서 제외할 루트 전용 항목(`_posts`, `_tabs`, `_drafts`, `robots.txt`, `ads.txt`)을 명시합니다. 영어 쪽 목록에는 컬렉션을 읽을 수 있도록 `en`을 넣지 않습니다. 공통 제외 항목을 변경할 때 두 목록을 함께 갱신합니다.
+- `_config.yml`의 `exclude`에 `en`을 추가합니다. Jekyll은 설정 파일 간 `exclude` 배열을 교체하므로, 영어 오버라이드에는 기존 공통 제외 목록 전체와 영어 빌드에서 제외할 루트 전용 항목(`_posts`, `_drafts`, `robots.txt`, `ads.txt`)을 명시합니다. 영어 탭은 `collections_dir: en`으로 선택합니다. Jekyll은 영어 탭에도 `_tabs/` 기준으로 제외 규칙을 적용하므로, 영어 제외 목록에서 `_tabs`와 `en`을 빼둡니다. 공통 제외 항목을 변경할 때 두 목록을 함께 갱신합니다.
 - 한국어 PWA의 `pwa.cache.deny_paths`에 `/en`을 추가합니다. 최종 산출물에서 루트 서비스 워커의 캐시 제외 동작과 영어 페이지의 서비스 워커 미등록을 확인합니다.
 - `en/_tabs/`에 `about.md`, `archives.md`, `categories.md`, `tags.md`를 작성합니다. 영문 글은 `en/_posts/{대분류}/{중분류}/YYYY-MM-DD-slug.md`에 둡니다.
 

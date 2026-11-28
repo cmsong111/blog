@@ -20,6 +20,7 @@ pwa:
 
 # Jekyll replaces the entire exclude list. Keep the common entries in sync
 # with _config.yml and leave the en collection directory readable.
+# The collection filter matches tab documents against _tabs/ even in this build.
 exclude:
   - "*.gem"
   - "*.gemspec"
@@ -36,7 +37,6 @@ exclude:
   - "*.config.js"
   - "package*.json"
   - _posts
-  - _tabs
   - _drafts
   - robots.txt
   - ads.txt
