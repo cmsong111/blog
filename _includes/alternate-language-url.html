@@ -1,0 +1,8 @@
+{%- if page.alt_url -%}
+  {{- page.alt_url -}}
+{%- elsif page.layout == 'home' -%}
+  {%- assign home_path = page.url | strip_index -%}
+  {%- if home_path == '/' -%}
+    {{- site.alternate_language_home -}}
+  {%- endif -%}
+{%- endif -%}

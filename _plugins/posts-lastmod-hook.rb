@@ -9,10 +9,15 @@
 require 'open3'
 
 Jekyll::Hooks.register :site, :post_read do |site|
+  next if site.posts.docs.empty?
+
+  collections_dir = site.config['collections_dir']
+  posts_dir = collections_dir.empty? ? '_posts' : File.join(collections_dir, '_posts')
+
   cmd = [
     'git', '-c', 'core.quotepath=false',
     'log', '--format=COMMIT:%ad', '--date=iso', '--name-only',
-    'HEAD', '--', '_posts'
+    'HEAD', '--', posts_dir
   ]
 
   stdout, status = Open3.capture2(*cmd, chdir: site.source)
@@ -35,7 +40,7 @@ Jekyll::Hooks.register :site, :post_read do |site|
   end
 
   site.posts.docs.each do |post|
-    rel_path = post.relative_path
+    rel_path = collections_dir.empty? ? post.relative_path : File.join(collections_dir, post.relative_path)
     if commit_counts[rel_path] > 1 && latest_dates[rel_path]
       post.data['last_modified_at'] = latest_dates[rel_path]
     end

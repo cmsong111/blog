@@ -3,6 +3,22 @@
 <!-- Naver Search Advisor site verification -->
 <meta name="naver-site-verification" content="858f23c87778195f1b40e45846a75a7f99cb6371">
 
+{%- capture alternate_path -%}{% include alternate-language-url.html %}{%- endcapture -%}
+{% if alternate_path != empty %}
+  {% assign current_url = page.url | absolute_url | strip_index %}
+  {% assign alternate_url = site.url | append: alternate_path %}
+  {% if site.lang == 'en' %}
+    {% assign english_url = current_url %}
+    {% assign korean_url = alternate_url %}
+  {% else %}
+    {% assign english_url = alternate_url %}
+    {% assign korean_url = current_url %}
+  {% endif %}
+  <link rel="alternate" hreflang="ko" href="{{ korean_url | escape }}">
+  <link rel="alternate" hreflang="en" href="{{ english_url | escape }}">
+  <link rel="alternate" hreflang="x-default" href="{{ korean_url | escape }}">
+{% endif %}
+
 {% if page.noindex %}
   <!-- Prevent thin tag archive and paginated index pages from diluting search indexing -->
   <meta name="robots" content="noindex, follow">

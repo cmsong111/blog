@@ -1,0 +1,42 @@
+lang: en
+locale: en_US
+baseurl: /en
+collections_dir: en
+alternate_language_home: /
+
+title: Namju's Commit Log
+tagline: Engineering notes, troubleshooting, and things learned along the way.
+description: Notes on backend engineering, infrastructure, and lessons from building software.
+
+social:
+  name: Namju Kim
+
+author:
+  name: Namju Kim
+  url: https://namju.kim/en/about/
+
+pwa:
+  enabled: false
+
+# Jekyll replaces the entire exclude list. Keep the common entries in sync
+# with _config.yml and leave the en collection directory readable.
+exclude:
+  - "*.gem"
+  - "*.gemspec"
+  - docs
+  - tools
+  - README.md
+  - plan.md
+  - docker/plan.md
+  - agent.md
+  - AGENTS.md
+  - writing-tone.md
+  - LICENSE
+  - purgecss.js
+  - "*.config.js"
+  - "package*.json"
+  - _posts
+  - _tabs
+  - _drafts
+  - robots.txt
+  - ads.txt

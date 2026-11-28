@@ -89,5 +89,28 @@
     <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">
       {{- site.data.locales[include.lang].search.cancel -}}
     </button>
+
+    {%- capture alternate_path -%}{% include alternate-language-url.html %}{%- endcapture -%}
+    {% if site.lang == 'en' %}
+      {% assign alternate_lang = 'ko' %}
+      {% assign alternate_label = '한국어' %}
+      {% assign home_label = 'Korean home' %}
+      {% assign home_suffix = ' Home' %}
+    {% else %}
+      {% assign alternate_lang = 'en' %}
+      {% assign alternate_label = 'English' %}
+      {% assign home_label = '영어 홈' %}
+      {% assign home_suffix = ' 홈' %}
+    {% endif %}
+    <a
+      id="language-switcher"
+      class="ms-2 small text-nowrap flex-shrink-0"
+      href="{{ alternate_path | default: site.alternate_language_home | escape }}"
+      hreflang="{{ alternate_lang }}"
+      aria-label="{% if alternate_path == empty %}{{ home_label }}{% else %}{{ alternate_label }}{% endif %}"
+    >
+      {{- alternate_lang | upcase -}}
+      {%- if alternate_path == empty %}{{ home_suffix }}{% endif -%}
+    </a>
   </div>
 </header>

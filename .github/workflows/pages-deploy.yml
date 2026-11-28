@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: _cache
-          key: linkpreview-${{ hashFiles('_posts/**') }}
+          key: linkpreview-${{ hashFiles('_posts/**', 'en/_posts/**') }}
           restore-keys: |
             linkpreview-
 
@@ -61,15 +61,24 @@ jobs:
           mkdir -p _cache
           # Pin the jsDelivr CDN to this exact commit (immutable cache) instead of @main
           echo "cdn: 'https://cdn.jsdelivr.net/gh/${{ github.repository }}@${{ github.sha }}'" > _config_ci.yml
-          bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}" --config _config.yml,_config_prod.yml,_config_ci.yml
+          en_dest=$(mktemp -d "$RUNNER_TEMP/jekyll-en.XXXXXX")
+          bundle exec jekyll build -d "$PAGES_DEST" --config _config.yml,_config_prod.yml,_config_ci.yml
+          bundle exec jekyll build -d "$en_dest" --config _config.yml,_config_prod.yml,_config_ci.yml,_config_en.yml
+          rsync -a --exclude='/assets/images/' --exclude='/robots.txt' --exclude='/ads.txt' "$en_dest/" "$PAGES_DEST/en/"
         env:
           JEKYLL_ENV: "production"
+          PAGES_DEST: "_site${{ steps.pages.outputs.base_path }}"
 
       - name: Test site
         run: |
           bundle exec htmlproofer _site \
             --disable-external \
             --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
+
+      - name: Verify multilingual output
+        run: python3 tools/check-multilingual.py "$PAGES_DEST"
+        env:
+          PAGES_DEST: "_site${{ steps.pages.outputs.base_path }}"
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v5

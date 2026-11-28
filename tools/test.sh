@@ -60,6 +60,11 @@ main() {
   JEKYLL_ENV=production bundle exec jekyll b \
     -d "$SITE_DIR$_baseurl" -c "$_config"
 
+  if [[ -z $_baseurl ]]; then
+    JEKYLL_ENV=production bundle exec jekyll b \
+      -d "$SITE_DIR/en" -c "$_config,_config_en.yml"
+  fi
+
   # test
   bundle exec htmlproofer "$SITE_DIR" \
     --disable-external \

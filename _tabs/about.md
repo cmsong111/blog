@@ -3,6 +3,7 @@
 description: Spring Boot 기반 백엔드 개발자 김남주의 기술 스택, 협업 철학, 문제 해결 방식을 소개합니다.
 icon: fas fa-info-circle
 order: 4
+alt_url: /en/about/
 ---
 
 ## 깊은 전문성과 폭넓은 지식을 갖춘 T자형 개발자
