@@ -26,7 +26,7 @@
     var skipLink = document.createElement('a');
     skipLink.className = 'skip-to-content';
     skipLink.href = '#' + mainEl.id;
-    skipLink.textContent = '본문으로 바로가기';
+    skipLink.textContent = document.documentElement.lang === 'en' ? 'Skip to main content' : '본문으로 바로가기';
 
     document.body.insertBefore(skipLink, document.body.firstChild);
   }

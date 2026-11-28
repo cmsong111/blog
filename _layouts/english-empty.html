@@ -1,0 +1,19 @@
+---
+layout: page
+---
+
+{% if page.layout == 'home' %}
+  <h1 class="dynamic-title">Latest posts</h1>
+{% endif %}
+
+{%- capture korean_path -%}{% include alternate-language-url.html %}{%- endcapture -%}
+<div id="english-empty-state">
+  <p>No English posts have been published yet.</p>
+  <p>
+    {% if page.layout == 'home' %}
+      <a href="{{ '/about/' | relative_url }}">About Namju Kim</a>
+      <span aria-hidden="true"> · </span>
+    {% endif %}
+    <a href="{{ korean_path | default: site.alternate_language_home | escape }}" hreflang="ko">Browse in Korean</a>
+  </p>
+</div>

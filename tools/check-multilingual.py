@@ -20,6 +20,7 @@ class Page(HTMLParser):
         self.in_head = False
         self.in_sidebar = False
         self.has_sidebar = False
+        self.has_english_empty_state = False
         self.lang = ""
         self.locale = ""
         self.canonical = []
@@ -33,7 +34,9 @@ class Page(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
-        if tag == "html":
+        if tag == "div" and attrs.get("id") == "english-empty-state":
+            self.has_english_empty_state = True
+        elif tag == "html":
             self.lang = attrs.get("lang", "")
         elif tag == "head":
             self.in_head = True
@@ -146,6 +149,9 @@ def check_site(root):
     for post in search:
         require(post["url"].startswith("/en/posts/") and quote(unquote(post["url"])) in pages,
                 f"Invalid English search result: {post['url']}")
+    if not any((en / "posts").rglob("*.html")):
+        for route in ("/en/", "/en/archives/", "/en/categories/", "/en/tags/"):
+            require(pages[route].has_english_empty_state, f"Missing English empty state: {route}")
 
     swconf = (root / "assets/js/data/swconf.js").read_text(encoding="utf-8")
     deny_paths = re.search(r"\bpaths:\s*\[([^\]]*)\]", swconf)

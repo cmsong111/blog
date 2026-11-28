@@ -18,7 +18,7 @@
   function createAdContainer(className, slotId, options) {
     var wrapper = document.createElement('aside');
     wrapper.className = 'ad-slot-wrapper ' + className;
-    wrapper.setAttribute('aria-label', '광고');
+    wrapper.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Advertisement' : '광고');
 
     var label = document.createElement('span');
     label.className = 'ad-slot-label';
