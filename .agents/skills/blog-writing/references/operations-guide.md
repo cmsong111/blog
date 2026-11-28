@@ -24,30 +24,31 @@
 
 ---
 
-## 2. 초안(`_drafts/`) 및 발행(`_posts/`) 라이프사이클
+## 2. 초안(`_drafts/` · `en/_drafts/`) 및 발행(`_posts/` · `en/_posts/`) 라이프사이클
 
-1. **초안 작성 중**: 본문이 600자 미만이거나 링크·메모만 있는 글은 `_drafts/{카테고리}/YYYY-MM-DD-slug.md`에 보관합니다.
+1. **초안 작성 중**: 본문이 기준 미만(한국어 600자 / 영어 300 words 미만)이거나 링크·메모만 있는 글은 `_drafts/{카테고리}/YYYY-MM-DD-slug.md`(영문은 `en/_drafts/{카테고리}/YYYY-MM-DD-slug.md`)에 보관합니다.
 2. **발행 승격 조건**:
-   - 코드·Mermaid 제외 순수 본문 1,500자 이상
-   - `title`, `description`, `date`(오늘 이하, 비어 있는 날짜), `tags` 완비
-   - `qa_check.py` 오류 0건 통과
-3. **발행 이동**: `_posts/{카테고리}/`로 이동 후 커밋·푸시
+   - 코드·Mermaid 제외 순수 본문 한국어 1,500자 이상 / 영어 800 words 이상 권장
+   - `title`, `description`, `date`(오늘 이하, 비어 있는 날짜), `tags` 완비 (번역 쌍은 양쪽 `alt_url` 상호 기재)
+   - `qa_check.py` 오류 0건 통과 (영문 발행 시 이중 빌드 + `tools/check-multilingual.py` 포함)
+3. **발행 이동**: `_posts/{카테고리}/` 또는 `en/_posts/{카테고리}/`로 이동 후 커밋·푸시
 
 ---
 
 ## 3. 정기 유지보수 체크리스트 (월간 / 분기별)
 
 ```bash
-# 원커맨드 전체 저장소 건강 점검
+# 원커맨드 전체 저장소 건강 점검 (KO + EN 통합)
 python3 .agents/skills/blog-writing/scripts/qa_check.py
 ```
 
 1. **기술 최신성 점검 (분기별)**:
    - 홈서버 컨테이너(Docker 이미지 아카이브/유지보수 중단 여부), Spring Boot / Spring AI / Vite 메이저 릴리즈 변경점 확인
-   - 더 이상 동작하지 않는 글은 상단에 `{: .prompt-warning }`으로 변경 이력과 대안 도구 안내 추가
+   - 더 이상 동작하지 않는 글은 상단에 `{: .prompt-warning }`으로 변경 이력과 대안 도구 안내 추가 (번역 쌍이 있는 경우 한국어·영어 글 모두 동기화)
    - 후속 버전(v1 → v2) 글 발행 시 기존 글 상단에 `{: .prompt-info }` 크로스 링크 추가
 2. **자산 및 설정 점검**:
    - `assets/images/` 내 미사용(고아) 이미지 및 1MB 초과 이미지 정리
-   - `_config.yml` `exclude` 및 `.github/workflows/pages-deploy.yml` `paths-ignore`에 내부 문서·스킬 폴더가 누락되지 않았는지 확인
+   - `_config.yml` 및 `_config_en.yml` `exclude`, `.github/workflows/pages-deploy.yml` `paths-ignore`에 내부 문서·스킬 폴더가 누락되지 않았는지 확인
 3. **인프라·테마 버전 점검 (반기별)**:
    - `jekyll-theme-chirpy`, `jekyll`, `html-proofer`, GitHub Actions, Ruby 버전, `.devcontainer/devcontainer.json` 베이스 이미지 LTS 상태 확인
+

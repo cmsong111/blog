@@ -1,19 +1,20 @@
 ---
 name: blog-writing
 description: >-
-  남주의 커밋로그(namju.kim) 기술 블로그 포스트를 작성·수정·최신화·정기 점검할 때 사용하는 표준 운영 스킬.
-  작성자 페르소나, 톤앤매너, SEO·애드센스 연계 구조, Front Matter·카테고리 규격, Mermaid 문법,
-  이미지 내재화·보안 규칙, 시리즈 병렬 집필 절차 및 자동 QA 스크립트(scripts/qa_check.py)를 포함합니다.
+  남주의 커밋로그(namju.kim) 한국어·영어(`/en/`) 기술 블로그 포스트를 작성·번역(Transcreation)·수정·최신화·정기 점검할 때 사용하는 표준 운영 스킬.
+  한/영 작성자 페르소나, 톤앤매너, Anti-AI-Slop 규칙, SEO·다국어(`alt_url`/`hreflang`)·애드센스 연계 구조,
+  Front Matter·카테고리 규격, Mermaid 문법, 이미지 내재화·보안 규칙, 시리즈 병렬 집필 절차 및 자동 QA 스크립트(scripts/qa_check.py)를 포함합니다.
 ---
 
 # 남주의 커밋로그 운영 및 글쓰기 스킬 (`blog-writing`)
 
-블로그 포스트 작성·수정·최신화·정기 점검 시 반드시 아래 참조 문서를 확인하고, 작업 종료 전 내장 QA 스크립트(`scripts/qa_check.py`)를 실행해 오류 0건을 검증합니다.
+블로그 포스트 작성·번역·수정·최신화·정기 점검 시 반드시 아래 참조 문서를 확인하고, 작업 종료 전 내장 QA 스크립트(`scripts/qa_check.py`)를 실행해 오류 0건을 검증합니다.
 
-- **톤앤매너·템플릿 3종·심화 집필 체크리스트**: [`references/writing-tone.md`](./references/writing-tone.md)
-- **표준 태그 사전 (103개 SSOT)**: [`references/tag-taxonomy.md`](./references/tag-taxonomy.md)
+- **한국어 톤앤매너·템플릿 3종·심화 집필 체크리스트**: [`references/writing-tone.md`](./references/writing-tone.md)
+- **영어 톤앤매너·KO→EN 트랜스크리에이션·Anti-AI-Slop 가이드**: [`references/writing-tone-en.md`](./references/writing-tone-en.md)
+- **표준 태그 사전 (103개 SSOT, 한/영 공용)**: [`references/tag-taxonomy.md`](./references/tag-taxonomy.md)
 - **블로그 운영·애드센스·정기 유지보수 플레이북**: [`references/operations-guide.md`](./references/operations-guide.md)
-- **자동 QA 검증 스크립트**: [`scripts/qa_check.py`](./scripts/qa_check.py)
+- **자동 QA 검증 스크립트 (KO + EN 통합)**: [`scripts/qa_check.py`](./scripts/qa_check.py)
 - **터미널 실행 결과 캡처 생성기**: [`scripts/render_terminal.py`](./scripts/render_terminal.py)
 - **웹 캡처 부분 파싱·강조·마스킹 후처리기**: [`scripts/annotate_screenshot.py`](./scripts/annotate_screenshot.py)
 
@@ -47,13 +48,32 @@ description: >-
 1. **버전·생태계 변화 반영**: 아카이브·지원 종료·Breaking Change가 생긴 글은 원문을 무작정 지우기보다 상단에 `{: .prompt-warning }` 콜아웃으로 변경 이력과 대안(포크/후속 도구)을 명시
 2. **후속 버전 글 연결**: v1 → v2처럼 후속 글이 발행되면 기존 글 상단에 `{: .prompt-info }` 콜아웃으로 최신 글 링크 연결
 
+### D. 영문 포스트 작성 및 한국어 포스트 영문 번역 (Transcreation)
+1. **영어 톤앤매너 장착**: [`references/writing-tone-en.md`](./references/writing-tone-en.md)를 먼저 읽고 미국식 영어(`en_US`), 1인칭(`I`)·능동태·자연스러운 축약형, Anti-AI-Slop 금지어 목록, Sentence-case 제목 원칙을 준수
+2. **직역 금지 · 트랜스크리에이션(Transcreation)**: 한국어 원문을 단어 단위로 직역하지 않고 영어 독자가 자연스럽게 읽는 SVO 단문 구조로 재작성하되, 버전·내부 원리·수치 근거·운영 함정의 기술 밀도는 그대로 유지
+3. **경로 · 카테고리 · 태그 · 슬러그**:
+   - 경로: `en/_posts/{대분류}/{중분류}/YYYY-MM-DD-kebab-case-slug.md` (한국어 `_posts/`와 동일한 영문 카테고리 폴더 사용, Front Matter에서 `categories` 생략)
+   - 슬러그: `en/_posts/` 내부에서 유일해야 함(한국어 원문과 동일한 영문 슬러그 사용 가능)
+   - 태그: [`references/tag-taxonomy.md`](./references/tag-taxonomy.md)의 표준 103개 소문자 `kebab-case` 태그에서 3~5개 선택
+4. **번역 쌍(`alt_url`) 상호 연결 & 내부 링크**:
+   - 한국어 원문이 있는 번역 쌍은 **양쪽 Front Matter에 도메인 루트 기준 `alt_url`을 상호 기재**:
+     - 영문 글: `alt_url: /posts/<ko-slug>/`
+     - 한국어 글: `alt_url: /en/posts/<en-slug>/`
+   - 영문 단독 글(대응 한국어 글 없음)은 **`alt_url`을 생략**(`hreflang` 미출력, 사이드바 지구본은 자동으로 `/` 연결)
+   - 영문 글 내부에서 다른 영문 글을 링크할 때는 `/en/posts/<en-slug>/` 경로를 사용(미번역 한국어 글 링크는 꼭 필요할 때만 `(Korean)` 표기와 함께 `/posts/<ko-slug>/` 사용)
+5. **분량 · 현지화 기준**:
+   - **코드 블록·Mermaid 제외 순수 영문 본문 800 ~ 1,600 words 권장** (5분 읽기 분량, **300 words 미만**은 Thin Content로 금지하며 `en/_drafts/` 보관)
+   - 코드 주석, Mermaid 노드/엣지 라벨, Chart.js 라벨, 이미지 `alt`, 캡션(`_Figure 1. ..._`)을 모두 영어로 현지화하고 `{% linkpreview "URL" %}`도 공식 영문 문서를 우선 연결
+   - 로컬 이미지는 한국어 글과 동일하게 `/assets/images/YYYY-MM-DD/<name>.png` 경로를 사용(프로덕션 jsDelivr CDN 자동 적용, 한글 UI가 과도한 스크린샷만 영문판 별도 캡처)
+6. **이중 빌드 & 다국어 QA 실행**: `qa_check.py`로 KO+EN 정적 검증 및 `alt_url` 상호 참조를 확인하고, Ruby 환경에서는 섹션 5의 이중 빌드(`rsync` 병합) + `htmlproofer` + `tools/check-multilingual.py`까지 통과 확인
+
 ---
 
 ## 2. Front Matter · SEO · 카테고리 규격
 
-- `_plugins/category-folder-hook.rb`가 폴더 경로로 `categories`를 자동 주입하므로 **Front Matter에서 `categories`는 생략하고 `tags`만 작성**합니다.
+- `_plugins/category-folder-hook.rb`가 폴더 경로로 `categories`를 자동 주입하므로 **한국어(`_posts/`)·영어(`en/_posts/`) 모두 Front Matter에서 `categories`는 생략하고 `tags`만 작성**합니다.
 - **표준 카테고리 폴더**:
-  - `AI > Concept`: `_posts/AI/Concept/`
+  - `AI > Concept`: `_posts/AI/Concept/` (영문: `en/_posts/AI/Concept/`)
   - `Blog > Jekyll`: `_posts/Blog/Jekyll/`
   - `Book > DDD`: `_posts/Book/DDD/`
   - `CS > Database / JVM / Web-Network`: `_posts/CS/{중분류}/`
@@ -74,10 +94,11 @@ description: >-
 
 ```yaml
 ---
-title: "핵심 기술 키워드와 적용 대상·목적이 명확한 담백한 제목 (30~55자 권장)"
-description: "검색엔진·SNS 카드용 핵심 요약 1~2문장 (80~155자 권장, 절대 누락 금지)"
+title: "핵심 기술 키워드와 적용 대상·목적이 명확한 담백한 제목 (KO 30~55자 / EN Sentence case 40~65자)"
+description: "검색엔진·SNS 카드용 핵심 요약 1~2문장 (KO 80~155자 / EN 100~160자 권장, 절대 누락 금지)"
 date: YYYY-MM-DD HH:MM:SS +0900
 tags: [spring-boot, kotlin, jpa, redis] # 100% 영문 소문자 kebab-case, 글당 3~5개 (동의어·약어 중복 금지, 기존 표준 태그 우선 재사용)
+alt_url: /en/posts/example-slug/ # 번역 쌍이 존재할 때만 양쪽에 도메인 루트 경로로 상호 선언 (EN 글은 /posts/<ko-slug>/, 단독 글은 생략)
 mermaid: true # 본문에 mermaid 코드 블록이 있을 때만 선언 (없으면 생략)
 chart: true # 본문에 {: .chart-js } Chart.js 블록이 있을 때만 선언 (없으면 생략)
 image:
@@ -86,7 +107,7 @@ image:
 ---
 ```
 
-> **제목 금지어**: 의문형(`~할 때?`, `~죽는 이유`), 과장·어그로 표현(`완벽 해결`, `완전 정복`, `초고속`, `원클릭`, `~의 모든 것`, `치명적 위험`), 그리고 불필요한 콜론(`:`) 부제 나열을 피하고 한 문장으로 간결하게 작성합니다.
+> **제목 금지어**: 의문형(`~할 때?`, `~죽는 이유`, `Why Does ...?`), 과장·어그로 표현(`완벽 해결`, `완전 정복`, `초고속`, `원클릭`, `~의 모든 것`, `치명적 위험`, `Ultimate Guide`, `Everything You Need to Know`, `Mastering`, `Blazing Fast`, `One-Click`), 그리고 불필요한 콜론(`:`) 부제 나열을 피하고 한 문장으로 간결하게 작성합니다.
 
 ---
 
@@ -95,7 +116,7 @@ image:
 1. **로컬 내재화 우선 (외부 핫링크 금지)**: `velog.velcdn.com` 등 외부 호스팅 이미지에 의존하지 말고 `assets/images/YYYY-MM-DD/`에 저장해 `/assets/images/...` 경로로 참조합니다(이중 슬래시 `/assets//` 주의). 프로덕션 배포 시 `_config_prod.yml`의 jsDelivr CDN이 자동 적용됩니다.
 2. **해상도 · 용량 · 캡션 기준**:
    - Chirpy 본문 폭(2x 레티나) 기준 **가로 1,200~1,600px**, WebP 또는 최적화 PNG **100~300KB**(단일 파일 **1MB 이하** 필수) 권장
-   - 모든 본문 이미지에는 구체적 `alt`를 작성하고, 바로 아래 `_그림 1. ..._` 한 줄 캡션을 붙여 스캐닝 가독성을 높입니다.
+   - 모든 본문 이미지에는 구체적 `alt`를 작성하고, 바로 아래 한 줄 캡션(한국어 `_그림 1. ..._` / 영어 `_Figure 1. ..._`)을 붙여 스캐닝 가독성을 높입니다.
 3. **시각 자료 유형별 의사결정 표 (무엇을 캡처하고 어떻게 만들 것인가)**:
 
 | 유형 | 적합한 장면 | 표준 제작 도구 | 금지 사항 |
@@ -186,12 +207,17 @@ image:
 작업이 끝나면 보고 전 반드시 아래 QA 스크립트를 실행합니다.
 
 ```bash
-# 1. 정적 전수 검증 (Front Matter, SEO, 분량, Mermaid, 이미지, 내부 링크, 보안)
+# 1. 정적 전수 검증 (KO + EN Front Matter, SEO, alt_url 상호 참조, 분량, Mermaid, 이미지, 내부 링크, 보안)
 python3 .agents/skills/blog-writing/scripts/qa_check.py
 
-# 2. (Dev Container / Ruby 3.4 환경 사용 시) Jekyll 빌드 및 htmlproofer 검증
-bundle exec jekyll build -d /tmp/_site
+# 2. (Dev Container / Ruby 3.4 환경 사용 시) 한국어 + 영어 이중 빌드, htmlproofer, 다국어 검증
+rm -rf /tmp/_site /tmp/_site_en
+JEKYLL_ENV=production bundle exec jekyll build -d /tmp/_site --config _config.yml,_config_prod.yml
+JEKYLL_ENV=production bundle exec jekyll build -d /tmp/_site_en --config _config.yml,_config_prod.yml,_config_en.yml
+rsync -a --exclude='/assets/images/' --exclude='/robots.txt' --exclude='/ads.txt' /tmp/_site_en/ /tmp/_site/en/
 bundle exec htmlproofer /tmp/_site \
   --disable-external \
   --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
+python3 tools/check-multilingual.py /tmp/_site
 ```
+

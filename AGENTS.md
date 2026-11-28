@@ -3,7 +3,7 @@
 이 문서는 AI 어시스턴트(Antigravity, Claude Code, Copilot 등)가 **남주의 커밋로그([https://namju.kim](https://namju.kim))** 저장소에서 작업할 때 항상 준수해야 하는 **아키텍처 규칙, 스킬 연계, Git 작업 수칙**을 정의합니다.
 
 > ⚠️ **블로그 포스트 작성·수정 시 필수 확인**
-> - 포스트 작성·수정·리팩토링 작업 시에는 반드시 **`blog-writing` 스킬**([.agents/skills/blog-writing/SKILL.md](.agents/skills/blog-writing/SKILL.md))과 그 하위 참조 문서([writing-tone.md](.agents/skills/blog-writing/references/writing-tone.md))를 먼저 읽고 페르소나, 문체, Front Matter/Mermaid 규격, 상세 집필 체크리스트, QA 절차를 준수해야 합니다. (Claude Code는 `.claude/skills` 심볼릭 링크를 통해 동일한 스킬을 자동 인식합니다.)
+> - 포스트 작성·번역·수정·리팩토링 작업 시에는 반드시 **`blog-writing` 스킬**([.agents/skills/blog-writing/SKILL.md](.agents/skills/blog-writing/SKILL.md))과 그 하위 참조 문서(한국어: [writing-tone.md](.agents/skills/blog-writing/references/writing-tone.md), 영어: [writing-tone-en.md](.agents/skills/blog-writing/references/writing-tone-en.md))를 먼저 읽고 페르소나, 문체, Front Matter/Mermaid 규격, 상세 집필 체크리스트, QA 절차를 준수해야 합니다. (Claude Code는 `.claude/skills` 심볼릭 링크를 통해 동일한 스킬을 자동 인식합니다.)
 > - **AI 작성 사실 비노출 원칙**: 공개 블로그 포스트 본문·요약·메타데이터·주석 어디에도 **AI(Antigravity, Claude, ChatGPT 등)를 활용해 블로그 글을 작성·생성·검수했다는 내용이 들어가서는 안 됩니다.** 모든 글은 작성자(김남주)가 직접 경험하고 정리한 1인칭 엔지니어링 기록으로만 서술합니다.
 
 ---
@@ -12,39 +12,50 @@
 
 - **엔진**: Jekyll v4.4.x + `jekyll-theme-chirpy` v7.6.0 (Gem 기반 배포)
 - **런타임**: Ruby 3.4 (GitHub Actions 및 Dev Container 표준)
-- **배포 환경**: GitHub Pages (`.github/workflows/pages-deploy.yml`) + 프로덕션 이미지 CDN(`_config_prod.yml`, jsDelivr)
+- **배포 환경**: GitHub Pages (`.github/workflows/pages-deploy.yml`) + 한국어(`/`)·영어(`/en/`) 이중 빌드 + 프로덕션 이미지 CDN(`_config_prod.yml`, jsDelivr)
 - **개발 환경**: VS Code Dev Container (`.devcontainer/devcontainer.json`, Debian Bookworm 기반)
 
 | 경로 | 용도 및 주의사항 |
 | :--- | :--- |
-| `_posts/{대분류}/{중분류}/` | 계층형 카테고리 디렉토리 구조 및 블로그 포스트 마크다운 파일 (`YYYY-MM-DD-title.md`) |
-| `_drafts/` | 미완성 초안 포스트 보관소 (프로덕션 빌드 제외) |
-| `assets/images/YYYY-MM-DD/` | 포스트 이미지 자산 저장소 (`/` 경로 사용 시 프로덕션 jsDelivr CDN 자동 적용) |
-| `.agents/skills/blog-writing/` | 글쓰기·페르소나·QA 표준 스킬 (SSOT, `.claude/skills`에서 심볼릭 링크) |
-| `_includes/metadata-hook.html` | **Chirpy 공식 확장 훅** (네이버 서치어드바이저, 애드센스, linkpreview CSS, `noindex`, `BreadcrumbList` JSON-LD, 접근성·조건부 Chart.js 스크립트 주입용). **절대 `_includes/head.html`을 통째로 덮어쓰지 말 것!** |
+| `_posts/{대분류}/{중분류}/` | 한국어 계층형 카테고리 디렉토리 구조 및 블로그 포스트 마크다운 파일 (`YYYY-MM-DD-title.md`) |
+| `en/_posts/{대분류}/{중분류}/` | 영어(`/en/`) 포스트 마크다운 파일 (`_config_en.yml`의 `collections_dir: en` 기반, 번역 쌍은 양쪽 `alt_url` 상호 연결) |
+| `_drafts/` · `en/_drafts/` | 미완성 초안 포스트 보관소 (프로덕션 빌드 제외) |
+| `assets/images/YYYY-MM-DD/` | 포스트 이미지 자산 저장소 (`/` 경로 사용 시 한/영 빌드 모두 프로덕션 jsDelivr CDN 자동 적용) |
+| `.agents/skills/blog-writing/` | 한/영 글쓰기·페르소나·QA 표준 스킬 (SSOT, `.claude/skills`에서 심볼릭 링크) |
+| `_config_en.yml` | 영어 사이트(`/en/`) 전용 오버라이드 설정 (`lang: en`, `locale: en_US`, `baseurl: /en`, `collections_dir: en`) |
+| `_includes/metadata-hook.html` | **Chirpy 공식 확장 훅** (네이버 서치어드바이저, `hreflang`, 애드센스, linkpreview CSS, `noindex`, `BreadcrumbList` JSON-LD, 접근성·조건부 Chart.js 스크립트 주입용). **절대 `_includes/head.html`을 통째로 덮어쓰지 말 것!** |
 | `_includes/linkpreview.html` | `jekyll-linkpreview` OG 지원 사이트용 미리보기 카드 템플릿 |
 | `_includes/linkpreview_nog.html` | OpenGraph가 없는 사이트용 fallback 템플릿 |
-| `_plugins/category-folder-hook.rb` | `_posts/{대분류}/{중분류}/` 폴더 경로 기반 카테고리 자동 주입 훅 (Front Matter에 `categories` 생략) |
-| `_plugins/posts-lastmod-hook.rb` | Git 커밋 히스토리 기반 `last_modified_at` 자동 주입 훅 |
+| `_plugins/category-folder-hook.rb` | `_posts/{대분류}/{중분류}/` 및 `en/_posts/{대분류}/{중분류}/` 폴더 경로 기반 카테고리 자동 주입 훅 (Front Matter에 `categories` 생략) |
+| `_plugins/posts-lastmod-hook.rb` | Git 커밋 히스토리 기반 `last_modified_at` 자동 주입 훅 (한/영 컬렉션 경로 자동 대응) |
 | `_plugins/seo-sitemap-hook.rb` | 얇은 태그 아카이브(`/tags/*/`)·페이지네이션(`/page2+/`) `sitemap.xml` 제외 및 `noindex` 자동 주입 훅 |
 | `_plugins/image-dimensions-hook.rb` | 로컬 이미지의 고유 `width`/`height` 자동 주입 훅 (CLS 방지, `fastimage` 활용) |
-| `_plugins/locale-override-hook.rb` | Chirpy 테마 로케일 라벨(`post.relate_posts` 등) 인메모리 오버라이드 훅 |
+| `_plugins/locale-override-hook.rb` | Chirpy 테마 로케일 라벨(`post.relate_posts` 등) 인메모리 오버라이드 훅 (`ko` 전용) |
+| `_plugins/english-empty-pages-hook.rb` | 영문 포스트가 0편일 때 영문 공통 목록 페이지(`home`/`archives`/`categories`/`tags`)에 빈 목록 안내 레이아웃을 적용하는 훅 |
 | `_plugins/code-raw-escape-hook.rb` | 마크다운 코드 블록(`` ``` ``/`` ~~~ ``) 및 인라인 코드(`` `...` ``) 내부의 Liquid 구문(`{{`, `{%`) 자동 `raw` 이스케이프 훅 |
+| `tools/check-multilingual.py` | 이중 빌드 산출물의 `lang`, `og:locale`, `canonical`, 상호 `hreflang`, 사이트맵, 사이드바 언어 전환 검증 스크립트 |
 
 ---
 
 ## 2. 품질 및 빌드 검증 (Quality Assurance)
 
-변경 작업이 끝나면 보고 전 반드시 빌드·링크·Mermaid 검증을 수행합니다(호스트에 Ruby 3.4가 없는 경우 Python 정적 검증을 수행하고 CI 빌드 확인 안내).
+변경 작업이 끝나면 보고 전 반드시 정적 QA, 이중 빌드, 링크·다국어 검증을 수행합니다(호스트에 Ruby 3.4가 없는 경우 Python 정적 검증을 수행하고 CI 빌드 확인 안내).
 
 ```bash
-# 1. 사이트 빌드 검증
-bundle exec jekyll build -d /tmp/_site
+# 1. 한/영 정적 QA 검증 (Front Matter, alt_url 상호 참조, 분량, Mermaid, 이미지, 보안)
+python3 .agents/skills/blog-writing/scripts/qa_check.py
 
-# 2. 내부 링크, 이미지 깨짐, 프로토콜 검사 (htmlproofer)
+# 2. 한국어 + 영어 이중 빌드 및 병합
+rm -rf /tmp/_site /tmp/_site_en
+JEKYLL_ENV=production bundle exec jekyll build -d /tmp/_site --config _config.yml,_config_prod.yml
+JEKYLL_ENV=production bundle exec jekyll build -d /tmp/_site_en --config _config.yml,_config_prod.yml,_config_en.yml
+rsync -a --exclude='/assets/images/' --exclude='/robots.txt' --exclude='/ads.txt' /tmp/_site_en/ /tmp/_site/en/
+
+# 3. 내부 링크·이미지 검사(htmlproofer) 및 다국어 산출물 검증
 bundle exec htmlproofer /tmp/_site \
   --disable-external \
   --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
+python3 tools/check-multilingual.py /tmp/_site
 ```
 
 ---
